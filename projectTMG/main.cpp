@@ -1,20 +1,29 @@
-﻿#include <windows.h> //[WINDOWS]-MAC
+﻿#include "macros.h"
+
+#ifdef OS_IS_WIN
+    #include <windows.h>
+    #define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
+    #define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
+    #define SCREEN_M 8
+#else
+    #define SCREEN_Y 600
+    #define SCREEN_X 800
+    #define SCREEN_M 7
+#endif
+
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN) //[WINDOWS]-MAC
-#define SCREEN_X GetSystemMetrics(SM_CXSCREEN) //[WINDOWS]-MAC
-
 int main()
 {
-	int style = 8; //Fullscreen
+	int style = SCREEN_M; //Fullscreen
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8; //Сглаживание. Производительность?!
 	sf::RenderWindow window(sf::VideoMode(SCREEN_X, SCREEN_Y), "Three Minutes", style, setting);
 	//[УЗНАЁМ О РАЗМЕРАХ ОКНА]
-	sf::Vector2u size = window.getSize();
-	unsigned int width = size.x;
-	unsigned int height = size.y;
+	//sf::Vector2u size = window.getSize();
+	//unsigned int width = size.x;
+	//unsigned int height = size.y;
 	//[ШРИФТ]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile("resources/font1.ttf");
