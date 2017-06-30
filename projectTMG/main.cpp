@@ -1,4 +1,4 @@
-#include <windows.h> //[WINDOWS]-MAC
+ï»¿#include <windows.h> //[WINDOWS]-MAC
 #include <SFML/Graphics.hpp>
 
 #define SCREEN_Y GetSystemMetrics(SM_CYSCREEN) //[WINDOWS]-MAC
@@ -8,27 +8,26 @@ int main()
 {
 	int style = 8; //Fullscreen
 	sf::ContextSettings setting;
-	setting.antialiasingLevel = 8; //Ñãëàæèâàíèå. Ïðîèçâîäèòåëüíîñòü?!
-	sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(SCREEN_X, SCREEN_Y), "Three Minutes", style, setting);
-	//[ØÐÈÔÒ]
+	setting.antialiasingLevel = 8; //Ð¡Ð³Ð»Ð°Ð¶Ð¸Ð²Ð°Ð½Ð¸Ðµ. ÐŸÑ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚ÑŒ?!
+	sf::RenderWindow window(sf::VideoMode(SCREEN_X, SCREEN_Y), "Three Minutes", style, setting);
+	//[Ð¨Ð Ð˜Ð¤Ð¢]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile("resources/font1.ttf");
-	//[ÒÅÊÑÒ]
+	//[Ð¢Ð•ÐšÐ¡Ð¢]
 	sf::Text *text = new sf::Text("SFML / OpenGL demo", *font);
-	while (window->isOpen())
+	while (window.isOpen())
 	{
 		sf::Event event;
-		while (window->pollEvent(event))
+		while (window.pollEvent(event))
 		{
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
-				window->close();
+				window.close();
 		}
-		window->pushGLStates();
-		window->clear();
-		window->draw(*text);
-		window->popGLStates();
-		window->display();
+		window.pushGLStates();
+		window.clear();
+		window.draw(*text);
+		window.popGLStates();
+		window.display();
 	}
-	delete[] window;
 	return EXIT_SUCCESS;
 }
