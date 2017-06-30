@@ -1,35 +1,33 @@
 ﻿#include "macros.h"
-
 #ifdef OS_IS_WIN
-    #include <windows.h>
-    #define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
-    #define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
-    #define SCREEN_M 8
+	#include <windows.h>
+	#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
+	#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
+	#define SCREEN_M 8
 #else
-    #define SCREEN_Y 600
-    #define SCREEN_X 800
-    #define SCREEN_M 7
+	#define SCREEN_Y 600
+	#define SCREEN_X 800
+	#define SCREEN_M 7
 #endif
 
-#include <SFML/Audio.hpp>
+#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "loadResources.h"
 
 int main()
 {
-	int style = SCREEN_M; //Fullscreen
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8; //Сглаживание. Производительность?!
-	sf::RenderWindow window(sf::VideoMode(SCREEN_X, SCREEN_Y), "Three Minutes", style, setting);
-	//[УЗНАЁМ О РАЗМЕРАХ ОКНА]
-	//sf::Vector2u size = window.getSize();
-	//unsigned int width = size.x;
-	//unsigned int height = size.y;
+	sf::RenderWindow window(sf::VideoMode(SCREEN_X, SCREEN_Y), "Three Minutes", SCREEN_M, setting);
+	//[ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
+	loadXMLResources();
 	//[ШРИФТ]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile("resources/font1.ttf");
 	//[ТЕКСТ]
 	sf::Text *text = new sf::Text("SFML demo", *font);
-	text->setColor(sf::Color::Black);
+	text->setFillColor(sf::Color::Black);
 	//[ТЕКСТУРА]
 	sf::Texture texture;
 	texture.loadFromFile("resources/texture.png");

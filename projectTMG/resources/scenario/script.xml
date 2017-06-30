@@ -1,0 +1,30 @@
+<SCRIPTGAME> <!-- Начало сценария -->
+	<CHARTER name="Charter 1: Test Name 1" number="1">
+		<SCENE number="1" 
+		       texture="resources/textures/charter1/scene1.png"
+			   text="First text to display"
+			   sound="false"
+			   music="false">
+	    </SCENE>
+		<SCENE number="2" 
+		       texture="resources/textures/charter1/scene2.png"
+			   text="Second text to display"
+			   sound="false"
+			   music="false">
+	    </SCENE>
+	</CHARTER> 
+	<CHARTER name="Charter 2: Test Name 2" number="2">
+		<SCENE number="1" 
+		       texture="resources/textures/charter2/scene1.png"
+			   text="First text to display"
+			   sound="false"
+			   music="false">
+	    </SCENE>
+		<SCENE number="2" 
+		       texture="resources/textures/charter2/scene2.png"
+			   text="Second text to display"
+			   sound="false"
+			   music="false">
+	    </SCENE>
+	</CHARTER> 
+</SCRIPTGAME> <!-- Конец сценария -->

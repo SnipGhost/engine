@@ -45,12 +45,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>H:\SFML-2.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>H:\SFML-2.4.2\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_DINAMIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>H:\SFML-2.0\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>H:\SFML-2.4.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -70,6 +70,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="modules\lib\tinyxml2\tinyxml2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="loadResources.h" />
+    <ClInclude Include="macros.h" />
+    <ClInclude Include="modules\lib\tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
