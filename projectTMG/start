@@ -1,0 +1,20 @@
+#!/bin/bash
+if [[ -z $1 ]]
+then
+    export APP_DIR=$(dirname "$0")
+    export DYLD_LIBRARY_PATH=${APP_DIR%?????}Frameworks/
+    export DYLD_FRAMEWORK_PATH=${APP_DIR%?????}Frameworks/
+else
+    export APP_DIR=Debug
+    export DYLD_LIBRARY_PATH=$1
+    export DYLD_FRAMEWORK_PATH=$1 
+fi
+printf '=%.0s' {1..80}
+printf '\n'$DYLD_LIBRARY_PATH'\n'
+printf '=%.0s' {1..80}
+printf '\n'$DYLD_FRAMEWORK_PATH'\n'
+printf '=%.0s' {1..80}
+printf '\n'$APP_DIR/'\n'
+printf '=%.0s' {1..80}
+printf '\n\n'
+$APP_DIR/game

@@ -1,12 +1,9 @@
-﻿#pragma once 
+﻿#include "loadRes.hpp"
 
-#include "modules/lib/tinyxml2/tinyxml2.h"
-#include <iostream>
-
-void loadXMLResources() 
+void loadXMLResources(std::string file) 
 {
 	tinyxml2::XMLDocument doc;
-	doc.LoadFile("resources/scenario/script.xml");
+    doc.LoadFile((file).c_str());
 	tinyxml2::XMLElement* CHARTER = doc.FirstChildElement("SCRIPTGAME")->FirstChildElement("CHARTER");
 	while (CHARTER != NULL)
 	{
