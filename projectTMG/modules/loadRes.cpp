@@ -3,7 +3,7 @@
 void loadXMLResources(std::string file) 
 {
 	tinyxml2::XMLDocument doc;
-    doc.LoadFile((file).c_str());
+	doc.LoadFile((file).c_str());
 	tinyxml2::XMLElement* CHARTER = doc.FirstChildElement("SCRIPTGAME")->FirstChildElement("CHARTER");
 	while (CHARTER != NULL)
 	{
@@ -26,10 +26,10 @@ void loadXMLResources(std::string file)
 			//              -- Очищать загруженное
 
 			std::cout << "SCENE: " << number << std::endl
-				      << "Texture: " << texture << std::endl
-				      << "Text: " << text << std::endl
-				      << "Sound: " << sound << std::endl
-				      << "Music: " << music << std::endl << std::endl;
+					  << "Texture: " << texture << std::endl
+					  << "Text: " << text << std::endl
+					  << "Sound: " << sound << std::endl
+					  << "Music: " << music << std::endl << std::endl;
 
 			SCENE = SCENE->NextSiblingElement("SCENE");
 		}

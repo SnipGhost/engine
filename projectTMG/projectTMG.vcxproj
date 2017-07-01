@@ -70,12 +70,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="modules\lib\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="Modules\loadRes.cpp" />
+    <ClCompile Include="Modules\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="loadResources.h" />
     <ClInclude Include="macros.h" />
-    <ClInclude Include="modules\lib\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="Modules\loadRes.hpp" />
+    <ClInclude Include="Modules\tinyxml2.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Resources\scenario\script.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

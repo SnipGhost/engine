@@ -18,7 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="modules\lib\tinyxml2\tinyxml2.cpp">
+    <ClCompile Include="Modules\loadRes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Modules\tinyxml2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,11 +29,16 @@
     <ClInclude Include="macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="loadResources.h">
+    <ClInclude Include="Modules\loadRes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="modules\lib\tinyxml2\tinyxml2.h">
+    <ClInclude Include="Modules\tinyxml2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Resources\scenario\script.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
