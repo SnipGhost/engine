@@ -30,24 +30,28 @@
 int main()
 {
 	sf::ContextSettings setting;
-	setting.antialiasingLevel = 8; // Сглаживаниe
+	setting.antialiasingLevel = 8;
 	sf::VideoMode videoMode(SCREEN_X, SCREEN_Y);
 	sf::RenderWindow window(videoMode, "Three Minutes", SCREEN_M, setting);
 	window.setFramerateLimit(30);
-	//[ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
+	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
 	loadXMLResources(RES_PATH + "scenario/script.xml");
-	//[ШРИФТ]
+	//[ВРЕМЯ]
+	sf::Clock clock;
+	//[ШРИФТ][ТЕКСТ]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile(RES_PATH + "font1.ttf");
-	//[ТЕКСТ]
 	sf::Text *text = new sf::Text("SFML demo", *font);
 	text->setFillColor(sf::Color::Black);
 	text->setPosition(sf::Vector2f(SCREEN_X-200, 20));
-	//[ТЕКСТУРА]
+	//[ТЕКСТУРА][СПРАЙТ]
 	sf::Texture texture;
 	texture.loadFromFile(RES_PATH + "texture.png");
-	//[СПРАЙТ]
 	sf::Sprite sprite(texture);
+	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]
+	sf::Texture gifT;
+	gifT.loadFromFile(RES_PATH + "gifFile.png");
+	sf::Sprite gif(gifT);
 	//[МУЗЫКА]
 	sf::Music music;
 	music.openFromFile(RES_PATH + "music.ogg");
@@ -61,6 +65,11 @@ int main()
 
 	while (window.isOpen())
 	{
+		//Общий пример обновления позиции в текстуре
+		int time = clock.getElapsedTime().asMilliseconds();
+		if(clock.getElapsedTime().asMilliseconds() > 1000) clock.restart(); else
+		gif.setTextureRect(sf::IntRect(256 * (time/500), 0, 256, 256));
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -72,10 +81,13 @@ int main()
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 				sound.play();
 		}
+
+
 		window.pushGLStates();
 		window.clear();
 		window.draw(sprite);
 		window.draw(*text);
+		window.draw(gif);
 		window.popGLStates();
 		window.display();
 	}

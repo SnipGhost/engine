@@ -79,7 +79,9 @@
     <ClInclude Include="Modules\tinyxml2.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\scenario\script.xml" />
+    <Xml Include="Resources\scenario\script.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
