@@ -35,7 +35,7 @@ int main()
 	sf::RenderWindow window(videoMode, "Three Minutes", SCREEN_M, setting);
 	window.setFramerateLimit(30);
 	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
-	loadXMLResources(RES_PATH + "scenario/script.xml");
+	loadXMLComposer(RES_PATH + "scenario/script.xml");
 	//[ВРЕМЯ]
 	sf::Clock clock;
 	//[ШРИФТ][ТЕКСТ]

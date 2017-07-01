@@ -7,6 +7,6 @@
 #include <string>
 #include "tinyxml2.hpp"
 
-void loadXMLResources(std::string file);
+void loadXMLComposer(std::string file);
 
 #endif /* LOAD_RES_HPP */

@@ -1,6 +1,6 @@
 ﻿#include "loadRes.hpp"
 
-void loadXMLResources(std::string file) 
+void loadXMLComposer(std::string file) 
 {
 	tinyxml2::XMLDocument doc;
 	doc.LoadFile((file).c_str());
