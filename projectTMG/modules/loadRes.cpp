@@ -4,11 +4,11 @@ void loadXMLComposer(std::string file)
 {
 	tinyxml2::XMLDocument doc;
 	doc.LoadFile((file).c_str());
-	tinyxml2::XMLElement* CHARTER = doc.FirstChildElement("SCRIPTGAME")->FirstChildElement("CHARTER");
-	while (CHARTER != NULL)
+	tinyxml2::XMLElement* CHAPTER = doc.FirstChildElement("SCRIPTGAME")->FirstChildElement("CHAPTER");
+	while (CHAPTER != NULL)
 	{
-		std::cout << CHARTER->Attribute("name") << " | Number: " << CHARTER->Attribute("number") << std::endl;
-		tinyxml2::XMLElement* SCENE = CHARTER->FirstChildElement("SCENE"); 
+		std::cout << CHAPTER->Attribute("name") << " | Number: " << CHAPTER->Attribute("number") << std::endl;
+		tinyxml2::XMLElement* SCENE = CHAPTER->FirstChildElement("SCENE"); 
 		while(SCENE != NULL) 
 		{
 			const char *number = SCENE->Attribute("number");
@@ -33,6 +33,6 @@ void loadXMLComposer(std::string file)
 
 			SCENE = SCENE->NextSiblingElement("SCENE");
 		}
-		CHARTER = CHARTER->NextSiblingElement("CHARTER");
+		CHAPTER = CHAPTER->NextSiblingElement("CHAPTER");
 	}
 }
