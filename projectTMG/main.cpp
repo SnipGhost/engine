@@ -7,9 +7,11 @@
 //-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
-	#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
-	#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
-	#define SCREEN_M 8
+	//#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
+	//#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
+	#define SCREEN_X 1024
+	#define SCREEN_Y 768
+	#define SCREEN_M 7
 	#define RES_PATH std::string("Resources/")
 #else
 	#define SCREEN_X 1024
