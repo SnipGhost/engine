@@ -2,10 +2,10 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "Modules/tinyxml2.hpp"
+#include "tinyxml2.hpp"
+#include <iostream>
 
 namespace ng
 {
@@ -19,6 +19,9 @@ namespace ng
 
 	struct SpriteData
 	{
+		float x;
+		float y;
+		float scale;
 		int layer;
 		bool smooth;
 		std::string id;

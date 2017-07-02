@@ -26,14 +26,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Modules/loadRes.hpp"
-#include "engine.hpp"
+#include "Modules/engine.hpp"
 //-----------------------------------------------------------------------------
 int main()
 {
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8;
 	sf::VideoMode videoMode(SCREEN_X, SCREEN_Y);
-	sf::RenderWindow window(videoMode, "Three Minutes", SCREEN_M, setting);
+	sf::RenderWindow window(videoMode, "NOVEL FOX ENGINE", SCREEN_M, setting);
 	window.setFramerateLimit(30);
 	
 	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
@@ -41,6 +41,11 @@ int main()
 	
 	//[ВРЕМЯ]
 	sf::Clock clock;
+
+	//[ИКОНКА]
+	sf::Image icon;
+	icon.loadFromFile(RES_PATH + "icon.png");
+	window.setIcon(64, 64, icon.getPixelsPtr());
 	
 	//[ШРИФТ][ТЕКСТ]
 	sf::Font *font = new sf::Font;
@@ -53,20 +58,14 @@ int main()
 	sf::Texture texture;
 	texture.loadFromFile(RES_PATH + "texture.png");
 	sf::Sprite sprite(texture);
+
 	//ng::Sprite slavya("Slavya", RES_PATH + "slavya.png"); // Классика
 
-	//[СПРАЙТЫ ИЗ XML]
+	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = parseXML(RES_PATH + "scenario/script.xml");
 	ng::Sprite slavya1(ng::getSpriteData(sp));
-	// Создаем первую Славю
-	slavya1.scale((float)0.3, (float)0.3);
-	slavya1.setPosition(600, -100);
-	bool forward = true; // [!]
-	// Переход к след. ноде
-	sp = getSpriteXMLNode(sp); 
-	// Создаем вторую Славю
+	sp = getSpriteXMLNode(sp); // Нода1 -> Нода2
 	ng::Sprite slavya2(ng::getSpriteData(sp));
-	slavya2.setPosition(100, 200);
 	
 	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]
 	sf::Texture gifT;
@@ -85,6 +84,8 @@ int main()
 	sound.setBuffer(buffer);
 	sound.setVolume(40);
 
+	bool forward = true; // [!]
+
 	while (window.isOpen())
 	{
 		//Общий пример обновления позиции в текстуре
@@ -96,11 +97,7 @@ int main()
 			auto pos = slavya1.getPosition();
 			if (pos.y < -100) forward = true;
 			if (pos.y > -80) forward = false;
-
-			if (forward)
-				slavya1.setPosition(pos.x, pos.y+1);
-			else
-				slavya1.setPosition(pos.x, pos.y-1);
+			(forward) ? slavya1.setPosition(pos.x, pos.y+1) : slavya1.setPosition(pos.x, pos.y-1);
 		}
 
 		sf::Event event;
@@ -114,7 +111,6 @@ int main()
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 				sound.play();
 		}
-
 
 		window.pushGLStates();
 		window.clear();

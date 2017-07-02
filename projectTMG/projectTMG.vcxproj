@@ -73,14 +73,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Modules\engine.cpp" />
     <ClCompile Include="Modules\loadRes.cpp" />
     <ClCompile Include="Modules\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.hpp" />
     <ClInclude Include="macros.h" />
+    <ClInclude Include="Modules\engine.hpp" />
     <ClInclude Include="Modules\loadRes.hpp" />
     <ClInclude Include="Modules\tinyxml2.hpp" />
   </ItemGroup>

@@ -21,10 +21,10 @@
     <ClCompile Include="Modules\loadRes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Modules\tinyxml2.cpp">
+    <ClCompile Include="Modules\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine.cpp">
+    <ClCompile Include="Modules\tinyxml2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClInclude Include="Modules\loadRes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Modules\tinyxml2.hpp">
+    <ClInclude Include="Modules\engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine.hpp">
+    <ClInclude Include="Modules\tinyxml2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

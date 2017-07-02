@@ -1,19 +1,21 @@
-﻿#include "loadRes.hpp"
-
+﻿//-----------------------------------------------------------------------------
+// loadRes.cpp												 Загрузчик ресурсов
+//-----------------------------------------------------------------------------
+#include "loadRes.hpp"
+//-----------------------------------------------------------------------------
 tinyxml2::XMLDocument *doc;
-
 tinyxml2::XMLElement* parseXML(std::string file)
 {
 	doc = new tinyxml2::XMLDocument();
 	doc->LoadFile((file).c_str());
 	return doc->FirstChildElement("SCRIPTGAME")->FirstChildElement("SPRITE");
 }
-
+//-----------------------------------------------------------------------------
 tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE)
 {
 	return SPRITE->NextSiblingElement("SPRITE");
 }
-
+//-----------------------------------------------------------------------------
 void loadXMLComposer(std::string file) 
 {
 	tinyxml2::XMLDocument doc;
@@ -31,14 +33,6 @@ void loadXMLComposer(std::string file)
 			const char *sound = SCENE->Attribute("sound");
 			const char *music = SCENE->Attribute("music");
 
-			//[TO DO] Создавать объекты "Сцена" <-----
-			//        |
-			//        -- Прогружать по информации данной "сценой"
-			//           |
-			//           -- Отрисовывать загруженное
-			//              |
-			//              -- Очищать загруженное
-
 			std::cout << "SCENE: " << number << std::endl
 					  << "Texture: " << texture << std::endl
 					  << "Text: " << text << std::endl
@@ -50,3 +44,4 @@ void loadXMLComposer(std::string file)
 		CHAPTER = CHAPTER->NextSiblingElement("CHAPTER");
 	}
 }
+//-----------------------------------------------------------------------------
