@@ -1,5 +1,19 @@
 ﻿#include "loadRes.hpp"
 
+tinyxml2::XMLDocument *doc;
+
+tinyxml2::XMLElement* parseXML(std::string file)
+{
+	doc = new tinyxml2::XMLDocument();
+	doc->LoadFile((file).c_str());
+	return doc->FirstChildElement("SCRIPTGAME")->FirstChildElement("SPRITE");
+}
+
+tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE)
+{
+	return SPRITE->NextSiblingElement("SPRITE");
+}
+
 void loadXMLComposer(std::string file) 
 {
 	tinyxml2::XMLDocument doc;

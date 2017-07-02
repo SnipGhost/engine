@@ -5,18 +5,16 @@
 #include <string>
 #include "macros.h"
 //-----------------------------------------------------------------------------
+#define SCREEN_X 1024
+#define SCREEN_Y 768
+#define SCREEN_M 7
+//-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
 	//#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
 	//#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
-	#define SCREEN_X 1024
-	#define SCREEN_Y 768
-	#define SCREEN_M 7
 	#define RES_PATH std::string("Resources/")
 #else
-	#define SCREEN_X 1024
-	#define SCREEN_Y 768
-	#define SCREEN_M 7
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
 	#else
@@ -28,6 +26,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Modules/loadRes.hpp"
+#include "engine.hpp"
 //-----------------------------------------------------------------------------
 int main()
 {
@@ -36,28 +35,49 @@ int main()
 	sf::VideoMode videoMode(SCREEN_X, SCREEN_Y);
 	sf::RenderWindow window(videoMode, "Three Minutes", SCREEN_M, setting);
 	window.setFramerateLimit(30);
+	
 	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
-	loadXMLComposer(RES_PATH + "scenario/script.xml");
+	//loadXMLComposer(RES_PATH + "scenario/script.xml");
+	
 	//[ВРЕМЯ]
 	sf::Clock clock;
+	
 	//[ШРИФТ][ТЕКСТ]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile(RES_PATH + "font1.ttf");
 	sf::Text *text = new sf::Text("SFML demo", *font);
 	text->setFillColor(sf::Color::Black);
 	text->setPosition(sf::Vector2f(SCREEN_X-200, 20));
+	
 	//[ТЕКСТУРА][СПРАЙТ]
 	sf::Texture texture;
 	texture.loadFromFile(RES_PATH + "texture.png");
 	sf::Sprite sprite(texture);
+	//ng::Sprite slavya("Slavya", RES_PATH + "slavya.png"); // Классика
+
+	//[СПРАЙТЫ ИЗ XML]
+	tinyxml2::XMLElement* sp = parseXML(RES_PATH + "scenario/script.xml");
+	ng::Sprite slavya1(ng::getSpriteData(sp));
+	// Создаем первую Славю
+	slavya1.scale((float)0.3, (float)0.3);
+	slavya1.setPosition(600, -100);
+	bool forward = true; // [!]
+	// Переход к след. ноде
+	sp = getSpriteXMLNode(sp); 
+	// Создаем вторую Славю
+	ng::Sprite slavya2(ng::getSpriteData(sp));
+	slavya2.setPosition(100, 200);
+	
 	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]
 	sf::Texture gifT;
 	gifT.loadFromFile(RES_PATH + "gifFile.png");
 	sf::Sprite gif(gifT);
+	
 	//[МУЗЫКА]
 	sf::Music music;
 	music.openFromFile(RES_PATH + "music.ogg");
 	music.setVolume(40);
+	
 	//[ЗВУК]
 	sf::SoundBuffer buffer;
 	buffer.loadFromFile(RES_PATH + "sound.ogg"); 
@@ -69,8 +89,19 @@ int main()
 	{
 		//Общий пример обновления позиции в текстуре
 		int time = clock.getElapsedTime().asMilliseconds();
-		if(clock.getElapsedTime().asMilliseconds() > 1000) clock.restart(); else
-		gif.setTextureRect(sf::IntRect(2048 * (time/500), 0, 2048, 2048));
+		if(clock.getElapsedTime().asMilliseconds() > 1000) clock.restart(); 
+		else
+		{
+			gif.setTextureRect(sf::IntRect(256 * (time/500), 0, 256, 256));
+			auto pos = slavya1.getPosition();
+			if (pos.y < -100) forward = true;
+			if (pos.y > -80) forward = false;
+
+			if (forward)
+				slavya1.setPosition(pos.x, pos.y+1);
+			else
+				slavya1.setPosition(pos.x, pos.y-1);
+		}
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -88,6 +119,8 @@ int main()
 		window.pushGLStates();
 		window.clear();
 		window.draw(sprite);
+		window.draw(slavya1);
+		window.draw(slavya2);
 		window.draw(*text);
 		window.draw(gif);
 		window.popGLStates();
