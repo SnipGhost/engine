@@ -70,7 +70,7 @@ int main()
 		//Общий пример обновления позиции в текстуре
 		int time = clock.getElapsedTime().asMilliseconds();
 		if(clock.getElapsedTime().asMilliseconds() > 1000) clock.restart(); else
-		gif.setTextureRect(sf::IntRect(256 * (time/500), 0, 256, 256));
+		gif.setTextureRect(sf::IntRect(2048 * (time/500), 0, 2048, 2048));
 
 		sf::Event event;
 		while (window.pollEvent(event))
