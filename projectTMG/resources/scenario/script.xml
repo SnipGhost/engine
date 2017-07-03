@@ -1,6 +1,6 @@
 <SCRIPTGAME> <!-- Начало сценария -->
 
-    <SPRITE id="slavya1" layer="1" smooth="true" x="600" y="-100" scale="0.3" src="Resources/slavya.png"/>
-    <SPRITE id="slavya2" layer="2" smooth="true" x="100" y="200" scale="1" src="Resources/slavya-2.png"/>
+    <SPRITE id="slavya1" layer="1" smooth="true" x="600" y="-100" scale="0.3" src="slavya.png"/>
+    <SPRITE id="slavya2" layer="2" smooth="true" x="100" y="200" scale="1" src="slavya-2.png"/>
 
 </SCRIPTGAME> <!-- Конец сценария -->

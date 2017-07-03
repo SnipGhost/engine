@@ -14,6 +14,7 @@
 	//#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
 	//#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
 	#define RES_PATH std::string("Resources/")
+    #define APP_ICON "icon.png"
 #else
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
@@ -21,6 +22,7 @@
 		#include "Modules/pathfinder.hpp"
 		#define RES_PATH findPath()
 	#endif
+    #define APP_ICON "icon-mac.png"
 #endif
 //-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
@@ -44,8 +46,8 @@ int main()
 
 	//[ИКОНКА]
 	sf::Image icon;
-	icon.loadFromFile(RES_PATH + "icon.png");
-	window.setIcon(64, 64, icon.getPixelsPtr());
+	icon.loadFromFile(RES_PATH + APP_ICON);
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	
 	//[ШРИФТ][ТЕКСТ]
 	sf::Font *font = new sf::Font;
@@ -63,9 +65,9 @@ int main()
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = parseXML(RES_PATH + "scenario/script.xml");
-	ng::Sprite slavya1(ng::getSpriteData(sp));
+	ng::Sprite slavya1(ng::getSpriteData(sp, RES_PATH));
 	sp = getSpriteXMLNode(sp); // Нода1 -> Нода2
-	ng::Sprite slavya2(ng::getSpriteData(sp));
+	ng::Sprite slavya2(ng::getSpriteData(sp, RES_PATH));
 	
 	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]
 	sf::Texture gifT;

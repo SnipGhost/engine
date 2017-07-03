@@ -1,22 +1,22 @@
 //-----------------------------------------------------------------------------
-// engine.cpp												  Ðåàëèçàöèè Engine
+// engine.cpp												  Ð ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Engine
 //-----------------------------------------------------------------------------
 #include "engine.hpp"
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-SpriteData ng::getSpriteData(tinyxml2::XMLElement *spriteNode)
+SpriteData ng::getSpriteData(tinyxml2::XMLElement *spNode, std::string path)
 {
-	const char *id = spriteNode->Attribute("id");
-	const char *x = spriteNode->Attribute("x");
-	const char *y = spriteNode->Attribute("y");
-	const char *scale = spriteNode->Attribute("scale");
-	const char *src = spriteNode->Attribute("src");
-	const char *smooth = spriteNode->Attribute("smooth");
-	const char *layer = spriteNode->Attribute("layer");
+	const char *id = spNode->Attribute("id");
+	const char *x = spNode->Attribute("x");
+	const char *y = spNode->Attribute("y");
+	const char *scale = spNode->Attribute("scale");
+	const char *src = spNode->Attribute("src");
+	const char *smooth = spNode->Attribute("smooth");
+	const char *layer = spNode->Attribute("layer");
 	SpriteData res;
 	res.id = std::string(id);
-	res.src = std::string(src);
+	res.src = path + std::string(src);
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	res.scale = std::stof(scale);

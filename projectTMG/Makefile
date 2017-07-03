@@ -28,6 +28,10 @@ debug: $(DG)$(OF)
 $(DG)main.o: main.cpp macros.h
 	$(CC) $(CF) -o $(DG)main.o main.cpp
 #------------------------------------------------------------------------------
+# Скомпилировать engine.cpp
+$(DG)engine.o: $(MPATH)engine.cpp $(MPATH)engine.hpp
+	$(CC) $(CF) -o $(DG)engine.o $(MPATH)engine.cpp
+#------------------------------------------------------------------------------
 # Скомпилировать pathfinder
 $(DG)pathfinder.o: $(MPATH)pathfinder.mm $(MPATH)pathfinder.hpp
 	$(OC) $(CF) -o $(DG)pathfinder.o $(MPATH)pathfinder.mm
@@ -41,9 +45,9 @@ $(DG)loadRes.o: $(MPATH)loadRes.cpp $(MPATH)loadRes.hpp $(DG)tinyxml2.o
 	$(CC) $(CF) -o $(DG)loadRes.o $(MPATH)loadRes.cpp
 #------------------------------------------------------------------------------
 # Залинковать все в один исполняемый файл
-$(DG)$(OF): $(DG)main.o $(DG)pathfinder.o $(DG)tinyxml2.o $(DG)loadRes.o
+$(DG)$(OF): $(DG)main.o $(DG)pathfinder.o $(DG)tinyxml2.o $(DG)loadRes.o $(DG)engine.o
 	$(CC) $(LF) $(OO) -o $(DG)$(OF) $(DG)main.o \
-	$(DG)pathfinder.o $(DG)loadRes.o $(DG)tinyxml2.o
+	$(DG)pathfinder.o $(DG)loadRes.o $(DG)tinyxml2.o $(DG)engine.o
 #------------------------------------------------------------------------------
 # Удалить все object-файлы и исполняемый файл проекта
 clean:

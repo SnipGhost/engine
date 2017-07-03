@@ -1,12 +1,15 @@
+//-----------------------------------------------------------------------------
+// engine.hpp                                                   Описание движка
+//-----------------------------------------------------------------------------
 #pragma once 
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-
+//-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "tinyxml2.hpp"
 #include <iostream>
-
+//-----------------------------------------------------------------------------
 namespace ng
 {
 	//class Kernel
@@ -16,7 +19,7 @@ namespace ng
 	//	public:
 
 	//};
-
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct SpriteData
 	{
 		float x;
@@ -27,9 +30,9 @@ namespace ng
 		std::string id;
 		std::string src;
 	};
-
-	SpriteData getSpriteData(tinyxml2::XMLElement *spriteNode);
-	
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	SpriteData getSpriteData(tinyxml2::XMLElement *spNode, std::string path);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite
 	{
 		private:
@@ -42,7 +45,7 @@ namespace ng
 			bool setStrTexture(std::string src, bool smooth = true);
 			//void change(SpriteData sd);
 	};
-
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Music:public sf::Music
 	//{
 	//	private:
@@ -50,7 +53,7 @@ namespace ng
 	//	public:
 
 	//};
-
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Sound:public sf::Sound
 	//{
 	//	private:
@@ -58,7 +61,7 @@ namespace ng
 	//	public:
 
 	//};
-
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Text:public sf::Text
 	//{
 	//	private:
@@ -67,5 +70,6 @@ namespace ng
 
 	//};
 }
-
+//-----------------------------------------------------------------------------
 #endif /* ENGINE_HPP */
+//-----------------------------------------------------------------------------
