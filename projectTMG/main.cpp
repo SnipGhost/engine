@@ -25,17 +25,30 @@
 //-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "Modules/loadRes.hpp"
 #include "Modules/engine.hpp"
+//-----------------------------------------------------------------------------
+void showAll(ng::LogStream &log)
+{
+	log.print("NONE       ", 0);
+	log.print("CRITICAL   ", 1);
+	log.print("WARNING    ", 2);
+	log.print("NORMAL     ", 3);
+	log.print("INFORMATION", 4);
+}
 //-----------------------------------------------------------------------------
 int main()
 {
+	ng::LogStream log;
+	log.print("Hello");
+
+	showAll(log);
+
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8;
 	sf::VideoMode videoMode(SCREEN_X, SCREEN_Y);
 	sf::RenderWindow window(videoMode, "NOVEL FOX ENGINE", SCREEN_M, setting);
 	window.setFramerateLimit(30);
-	
+
 	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
 	//loadXMLComposer(RES_PATH + "scenario/script.xml");
 	
@@ -61,9 +74,9 @@ int main()
 	//ng::Sprite slavya("Slavya", RES_PATH + "slavya.png"); // Классика
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
-	tinyxml2::XMLElement* sp = parseXML(RES_PATH + "scenario/script.xml");
+	tinyxml2::XMLElement* sp = ng::parseXML(RES_PATH + "scenario/script.xml");
 	ng::Sprite slavya1(ng::getSpriteData(sp, RES_PATH));
-	sp = getSpriteXMLNode(sp); // Нода1 -> Нода2
+	sp = ng::getSpriteXMLNode(sp); // Нода1 -> Нода2
 	ng::Sprite slavya2(ng::getSpriteData(sp, RES_PATH));
 	
 	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]

@@ -9,23 +9,15 @@
 #include <SFML/Audio.hpp>
 #include "tinyxml2.hpp"
 #include <iostream>
-#include <fstream> 
+#include <fstream>
+#include <string>
+//-----------------------------------------------------------------------------
+#define GETBIT(x,pos) (((x) & ( 0x1 << (pos) )) !=0)
+#define SHOW_ALL_TAG 31
 //-----------------------------------------------------------------------------
 namespace ng
 {
-	/*sf::Clock clockNG();*/
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//class Kernel
-	//{
-	//	private:
-
-	//	public:
-
-	//};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern std::ostream *log; 
-	void showMsg(std::string msg, std::ostream &out = *log);
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct SpriteData
 	{
 		float x;
@@ -36,22 +28,46 @@ namespace ng
 		std::string id;
 		std::string src;
 	};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	tinyxml2::XMLElement* parseXML(std::string file);
+	tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE);
+	void loadXMLComposer(std::string file);
 	SpriteData getSpriteData(tinyxml2::XMLElement *spNode, std::string path);
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Clock;
+	/*sf::Clock clockNG();*/
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class LogStream
+	{
+	 private:
+		std::ostream *log;
+		bool isExtOS;
+		unsigned int tag_mask;
+	 public:
+		static enum TAGS { NONE, CRIT, WARN, NORM, INFO };
+		LogStream(unsigned int mask = SHOW_ALL_TAG);
+		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
+		LogStream(std::string &file, unsigned int mask = SHOW_ALL_TAG);
+		~LogStream();
+
+		bool check();
+		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
+		void print(std::string msg, size_t tag = 0);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite
 	{
-		private:
-			sf::Texture texture;
-			std::string id;
-			unsigned int layer;
-		public:
-			Sprite(std::string id, std::string src, bool smooth = true);
-			Sprite(ng::SpriteData sd);
-			bool setStrTexture(std::string src, bool smooth = true);
-			//void change(SpriteData sd);
+	 private:
+		sf::Texture texture;
+		std::string id;
+		unsigned int layer;
+	 public:
+		Sprite(std::string id, std::string src, bool smooth = true);
+		Sprite(SpriteData sd);
+		bool setStrTexture(std::string src, bool smooth = true);
+		//void change(SpriteData sd);
 	};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Music:public sf::Music
 	//{
 	//	private:
@@ -59,7 +75,7 @@ namespace ng
 	//	public:
 
 	//};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Sound:public sf::Sound
 	//{
 	//	private:
@@ -67,7 +83,7 @@ namespace ng
 	//	public:
 
 	//};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//class Text:public sf::Text
 	//{
 	//	private:
