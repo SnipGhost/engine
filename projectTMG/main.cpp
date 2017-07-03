@@ -11,10 +11,8 @@
 //-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
-	//#define SCREEN_X GetSystemMetrics(SM_CXSCREEN)
-	//#define SCREEN_Y GetSystemMetrics(SM_CYSCREEN)
 	#define RES_PATH std::string("Resources/")
-    #define APP_ICON "icon.png"
+	#define APP_ICON "icon.png"
 #else
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
@@ -22,7 +20,7 @@
 		#include "Modules/pathfinder.hpp"
 		#define RES_PATH findPath()
 	#endif
-    #define APP_ICON "icon-mac.png"
+	#define APP_ICON "icon-mac.png"
 #endif
 //-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
@@ -48,7 +46,6 @@ int main()
 	sf::Image icon;
 	icon.loadFromFile(RES_PATH + APP_ICON);
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	
 	//[ШРИФТ][ТЕКСТ]
 	sf::Font *font = new sf::Font;
 	font->loadFromFile(RES_PATH + "font1.ttf");
