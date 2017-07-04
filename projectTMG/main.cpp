@@ -44,20 +44,20 @@ int main()
 	//loadXMLComposer(RES_PATH + "scenario/script.xml");
 
 	//[ИКОНКА][СТАНДАРТ]
-	ng::Icon icon(RES_PATH + APP_ICON); //TO DO: Сделать установку ICON из файла настроек
+	ng::Icon icon(RES_PATH + APP_ICON);
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
-	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 20), RES_PATH + "font1.ttf", sf::Color::Red); 
-	text.setString("SFML"); //ПОСТ-ИЗМЕНЕНИЕ ПАРАМЕТРА STRING
+	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 50), RES_PATH + "font1.ttf", sf::Color::Red); 
 	
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
-	ng::Sprite sprite("background", RES_PATH + "texture.png");
+	ng::Sprite background("background", RES_PATH + "texture.png");
 
 	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
 	ng::Sprite gif("gif", RES_PATH + "gifFile.png");    //[12 КАДРОВ GIF]
-	ng::Sprite gif1("gif1", RES_PATH + "gifFile1.png"); //[6КАДРОВ GIF]
-	gif1.setPosition(0, 200);
+	gif.setPosition(50, 300);
+	ng::Sprite gif1("gif1", RES_PATH + "gifFile1.png"); //[6 КАДРОВ GIF]
+	gif1.setPosition(50, 500);
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = ng::parseXML(RES_PATH + "scenario/script.xml");
@@ -93,7 +93,7 @@ int main()
 
 		window.pushGLStates();
 		window.clear();
-		window.draw(sprite);
+		window.draw(background);
 		window.draw(slavya1);
 		window.draw(slavya2);
 		window.draw(text);
