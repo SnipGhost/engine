@@ -2,8 +2,15 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-int Clock::getMilliSecond()
+Icon::Icon(std::string src)
 {
-	return this->getElapsedTime().asMilliseconds();
+	if (!setIcon(src))
+	std::cout << "ErrorIcon " << src << std::endl;
+}
+//-----------------------------------------------------------------------------
+bool Icon::setIcon(std::string src)
+{
+	if (!loadFromFile(src)) return 0;
+	return 1;
 }
 //-----------------------------------------------------------------------------

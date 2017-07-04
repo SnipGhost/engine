@@ -76,8 +76,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modules\clock.cpp" />
     <ClCompile Include="Modules\engine.cpp" />
+    <ClCompile Include="Modules\icon.cpp" />
     <ClCompile Include="Modules\logstream.cpp" />
+    <ClCompile Include="Modules\music.cpp" />
+    <ClCompile Include="Modules\sound.cpp" />
     <ClCompile Include="Modules\sprite.cpp" />
+    <ClCompile Include="Modules\text.cpp" />
     <ClCompile Include="Modules\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -27,21 +27,12 @@
 #include <SFML/Audio.hpp>
 #include "Modules/engine.hpp"
 //-----------------------------------------------------------------------------
-void showAll(ng::LogStream &log)
-{
-	log.print("NONE       ", 0);
-	log.print("CRITICAL   ", 1);
-	log.print("WARNING    ", 2);
-	log.print("NORMAL     ", 3);
-	log.print("INFORMATION", 4);
-}
-//-----------------------------------------------------------------------------
 int main()
 {
+	system("chcp 1251 > nul");
 	ng::LogStream log;
-	log.print("Hello");
 
-	showAll(log);
+	log.print("Инициализация окна", 3);
 
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8;
@@ -51,58 +42,42 @@ int main()
 
 	//[XML ЗАГРУЗЧИК ИГРОВЫХ РЕСУРСОВ]
 	//loadXMLComposer(RES_PATH + "scenario/script.xml");
-	
-	//[ВРЕМЯ]
-	sf::Clock clock;
 
-	//[ИКОНКА]
-	sf::Image icon;
-	icon.loadFromFile(RES_PATH + APP_ICON);
+	//[ИКОНКА][СТАНДАРТ]
+	ng::Icon icon(RES_PATH + APP_ICON); //TO DO: Сделать установку ICON из файла настроек
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	//[ШРИФТ][ТЕКСТ]
-	sf::Font *font = new sf::Font;
-	font->loadFromFile(RES_PATH + "font1.ttf");
-	sf::Text *text = new sf::Text("SFML demo", *font);
-	text->setFillColor(sf::Color::Black);
-	text->setPosition(sf::Vector2f(SCREEN_X-200, 20));
-	
-	//[ТЕКСТУРА][СПРАЙТ]
-	sf::Texture texture;
-	texture.loadFromFile(RES_PATH + "texture.png");
-	sf::Sprite sprite(texture);
 
-	//ng::Sprite slavya("Slavya", RES_PATH + "slavya.png"); // Классика
+	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
+	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 20), RES_PATH + "font1.ttf"); 
+	text.setString("SFML"); //ПОСТ-ИЗМЕНЕНИЕ ПАРАМЕТРА STRING
+	
+	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
+	ng::Sprite sprite("background", RES_PATH + "texture.png");
+
+	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
+	ng::Sprite gif("gif", RES_PATH + "gifFile.png"); //TO DO: Сделать отдельный класс анимации
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = ng::parseXML(RES_PATH + "scenario/script.xml");
 	ng::Sprite slavya1(ng::getSpriteData(sp, RES_PATH));
 	sp = ng::getSpriteXMLNode(sp); // Нода1 -> Нода2
 	ng::Sprite slavya2(ng::getSpriteData(sp, RES_PATH));
+
+	//[МУЗЫКА][СТАНДАРТ]
+	ng::Music music("music", RES_PATH + "music.ogg");
 	
-	//[GIF-АНИМАЦИЯ][СТАНДАРТНАЯ ЗАГРУЗКА ТЕКСТУРЫ]
-	sf::Texture gifT;
-	gifT.loadFromFile(RES_PATH + "gifFile.png");
-	sf::Sprite gif(gifT);
-	
-	//[МУЗЫКА]
-	sf::Music music;
-	music.openFromFile(RES_PATH + "music.ogg");
-	music.setVolume(40);
-	
-	//[ЗВУК]
-	sf::SoundBuffer buffer;
-	buffer.loadFromFile(RES_PATH + "sound.ogg"); 
-	sf::Sound sound;
-	sound.setBuffer(buffer);
-	sound.setVolume(40);
+	//[ЗВУК][СТАНДАРТ]
+	ng::Sound sound("sound", RES_PATH + "sound.ogg");
+
+	log.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
 
 	bool forward = true; // [!]
 
 	while (window.isOpen())
 	{
 		//Общий пример обновления позиции в текстуре
-		int time = clock.getElapsedTime().asMilliseconds();
-		if(clock.getElapsedTime().asMilliseconds() > 1000) clock.restart(); 
+		int time = ng::globalClock.getMilliSecond();
+		if(ng::globalClock.getMilliSecond() > 1000) ng::globalClock.restart(); 
 		else
 		{
 			gif.setTextureRect(sf::IntRect(256 * (time/500), 0, 256, 256));
@@ -129,11 +104,12 @@ int main()
 		window.draw(sprite);
 		window.draw(slavya1);
 		window.draw(slavya2);
-		window.draw(*text);
+		window.draw(text);
 		window.draw(gif);
 		window.popGLStates();
 		window.display();
 	}
+
 	return EXIT_SUCCESS;
 }
 //-----------------------------------------------------------------------------

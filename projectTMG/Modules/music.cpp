@@ -2,31 +2,29 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Sprite::Sprite(std::string id, std::string src, bool smooth)
+Music::Music(std::string id, std::string src, float volume, bool loop)
 {
 	this->id = id; //TO DO
-	if (!setStrTexture(src, smooth))
-	std::cout << "Error" << std::endl;
+	if (!setMusic(src, volume, loop))
+	std::cout << "ErrorMusic " << src << std::endl;
 }
 //-----------------------------------------------------------------------------
-Sprite::Sprite(SpriteData sd)
-{
-	this->id = sd.id;
-	if (!setStrTexture(sd.src, sd.smooth))
-	std::cout << "Error" << std::endl;
-	setPosition(sd.x, sd.y);
-	setScale(sd.scale, sd.scale);
-}
+//Music::Music(MusicData md)
+//{
+//	this->id = md.id; //TO DO
+//	if (!setMusic(md.src, md.volume, md.loop))
+//	std::cout << "ErrorMusic " << md.src << std::endl;
+//}
 //-----------------------------------------------------------------------------
-bool Sprite::setStrTexture(std::string src, bool smooth)
+bool Music::setMusic(std::string src, float volume, bool loop)
 {
-	if (!texture.loadFromFile(src)) return 0;
-	texture.setSmooth(smooth);
-	setTexture(texture);
+	if (!openFromFile(src)) return 0;
+	setVolume(volume);
+	setLoop(loop);
 	return 1;
 }
 //-----------------------------------------------------------------------------
-//void Sprite::change(tinyxml2::XMLElement) 
+//void Music::change() 
 //{
 //
 //}
