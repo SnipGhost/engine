@@ -48,14 +48,16 @@ int main()
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
-	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 20), RES_PATH + "font1.ttf"); 
+	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 20), RES_PATH + "font1.ttf", sf::Color::Red); 
 	text.setString("SFML"); //ПОСТ-ИЗМЕНЕНИЕ ПАРАМЕТРА STRING
 	
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	ng::Sprite sprite("background", RES_PATH + "texture.png");
 
 	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
-	ng::Sprite gif("gif", RES_PATH + "gifFile.png"); //TO DO: Сделать отдельный класс анимации
+	ng::Sprite gif("gif", RES_PATH + "gifFile.png");    //[12 КАДРОВ GIF]
+	ng::Sprite gif1("gif1", RES_PATH + "gifFile1.png"); //[6КАДРОВ GIF]
+	gif1.setPosition(0, 200);
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = ng::parseXML(RES_PATH + "scenario/script.xml");
@@ -71,21 +73,11 @@ int main()
 
 	log.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
 
-	bool forward = true; // [!]
-
 	while (window.isOpen())
 	{
-		//Общий пример обновления позиции в текстуре
-		int time = ng::globalClock.getMilliSecond();
-		if(ng::globalClock.getMilliSecond() > 1000) ng::globalClock.restart(); 
-		else
-		{
-			gif.setTextureRect(sf::IntRect(256 * (time/500), 0, 256, 256));
-			auto pos = slavya1.getPosition();
-			if (pos.y < -100) forward = true;
-			if (pos.y > -80) forward = false;
-			(forward) ? slavya1.setPosition(pos.x, pos.y+1) : slavya1.setPosition(pos.x, pos.y-1);
-		}
+
+		gif.setAnimation(ng::globalClock.getMilliSecond());
+		gif1.setAnimation(ng::globalClock.getMilliSecond());
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -106,6 +98,7 @@ int main()
 		window.draw(slavya2);
 		window.draw(text);
 		window.draw(gif);
+		window.draw(gif1);
 		window.popGLStates();
 		window.display();
 	}

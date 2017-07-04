@@ -97,11 +97,16 @@ namespace ng
 		sf::Texture texture;
 		std::string id;
 		unsigned int layer;
+		int saveTime;
+		int saveFrame;
+		int countA;
+		int sideSize;
 	 public:
 		Sprite(std::string id, std::string src, bool smooth = true);
 		Sprite(SpriteData sd);
 		bool setStrTexture(std::string src, bool smooth = true);
-		//void change(SpriteData sd);
+		void setAnimation(int time);
+		//void change();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
@@ -132,9 +137,9 @@ namespace ng
 	 private:
 		sf::Font font;
 	 public:
-	    Text(std::string text, sf::Vector2f vector, std::string srcFont); //TO DO: Убрать постоянное указывание пути font
+	    Text(std::string text, sf::Vector2f vector, std::string srcFont, sf::Color color);
 		/*Text(TextData td);*/
-		bool setText(std::string text, sf::Vector2f vector, std::string srcFont); //TO DO: Убрать постоянное указывание пути font
+		bool setText(std::string text, sf::Vector2f vector, std::string srcFont, sf::Color color);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Clock globalClock;
