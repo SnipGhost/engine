@@ -9,10 +9,11 @@ AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
 	numFrame = 1;
 }
 //-----------------------------------------------------------------------------
-void AnimateSprite::setAnimation(int frameWidth, int frameHeight, int ms) 
+void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
 {
-	sideWidth = frameWidth;
 	sideHeight = frameHeight;
+	if(frameWidth == 0) frameWidth = frameHeight; //Один аргумент setAnimation
+	sideWidth = frameWidth;
 	delay = ms;
 }
 //-----------------------------------------------------------------------------
