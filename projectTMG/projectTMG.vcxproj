@@ -73,20 +73,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\clock.cpp" />
+    <ClCompile Include="Engine\engine.cpp" />
+    <ClCompile Include="Engine\icon.cpp" />
+    <ClCompile Include="Engine\logstream.cpp" />
+    <ClCompile Include="Engine\music.cpp" />
+    <ClCompile Include="Engine\sound.cpp" />
+    <ClCompile Include="Engine\sprite.cpp" />
+    <ClCompile Include="Engine\text.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Modules\clock.cpp" />
-    <ClCompile Include="Modules\engine.cpp" />
-    <ClCompile Include="Modules\icon.cpp" />
-    <ClCompile Include="Modules\logstream.cpp" />
-    <ClCompile Include="Modules\music.cpp" />
-    <ClCompile Include="Modules\sound.cpp" />
-    <ClCompile Include="Modules\sprite.cpp" />
-    <ClCompile Include="Modules\text.cpp" />
     <ClCompile Include="Modules\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="macros.h" />
-    <ClInclude Include="Modules\engine.hpp" />
+    <ClInclude Include="Engine\engine.hpp" />
+    <ClInclude Include="Modules\macros.h" />
     <ClInclude Include="Modules\tinyxml2.hpp" />
   </ItemGroup>
   <ItemGroup>

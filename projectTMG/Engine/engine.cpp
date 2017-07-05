@@ -1,22 +1,27 @@
 ﻿//-----------------------------------------------------------------------------
-// loadRes.cpp												 Загрузчик ресурсов
+// engine.cpp                                                 Реализации Engine
 //-----------------------------------------------------------------------------
-#include "loadRes.hpp"
+#include "engine.hpp"
 //-----------------------------------------------------------------------------
+using namespace ng;
+//-----------------------------------------------------------------------------
+LogStream ng::log;
+Clock ng::globalClock;
 tinyxml2::XMLDocument *doc;
-tinyxml2::XMLElement* parseXML(std::string file)
+//-----------------------------------------------------------------------------
+tinyxml2::XMLElement* ng::parseXML(std::string file)
 {
 	doc = new tinyxml2::XMLDocument();
 	doc->LoadFile((file).c_str());
 	return doc->FirstChildElement("SCRIPTGAME")->FirstChildElement("SPRITE");
 }
 //-----------------------------------------------------------------------------
-tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE)
+tinyxml2::XMLElement* ng::getSpriteXMLNode(tinyxml2::XMLElement* SPRITE)
 {
 	return SPRITE->NextSiblingElement("SPRITE");
 }
 //-----------------------------------------------------------------------------
-void loadXMLComposer(std::string file) 
+void ng::loadXMLComposer(std::string file) 
 {
 	tinyxml2::XMLDocument doc;
 	doc.LoadFile((file).c_str());
@@ -43,5 +48,25 @@ void loadXMLComposer(std::string file)
 		}
 		CHAPTER = CHAPTER->NextSiblingElement("CHAPTER");
 	}
+}
+//-----------------------------------------------------------------------------
+SpriteData ng::getSpriteData(tinyxml2::XMLElement *spNode, std::string path)
+{
+	const char *x = spNode->Attribute("x");
+	const char *y = spNode->Attribute("y");
+	const char *id = spNode->Attribute("id");
+	const char *src = spNode->Attribute("src");
+	const char *scale = spNode->Attribute("scale");
+	const char *layer = spNode->Attribute("layer");
+	const char *smooth = spNode->Attribute("smooth");
+	SpriteData res;
+	res.x = std::stof(x);
+	res.y = std::stof(y);
+	res.id = std::string(id);
+	res.src = path + std::string(src);
+	res.scale = std::stof(scale);
+	res.layer = std::atoi(layer);
+	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
+	return res;
 }
 //-----------------------------------------------------------------------------

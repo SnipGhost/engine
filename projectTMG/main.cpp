@@ -1,38 +1,17 @@
 ﻿//-----------------------------------------------------------------------------
 // main.cpp														 DEMO-Программа
 //-----------------------------------------------------------------------------
-#include <iostream>
-#include <string>
-#include "macros.h"
-//-----------------------------------------------------------------------------
 #define SCREEN_X 1024
 #define SCREEN_Y 768
 #define SCREEN_M 7
 //-----------------------------------------------------------------------------
-#ifdef OS_IS_WIN
-	#include <windows.h>
-	#define RES_PATH std::string("Resources/")
-	#define APP_ICON "icon.png"
-#else
-	#ifdef DEBUG
-		#define RES_PATH std::string("Resources/")
-	#else
-		#include "Modules/pathfinder.hpp"
-		#define RES_PATH findPath()
-	#endif
-	#define APP_ICON "icon-mac.png"
-#endif
-//-----------------------------------------------------------------------------
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include "Modules/engine.hpp"
+#include "Engine/engine.hpp"
 //-----------------------------------------------------------------------------
 int main()
 {
 	system("chcp 1251 > nul");
-	ng::LogStream log;
 
-	log.print("Инициализация окна", 3);
+	ng::log.print("Инициализация окна", 3);
 
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = 8;
@@ -73,7 +52,7 @@ int main()
 	//[ЗВУК][СТАНДАРТ]
 	ng::Sound sound(RES_PATH + "sound.ogg");
 
-	log.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
+	ng::log.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
 
 	while (window.isOpen())
 	{

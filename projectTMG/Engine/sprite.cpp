@@ -1,3 +1,4 @@
+//-----------------------------------------------------------------------------
 #include "engine.hpp"
 //-----------------------------------------------------------------------------
 using namespace ng;
@@ -10,7 +11,7 @@ Sprite::Sprite(std::string id, std::string src, bool smooth)
 
 	saveTime = 0;
 	saveFrame = 1;
-	countA = getTextureRect().width/getTextureRect().height;
+
 	sideSize = getTextureRect().height;
 }
 //-----------------------------------------------------------------------------
@@ -33,11 +34,12 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 //-----------------------------------------------------------------------------
 void Sprite::setAnimation(int time) 
 {
-	    if((time-saveTime) >= 40) //ÌÈËËÈÑÅÊÓÍÄÛ ~25 FPS
+	    if ((time-saveTime) >= 40) //ÌÈËËÈÑÅÊÓÍÄÛ ~25 FPS
 		{
 			saveTime = time;
 			saveFrame++;
-			if(saveFrame == countA) saveFrame = 0;
+			if (saveFrame * sideSize >= this->getTexture()->getSize().x)
+				saveFrame = 0;
 		}
 		setTextureRect(sf::IntRect(sideSize * saveFrame, 0, sideSize, sideSize));
 }

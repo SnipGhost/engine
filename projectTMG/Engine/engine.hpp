@@ -5,9 +5,25 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 //-----------------------------------------------------------------------------
+#include "../Modules/macros.h"
+//-----------------------------------------------------------------------------
+#ifdef OS_IS_WIN
+	#include <windows.h>
+	#define RES_PATH std::string("Resources/")
+	#define APP_ICON "icon.png"
+#else
+	#ifdef DEBUG
+		#define RES_PATH std::string("Resources/")
+	#else
+		#include "pathfinder.hpp"
+		#define RES_PATH findPath()
+	#endif
+	#define APP_ICON "icon-mac.png"
+#endif
+//-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "tinyxml2.hpp"
+#include "../Modules/tinyxml2.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -93,20 +109,29 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite
 	{
-	 private:
+	 protected:
 		sf::Texture texture;
 		unsigned int layer;
 		std::string id;
-		int saveTime;
-		int saveFrame;
-		int countA;
-		int sideSize;
 	 public:
 		Sprite(std::string id, std::string src, bool smooth = true);
 		Sprite(SpriteData sd);
 		bool setStrTexture(std::string src, bool smooth);
-		void setAnimation(int time);
+		
 		void change(SpriteData sd);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class AnimateSprite: public ng::Sprite
+	{
+	 private:
+		int lastTime;   // Предыдущее время смены кадра
+		int numFrame;   // Текущий номер кадра
+		int sideWidth;  // Ширина кадра
+		int sideHeight; // Высота кадра
+		int delay;      // Время между кадрами в миллисекундах
+	 public:
+		void setAnimation(int frameWidth, int frameHeight, int delay);
+		void update();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
@@ -139,6 +164,8 @@ namespace ng
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Clock globalClock;
+	extern LogStream log;
+	extern sf::RenderWindow win;
 };
 //-----------------------------------------------------------------------------
 #endif /* ENGINE_HPP */
