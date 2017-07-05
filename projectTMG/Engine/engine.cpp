@@ -10,6 +10,10 @@ Kernel &ng::kernel = Kernel::init();
 Kernel & Kernel::init()
 {
 	static Kernel k;
+	#ifndef DEBUG
+		HWND hWnd = GetConsoleWindow();
+		ShowWindow(hWnd, SW_HIDE);
+	#endif
 	SET_LOCALE;
 	k.log = new LogStream("main.log");
 	k.doc = new tinyxml2::XMLDocument();
