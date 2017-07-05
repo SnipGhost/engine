@@ -101,7 +101,6 @@ namespace ng
 		int saveFrame;
 		int countA;
 		int sideSize;
-		std::map <sf::Sprite, std::string> mapping; //TO DO
 	 public:
 		Sprite(std::string id, std::string src, bool smooth = true);
 		Sprite(SpriteData sd);

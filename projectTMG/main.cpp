@@ -65,6 +65,8 @@ int main()
 	sp = ng::getSpriteXMLNode(sp); // Нода1 -> Нода2
 	ng::Sprite slavya2(ng::getSpriteData(sp, RES_PATH));
 
+	std::map <sf::Sprite, std::string> mapping; //TO DO
+
 	//[МУЗЫКА][СТАНДАРТ]
 	ng::Music music(RES_PATH + "music.ogg");
 	
