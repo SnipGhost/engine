@@ -42,8 +42,11 @@ void Sprite::setAnimation(int time)
 		setTextureRect(sf::IntRect(sideSize * saveFrame, 0, sideSize, sideSize));
 }
 //-----------------------------------------------------------------------------
-//void Sprite::change(tinyxml2::XMLElement) 
-//{
-//
-//}
+void Sprite::change(SpriteData sd) 
+{
+	if (!setStrTexture(sd.src, sd.smooth))
+	std::cout << "ErrorChangeSprite " << sd.src << std::endl;
+	setPosition(sd.x, sd.y);
+	setScale(sd.scale, sd.scale);
+}
 //-----------------------------------------------------------------------------

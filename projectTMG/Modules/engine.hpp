@@ -29,36 +29,36 @@ namespace ng
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//struct MusicData
-	//{
-	//	float volume;
-	//	bool loop;
-	//	std::string id;
-	//	std::string src;
-	//	std::string cmd;
-	//};
+	struct MusicData
+	{
+		float volume;
+		bool loop;
+		std::string id;
+		std::string src;
+		std::string cmd;
+	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//struct SoundData
-	//{
-	//	float volume;
-	//	std::string id;
-	//	std::string src;
-	//};
+	struct SoundData
+	{
+		float volume;
+		std::string id;
+		std::string src;
+	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//struct TextData
-	//{
-	//	std::string text;
-	//	std::string color;
-	//  std::string namePerson;
-	//};
+	struct TextData
+	{
+		std::string text;
+		std::string color;
+	  std::string namePerson;
+	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	tinyxml2::XMLElement* parseXML(std::string file);
 	tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE);
 	void loadXMLComposer(std::string file);
 	SpriteData getSpriteData(tinyxml2::XMLElement *spNode, std::string path);
-	/*MusicData getMusicData(tinyxml2::XMLElement *mNode, std::string path);*/
-	/*SoundData getSoundData(tinyxml2::XMLElement *sNode, std::string path);*/
-	/*TextData getTextData(tinyxml2::XMLElement *tNode, std::string path);*/
+	MusicData getMusicData(tinyxml2::XMLElement *mNode, std::string path);
+	SoundData getSoundData(tinyxml2::XMLElement *sNode, std::string path);
+	TextData getTextData(tinyxml2::XMLElement *tNode, std::string path);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
 	{
@@ -86,37 +86,36 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
-		public:
-			Icon(std::string src);
-			bool setIcon(std::string src);
+	 public:
+		Icon(std::string src);
+		bool setIcon(std::string src);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite
 	{
 	 private:
 		sf::Texture texture;
-		std::string id;
 		unsigned int layer;
+		std::string id;
 		int saveTime;
 		int saveFrame;
 		int countA;
 		int sideSize;
+		std::map <sf::Sprite, std::string> mapping; //TO DO
 	 public:
 		Sprite(std::string id, std::string src, bool smooth = true);
 		Sprite(SpriteData sd);
-		bool setStrTexture(std::string src, bool smooth = true);
+		bool setStrTexture(std::string src, bool smooth);
 		void setAnimation(int time);
-		//void change();
+		void change(SpriteData sd);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
 	{
-	 private:
-		std::string id;
 	 public:
-		Music(std::string id, std::string src, float volume = 100, bool loop = true); 
-		/*Music(MusicData md);*/ //TO DO: Показатель volume одинаков для всей музыки
-		bool setMusic(std::string src, float volume = 100, bool loop = true);
+		Music(std::string src, float volume = 100, bool loop = true); 
+		Music(MusicData md); //TO DO: Показатель volume одинаков для всей музыки
+		bool setMusic(std::string src, float volume, bool loop);
 		//void change(); //TO DO: Изменение volume
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,22 +123,20 @@ namespace ng
 	{
 	 private:
 		sf::SoundBuffer buffer;
-		std::string id;
 	 public:
-		 Sound(std::string id, std::string src, float volume = 100); 
-		/*Sound(SoundData sod);*/ //TO DO: Показатель volume одинаков для всех звуков
-		bool setSound(std::string src, float volume = 100);
-		//void change(); //TO DO: Изменение volume
+		Sound( std::string src, float volume = 100); 
+		Sound(SoundData sod); //TO DO: Показатель volume одинаков для всех звуков
+		bool setSound(std::string src, float volume);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Text:public sf::Text
 	{
 	 private:
 		sf::Font font;
+		std::map <std::string, int> mapping;
 	 public:
-	    Text(std::string text, sf::Vector2f vector, std::string srcFont, sf::Color color);
-		/*Text(TextData td);*/
-		bool setText(std::string text, sf::Vector2f vector, std::string srcFont, sf::Color color);
+	    Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
+		Text(TextData td);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Clock globalClock;

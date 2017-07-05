@@ -48,7 +48,7 @@ int main()
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
-	ng::Text text("SFML DEMO", sf::Vector2f(SCREEN_X-200, 50), RES_PATH + "font1.ttf", sf::Color::Red); 
+	ng::Text text(L"Привет", SCREEN_X-200, 50, 20, RES_PATH); 
 	
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	ng::Sprite background("background", RES_PATH + "texture.png");
@@ -66,10 +66,10 @@ int main()
 	ng::Sprite slavya2(ng::getSpriteData(sp, RES_PATH));
 
 	//[МУЗЫКА][СТАНДАРТ]
-	ng::Music music("music", RES_PATH + "music.ogg");
+	ng::Music music(RES_PATH + "music.ogg");
 	
 	//[ЗВУК][СТАНДАРТ]
-	ng::Sound sound("sound", RES_PATH + "sound.ogg");
+	ng::Sound sound(RES_PATH + "sound.ogg");
 
 	log.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
 

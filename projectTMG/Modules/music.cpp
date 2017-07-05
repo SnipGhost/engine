@@ -2,19 +2,17 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Music::Music(std::string id, std::string src, float volume, bool loop)
+Music::Music(std::string src, float volume, bool loop)
 {
-	this->id = id; //TO DO
 	if (!setMusic(src, volume, loop))
-	std::cout << "ErrorMusic " << src << std::endl;
+		std::cout << "ErrorMusic " << src << std::endl;
 }
 //-----------------------------------------------------------------------------
-//Music::Music(MusicData md)
-//{
-//	this->id = md.id; //TO DO
-//	if (!setMusic(md.src, md.volume, md.loop))
-//	std::cout << "ErrorMusic " << md.src << std::endl;
-//}
+Music::Music(MusicData md)
+{
+	if (!setMusic(md.src, md.volume, md.loop))
+	std::cout << "ErrorMusic " << md.src << std::endl;
+}
 //-----------------------------------------------------------------------------
 bool Music::setMusic(std::string src, float volume, bool loop)
 {
