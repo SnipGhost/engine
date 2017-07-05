@@ -30,12 +30,14 @@ int main()
 	ng::Text text(L"Привет", SCREEN_X-200, 50, 20, RES_PATH); 
 	
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
-	ng::Sprite background("background", RES_PATH + "texture.png");
+	ng::Sprite background(RES_PATH + "texture.png");
 
 	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
-	ng::Sprite gif("gif", RES_PATH + "gifFile.png");    //[12 КАДРОВ GIF]
+	ng::AnimateSprite gif(RES_PATH + "gifFile.png");    //[12 КАДРОВ GIF]
+	gif.setAnimation(256, 256, 40);
 	gif.setPosition(50, 300);
-	ng::Sprite gif1("gif1", RES_PATH + "gifFile1.png"); //[6 КАДРОВ GIF]
+	ng::AnimateSprite gif1(RES_PATH + "gifFile1.png"); //[6 КАДРОВ GIF]
+	gif1.setAnimation(256, 256, 40);
 	gif1.setPosition(50, 500);
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
@@ -56,9 +58,8 @@ int main()
 
 	while (window.isOpen())
 	{
-
-		gif.setAnimation(ng::globalClock.getMilliSecond());
-		gif1.setAnimation(ng::globalClock.getMilliSecond());
+		gif.update();
+		gif1.update();
 
 		sf::Event event;
 		while (window.pollEvent(event))

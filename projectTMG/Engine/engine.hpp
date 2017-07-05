@@ -45,6 +45,17 @@ namespace ng
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//struct AnimateSpriteData
+	//{
+	//	float x;
+	//	float y;
+	//	float scale;
+	//	int layer;
+	//	bool smooth;
+	//	std::string id;
+	//	std::string src;
+	//};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct MusicData
 	{
 		float volume;
@@ -114,10 +125,10 @@ namespace ng
 		unsigned int layer;
 		std::string id;
 	 public:
-		Sprite(std::string id, std::string src, bool smooth = true);
+		Sprite(){}
+		Sprite(std::string src, bool smooth = true);
 		Sprite(SpriteData sd);
 		bool setStrTexture(std::string src, bool smooth);
-		
 		void change(SpriteData sd);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,8 +141,16 @@ namespace ng
 		int sideHeight; // Высота кадра
 		int delay;      // Время между кадрами в миллисекундах
 	 public:
+		AnimateSprite(std::string src, bool smooth = true):Sprite(src, smooth)
+		{
+			lastTime = 0;
+			numFrame = 1;
+		}
+		/*AnimateSprite(AnimateSpriteData asd);*/
+		bool setStrTexture(std::string src, bool smooth);
 		void setAnimation(int frameWidth, int frameHeight, int delay);
 		void update();
+		void draw(sf::RenderWindow window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
