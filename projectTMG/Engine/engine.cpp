@@ -5,15 +5,50 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-LogStream ng::log;
-Clock ng::globalClock;
-tinyxml2::XMLDocument *doc;
+Kernel &ng::kernel = Kernel::init();
 //-----------------------------------------------------------------------------
-tinyxml2::XMLElement* ng::parseXML(std::string file)
+Kernel & Kernel::init()
 {
-	doc = new tinyxml2::XMLDocument();
-	doc->LoadFile((file).c_str());
-	return doc->FirstChildElement("SCRIPTGAME")->FirstChildElement("SPRITE");
+	static Kernel k;
+	SET_LOCALE;
+	k.log = new LogStream("main.log");
+	k.doc = new tinyxml2::XMLDocument();
+	std::string file = RES_PATH + "scenario/script.xml";
+	k.doc->LoadFile((file).c_str());
+	if (k.doc->Error())
+	{
+		k.log->print("Ошибка при чтении сценария: " + file, CRIT);
+		exit(EXIT_FAILURE); // TODO: test on MAC OS X	
+	}
+	sf::ContextSettings setting;
+	setting.antialiasingLevel = 8;
+	sf::VideoMode videoMode(SCREEN_X, SCREEN_Y);
+	k.window = new sf::RenderWindow(videoMode, "NOVEL FOX ENGINE", SCREEN_M, setting);
+	k.window->setFramerateLimit(30);
+	ng::Icon icon(RES_PATH + APP_ICON);
+	k.window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+	return k;
+}
+//-----------------------------------------------------------------------------
+Kernel::~Kernel()
+{
+	log->print("Выгрузка ядра", INFO);
+	if (doc != NULL) delete doc;
+	log->print("Удаление XML документа завершено", INFO);
+	if (window != NULL) delete window;
+	log->print("Удаление окна завершено", INFO);
+	if (log != NULL) delete log;
+}
+//-----------------------------------------------------------------------------
+void Kernel::print(std::string msg, size_t tag)
+{
+	log->print(msg, tag);
+}
+//-----------------------------------------------------------------------------
+tinyxml2::XMLElement* ng::parseXML()
+{
+	tinyxml2::XMLElement* res = kernel.doc->FirstChildElement("SCRIPTGAME")->FirstChildElement("SPRITE");
+	return res;
 }
 //-----------------------------------------------------------------------------
 tinyxml2::XMLElement* ng::getSpriteXMLNode(tinyxml2::XMLElement* SPRITE)

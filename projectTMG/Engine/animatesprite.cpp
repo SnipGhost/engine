@@ -3,13 +3,11 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-//bool AnimateSprite::setStrTexture(std::string src, bool smooth)
-//{
-//	if (!texture.loadFromFile(src)) return 0;
-//	texture.setSmooth(smooth);
-//	setTexture(texture);
-//	return 1;
-//}
+AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
+{
+	lastTime = 0;
+	numFrame = 1;
+}
 //-----------------------------------------------------------------------------
 void AnimateSprite::setAnimation(int frameWidth, int frameHeight, int ms) 
 {
@@ -20,15 +18,19 @@ void AnimateSprite::setAnimation(int frameWidth, int frameHeight, int ms)
 //-----------------------------------------------------------------------------
 void AnimateSprite::update() 
 {
-	    if ((ng::globalClock.getMilliSecond()-lastTime) >= delay)
-		{
-			lastTime = ng::globalClock.getMilliSecond();
-			numFrame++;
-			if (numFrame * sideWidth >= this->getTexture()->getSize().x)
-			{
-				numFrame = 0;
-			}
-		}
-		setTextureRect(sf::IntRect(sideWidth * numFrame, 0, sideWidth, sideHeight));
+	if ((kernel.globalClock.getMilliSecond()-lastTime) >= delay)
+	{
+		lastTime = kernel.globalClock.getMilliSecond();
+		numFrame++;
+		if (numFrame * sideWidth >= this->getTexture()->getSize().x)
+			numFrame = 0;
+	}
+	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
+}
+//-----------------------------------------------------------------------------
+void AnimateSprite::draw(sf::RenderWindow *win) 
+{
+	this->update();
+	win->draw(*this);
 }
 //-----------------------------------------------------------------------------

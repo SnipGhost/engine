@@ -7,10 +7,15 @@
 //-----------------------------------------------------------------------------
 #include "../Modules/macros.h"
 //-----------------------------------------------------------------------------
+#define SCREEN_X 1024
+#define SCREEN_Y 768
+#define SCREEN_M 7
+//-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
 	#define RES_PATH std::string("Resources/")
 	#define APP_ICON "icon.png"
+	#define SET_LOCALE system("chcp 1251 > nul")
 #else
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
@@ -33,6 +38,49 @@
 //-----------------------------------------------------------------------------
 namespace ng
 {
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	enum TAGS { NONE, CRIT, WARN, NORM, INFO };
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Clock: public sf::Clock
+	{
+	 public:
+		int getMilliSecond();
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class LogStream
+	{
+	 protected:
+		std::ostream *log;
+		bool isExtOS;
+		unsigned int tag_mask;
+	 public:
+		LogStream(unsigned int mask = SHOW_ALL_TAG);
+		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
+		LogStream(const char *file, unsigned int mask = SHOW_ALL_TAG);
+		~LogStream();
+
+		bool check();
+		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
+		void print(std::string msg, size_t tag = 0);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Kernel
+	{
+	 private:        
+		Kernel(){}
+		Kernel(const Kernel& root);
+		Kernel& operator=(const Kernel&);
+	 public:
+		~Kernel();
+		LogStream *log;
+		Clock globalClock;
+		tinyxml2::XMLDocument *doc;
+		sf::RenderWindow *window;
+		static Kernel & init();
+		void print(std::string msg, size_t tag);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	extern Kernel &kernel;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct SpriteData
 	{
@@ -79,37 +127,13 @@ namespace ng
 	  std::string namePerson;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	tinyxml2::XMLElement* parseXML(std::string file);
+	tinyxml2::XMLElement* parseXML();
 	tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE);
 	void loadXMLComposer(std::string file);
 	SpriteData getSpriteData(tinyxml2::XMLElement *spNode, std::string path);
 	MusicData getMusicData(tinyxml2::XMLElement *mNode, std::string path);
 	SoundData getSoundData(tinyxml2::XMLElement *sNode, std::string path);
 	TextData getTextData(tinyxml2::XMLElement *tNode, std::string path);
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Clock: public sf::Clock
-	{
-	 public:
-		int getMilliSecond();
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class LogStream
-	{
-	 private:
-		std::ostream *log;
-		bool isExtOS;
-		unsigned int tag_mask;
-	 public:
-		static enum TAGS { NONE, CRIT, WARN, NORM, INFO };
-		LogStream(unsigned int mask = SHOW_ALL_TAG);
-		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
-		LogStream(std::string &file, unsigned int mask = SHOW_ALL_TAG);
-		~LogStream();
-
-		bool check();
-		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		void print(std::string msg, size_t tag = 0);
-	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -125,32 +149,29 @@ namespace ng
 		unsigned int layer;
 		std::string id;
 	 public:
-		Sprite(){}
+		Sprite() {}
 		Sprite(std::string src, bool smooth = true);
 		Sprite(SpriteData sd);
 		bool setStrTexture(std::string src, bool smooth);
 		void change(SpriteData sd);
+		void draw(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class AnimateSprite: public ng::Sprite
 	{
-	 private:
-		int lastTime;   // Предыдущее время смены кадра
-		int numFrame;   // Текущий номер кадра
-		int sideWidth;  // Ширина кадра
-		int sideHeight; // Высота кадра
-		int delay;      // Время между кадрами в миллисекундах
+	 protected:
+		int lastTime;            // Предыдущее время смены кадра
+		unsigned int numFrame;   // Текущий номер кадра
+		unsigned int sideWidth;  // Ширина кадра
+		unsigned int sideHeight; // Высота кадра
+		int delay;               // Время между кадрами в миллисекундах
 	 public:
-		AnimateSprite(std::string src, bool smooth = true):Sprite(src, smooth)
-		{
-			lastTime = 0;
-			numFrame = 1;
-		}
+		AnimateSprite(std::string src, bool smooth = true);
 		/*AnimateSprite(AnimateSpriteData asd);*/
 		bool setStrTexture(std::string src, bool smooth);
 		void setAnimation(int frameWidth, int frameHeight, int delay);
 		void update();
-		void draw(sf::RenderWindow window);
+		void draw(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
@@ -164,7 +185,7 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound:public sf::Sound
 	{
-	 private:
+	 protected:
 		sf::SoundBuffer buffer;
 	 public:
 		Sound( std::string src, float volume = 100); 
@@ -174,17 +195,15 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Text:public sf::Text
 	{
-	 private:
+	 protected:
 		sf::Font font;
 		std::map <std::string, int> mapping;
 	 public:
-	    Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
+		Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
 		Text(TextData td);
+		void draw(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern Clock globalClock;
-	extern LogStream log;
-	extern sf::RenderWindow win;
 };
 //-----------------------------------------------------------------------------
 #endif /* ENGINE_HPP */

@@ -18,7 +18,7 @@ LogStream::LogStream(std::ostream &os, unsigned int mask)
 	check();
 }
 //-----------------------------------------------------------------------------
-LogStream::LogStream(std::string &file, unsigned int mask)
+LogStream::LogStream(const char *file, unsigned int mask)
 {
 	tag_mask = mask;
 	if (file == "std::cout")
@@ -28,7 +28,7 @@ LogStream::LogStream(std::string &file, unsigned int mask)
 	}
 	else
 	{
-		log = new std::fstream(file);
+		log = new std::ofstream(file);
 		isExtOS = false;
 		check();
 	}
