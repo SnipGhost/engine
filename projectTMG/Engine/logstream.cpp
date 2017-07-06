@@ -38,7 +38,11 @@ LogStream::LogStream(const char *file, unsigned int mask)
 //-----------------------------------------------------------------------------
 LogStream::~LogStream()
 {
-	if (!isExtOS) delete log;
+	if (!isExtOS)
+	{
+		((std::ofstream*)log)->close();
+		delete log;
+	}
 }
 //-----------------------------------------------------------------------------
 bool LogStream::check()

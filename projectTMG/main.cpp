@@ -7,10 +7,9 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-	kernel.print("Окно инициализированно", NORM);
-
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
-	Text text(L"Привет", SCREEN_X-200, 50, 20, RES_PATH); 
+	unsigned int screen_x = kernel.window->getSize().x;
+	Text text(L"Привет", screen_x-200.0, 50, 20, RES_PATH); 
 	
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	Sprite background(RES_PATH + "texture.png");
@@ -24,10 +23,10 @@ int main()
 	gif1.setPosition(50, 500);
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
-	tinyxml2::XMLElement* sp = parseXML();
+	tinyxml2::XMLElement* sp = parseXML("SPRITE");
 	Sprite slavya1(getSpriteData(sp, RES_PATH));
-	
-	sp = getSpriteXMLNode(sp); // Нода1 -> Нода2
+
+	sp = getNextXMLNode(sp, "SPRITE"); // Нода1 -> Нода2
 	Sprite slavya2(getSpriteData(sp, RES_PATH));
 
 	//std::map <sf::Sprite, std::string> mapping; //TO DO
