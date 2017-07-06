@@ -124,7 +124,7 @@ namespace ng
 	{
 		std::string text;
 		std::string color;
-	  std::string namePerson;
+	    std::string namePerson;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	tinyxml2::XMLElement* parseXML();
@@ -169,7 +169,7 @@ namespace ng
 		AnimateSprite(std::string src, bool smooth = true);
 		/*AnimateSprite(AnimateSpriteData asd);*/
 		bool setStrTexture(std::string src, bool smooth);
-		void setAnimation(int frameWidth, int frameHeight, int delay);
+		void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 		void update();
 		void draw(sf::RenderWindow *win = kernel.window);
 	};
@@ -202,6 +202,18 @@ namespace ng
 		Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
 		Text(TextData td);
 		void draw(sf::RenderWindow *win = kernel.window);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class CheckEvent:public sf::Event
+	{
+	 protected:
+		sf::Keyboard keyboard;
+		sf::Mouse mouse;
+	 public:
+		bool isKeyboardKey(sf::Keyboard::Key keyboard, sf::Event event);
+		bool isWinClosed(sf::Event event);
+		bool isMouseKey(sf::Mouse::Button mouse);
+		bool isMusicPlay(sf::Music &music);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };

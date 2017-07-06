@@ -17,10 +17,10 @@ int main()
 
 	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
 	AnimateSprite gif(RES_PATH + "gifFile.png");   // [12 КАДРОВ GIF]
-	gif.setAnimation(256, 256, 40);
+	gif.setAnimation(256);
 	gif.setPosition(50, 300);
 	AnimateSprite gif1(RES_PATH + "gifFile1.png"); // [ 6 КАДРОВ GIF]
-	gif1.setAnimation(256, 256, 40);
+	gif1.setAnimation(256);
 	gif1.setPosition(50, 500);
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
@@ -42,16 +42,14 @@ int main()
 
 	while (kernel.window->isOpen())
 	{
-		sf::Event event;
+		sf::Event event; //Убрать куда-нить
+		CheckEvent checkEvent;
 		while (kernel.window->pollEvent(event))
 		{
-			if (((event.type == sf::Event::KeyPressed) && 
-				(event.key.code == sf::Keyboard::Escape)) || event.type == sf::Event::Closed)
-				kernel.window->close();
-			if ((music.getStatus() != sf::Music::Playing) && kernel.window->isOpen()) 
-				music.play();
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
-				sound.play();
+			if(checkEvent.isKeyboardKey(sf::Keyboard::Escape, event) || 
+				checkEvent.isWinClosed(event)) kernel.window->close();
+			if(checkEvent.isMouseKey(sf::Mouse::Left)) sound.play();
+			if(!checkEvent.isMusicPlay(music)) music.play();
 		}
 
 		kernel.window->pushGLStates();
@@ -60,9 +58,7 @@ int main()
 		background.draw();
 		slavya1.draw();
 		slavya2.draw();
-
 		text.draw();
-
 		gif.draw();
 		gif1.draw();
 
