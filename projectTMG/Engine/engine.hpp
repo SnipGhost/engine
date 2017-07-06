@@ -167,6 +167,7 @@ namespace ng
 	class Icon: public sf::Image
 	{
 	 public:
+		Icon(){}
 		Icon(std::string src);
 		bool setIcon(std::string src);
 	};

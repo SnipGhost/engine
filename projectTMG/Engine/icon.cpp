@@ -5,7 +5,9 @@ using namespace ng;
 Icon::Icon(std::string src)
 {
 	if (!setIcon(src))
-		kernel.print("ErrorIcon " + src, NORM);
+		std::cout << "Failed load icon " << src << std::endl;
+	else
+		std::cout << "Set icon " << src << std::endl;
 }
 //-----------------------------------------------------------------------------
 bool Icon::setIcon(std::string src)

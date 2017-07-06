@@ -7,10 +7,11 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
+
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
 	unsigned int screen_x = kernel.window->getSize().x;
 	Text text(L"Привет", screen_x-200.0, 50, 20, RES_PATH); 
-	
+
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	Sprite background(RES_PATH + "texture.png");
 
@@ -41,6 +42,7 @@ int main()
 
 	while (kernel.window->isOpen())
 	{
+
 		Event event;
 		while (kernel.window->pollEvent(event))
 		{

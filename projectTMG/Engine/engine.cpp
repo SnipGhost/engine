@@ -44,9 +44,13 @@ Kernel::Kernel()
 	}
 	window->setFramerateLimit(30);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	ng::Icon icon(conf["app_icon"]);
+	ng::Icon icon;
+	if(!icon.loadFromFile(conf["app_icon"]))
+		log->print("Failed load icon " + conf["app_icon"], INFO);
+	else 
+		log->print("Icon loaded " + conf["app_icon"], INFO);
 	window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	log->print("Иконка загружена", INFO);
+	log->print("Icon set " + conf["app_icon"], INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	doc = new tinyxml2::XMLDocument();
 	doc->LoadFile((conf["scenario"]).c_str());

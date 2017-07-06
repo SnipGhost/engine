@@ -8,13 +8,17 @@ using namespace ng;
 Sprite::Sprite(std::string src, bool smooth)
 {
 	if (!setStrTexture(src, smooth))
-		kernel.print("ErrorSprite " + src, NORM);
+		kernel.print("Failed load texture " + src, WARN);
+	else
+		kernel.print("Load texture " + src, INFO);
 }
 //-----------------------------------------------------------------------------
 Sprite::Sprite(SpriteData sd)
 {
 	if (!setStrTexture(sd.src, sd.smooth))
-		kernel.print("ErrorSprite " + sd.src, NORM);
+		kernel.print("Failed create sprite " + sd.src, WARN);
+	else
+		kernel.print("Create sprite " + sd.src, INFO);
 	setPosition(sd.x, sd.y);
 	setScale(sd.scale, sd.scale);
 }
@@ -31,7 +35,9 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 void Sprite::change(SpriteData sd) 
 {
 	if (!setStrTexture(sd.src, sd.smooth))
-		kernel.print("ErrorChangeSprite " + sd.src, NORM);
+		kernel.print("Failed create sprite " + sd.src, WARN);
+	else
+		kernel.print("Change sprite " + sd.src, INFO);
 	setPosition(sd.x, sd.y);
 	setScale(sd.scale, sd.scale);
 }

@@ -6,13 +6,19 @@ using namespace ng;
 Music::Music(std::string src, float volume, bool loop)
 {
 	if (!setMusic(src, volume, loop))
-		kernel.print("ErrorMusic " + src, NORM);
+		kernel.print("Failed load music " + src, WARN);
+	else
+		kernel.print("Created music " + src, INFO);
+
+
 }
 //-----------------------------------------------------------------------------
 Music::Music(MusicData md)
 {
 	if (!setMusic(md.src, md.volume, md.loop))
-		kernel.print("ErrorMusic " + md.src, NORM);
+		kernel.print("Failed load music " + md.src, WARN);
+	else
+		kernel.print("Created music " + md.src, INFO);
 }
 //-----------------------------------------------------------------------------
 bool Music::setMusic(std::string src, float volume, bool loop)
