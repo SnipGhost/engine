@@ -68,9 +68,4 @@
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="main.log">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
 </Project>
