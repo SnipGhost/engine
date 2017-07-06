@@ -5,7 +5,23 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Kernel &ng::kernel = Kernel::init();
+// Настройки движка по-умолчанию
+//-----------------------------------------------------------------------------
+const char *ng::DEFAULT[PARAMS_COUNT*2] = \
+{
+	"scenario",       "scenario/script.xml",   // [0] Путь до скрипта
+	"xml_body",       "SCRIPTGAME",            // [1] Заглавный тег сценария
+	"screen_x",       "1024",                  // [2] Ширина окна
+	"screen_y",       "768",                   // [3] Высота окна
+	"screen_mode",    "7",                     // [4] Режим окна
+	"window_name",    "NOVEL FOX ENGINE",      // [5] Название окна
+	"app_icon",       DEFAULT_APP_ICON,        // [6] Иконка приложения
+	"anti_aliasing",  "8",                     // [7] Уровень сглаживания
+	"frame_limit",    "30"                     // [8] Ограничение FPS
+};
+const bool ng::RES_PARAMS[PARAMS_COUNT] = { 1, 0, 0, 0, 0, 0, 1, 0, 0 };
+//-----------------------------------------------------------------------------
+Kernel &ng::kernel = Kernel::init();       // Создаем ядро, загружаем настройки
 //-----------------------------------------------------------------------------
 Kernel::Kernel()
 {	
@@ -22,15 +38,16 @@ Kernel::Kernel()
 	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());
 	int screen_y = atoi(conf["screen_y"].c_str());
-	int screen_m = atoi(conf["screen_m"].c_str());
-	int anti_alias = atoi(conf["anti_alias"].c_str());
-	int fps_lim = atoi(conf["fps_lim"].c_str());
+	log->print(conf["screen_y"]);
+	int screen_mode = atoi(conf["screen_mode"].c_str());
+	int anti_aliasing = atoi(conf["anti_aliasing"].c_str());
+	int frame_limit = atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
-	setting.antialiasingLevel = anti_alias;
+	setting.antialiasingLevel = anti_aliasing;
 	sf::VideoMode videoMode(screen_x, screen_y);
-	const char *winName = conf["window_n"].c_str();
-	window = new sf::RenderWindow(videoMode, winName, screen_m, setting);
+	const char *winName = conf["window_name"].c_str();
+	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
 	if (window->isOpen()) 
 		log->print("Окно запущено", INFO);
 	else
@@ -38,11 +55,11 @@ Kernel::Kernel()
 		log->print("Ошибка при открытии окна", CRIT);
 		std::string vm = conf["screen_x"] + "x" + conf["screen_y"];
 		log->print("\t video mode:    " + vm, CRIT);
-		log->print("\t anti-Aliasing: " + conf["anti_alias"], CRIT);
-		log->print("\t window name:   " + conf["window_n"], CRIT);
+		log->print("\t anti-Aliasing: " + conf["anti_aliasing"], CRIT);
+		log->print("\t window name:   " + conf["window_name"], CRIT);
 		exit(EXIT_FAILURE);	
 	}
-	window->setFramerateLimit(30);
+	window->setFramerateLimit(frame_limit);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ng::Icon icon;
 	if(!icon.loadFromFile(conf["app_icon"]))
@@ -60,7 +77,6 @@ Kernel::Kernel()
 		exit(EXIT_FAILURE);	
 	}
 	else log->print("Сценарий загружен", INFO);
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 //-----------------------------------------------------------------------------
 Kernel & Kernel::init()
@@ -104,54 +120,17 @@ bool Kernel::parseConfig(std::string file)
 		value = strtok(NULL, CONF_DELIMS);
 		if (value[0] == ' ' || value[0] == '\t') value = value+1;
 		conf[std::string(key)] = std::string(value);
-		log->print(std::string(key) + " = " + conf[key]);
+		log->print(std::string(key) + " = " + conf[key]); // Проверка
 	}
-	// Путь до скрипта со сценарием
-	if (!conf.count("scenario")) {
-		conf["scenario"] = DEFAULT_SCENARIO;
-		log->print("scenario взято по-умолчанию", WARN);
-	}
-	conf["scenario"] = RES_PATH + conf["scenario"];
-	// XML-BODY
-	if (!conf.count("xml_body")) {
-		conf["xml_body"] = DEFAULT_XML_BODY;
-		log->print("xml_body взято по-умолчанию", WARN);
-	}
-	// Ширина окна
-	if (!conf.count("screen_x")) {
-		conf["screen_x"] = DEFAULT_SCREEN_X;
-		log->print("screen_x взято по-умолчанию", WARN);
-	}
-	// Высота окна
-	if (!conf.count("screen_y")) {
-		conf["screen_y"] = DEFAULT_SCREEN_Y;
-		log->print("screen_y взято по-умолчанию", WARN);
-	}
-	// Режим открытия окна
-	if (!conf.count("screen_m")) {
-		conf["screen_m"] = DEFAULT_SCREEN_M;
-		log->print("screen_m взято по-умолчанию", WARN);
-	}
-	// Название окна
-	if (!conf.count("window_n")) {
-		conf["window_n"] = DEFAULT_WINDOW_N;
-		log->print("window_n взято по-умолчанию", WARN);
-	}
-	// Уровень сглаживания
-	if (!conf.count("anti_alias")) {
-		conf["anti_alias"] = DEFAULT_ALIASLVL;
-		log->print("anti_alias взято по-умолчанию", WARN);
-	}
-	// Путь до иконки
-	if (!conf.count("app_icon")) {
-		conf["app_icon"] = DEFAULT_APP_ICON;
-		log->print("app_icon взято по-умолчанию", WARN);
-	}
-	conf["app_icon"] = RES_PATH + conf["app_icon"];
-	// Ограничение FPS
-	if (!conf.count("fps_lim")) {
-		conf["fps_lim"] = DEFAULT_FPSLIMIT;
-		log->print("fps_lim взято по-умолчанию", WARN);
+	for (int i = 0; i < PARAMS_COUNT*2; i += 2)
+	{
+		if (!conf.count(DEFAULT[i]))
+		{
+			conf[DEFAULT[i]] = DEFAULT[i+1];
+			log->print(std::string(DEFAULT[i]) + " взято по-умолчанию", WARN);
+			log->print(std::string("\t ") + DEFAULT[i+1], WARN);
+		}
+		if (RES_PARAMS[i/2]) conf[DEFAULT[i]] = RES_PATH + conf[DEFAULT[i]];
 	}
 	fin.close();
 	return 1;

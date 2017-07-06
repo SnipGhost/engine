@@ -36,22 +36,15 @@
 #define MAX_LINE 256
 #define CONF_DELIMS "="
 #define SHOW_ALL_TAG 31
-//-----------------------------------------------------------------------------
-// Настройки движка по-умолчанию
-//-----------------------------------------------------------------------------
-#define DEFAULT_SCENARIO "scenario/script.xml" // Путь до скрипта
-#define DEFAULT_XML_BODY "SCRIPTGAME"          // Заглавный тег XML скрипта
-#define DEFAULT_SCREEN_X "1024"                // Ширина окна
-#define DEFAULT_SCREEN_Y "768"                 // Высота окна
-#define DEFAULT_SCREEN_M "7"                   // Режим окна
-#define DEFAULT_WINDOW_N "NOVEL FOX ENGINE"    // Название окна
-#define DEFAULT_ALIASLVL "8"                   // Уровень сглаживания
-#define DEFAULT_FPSLIMIT "30"                  // Ограничение FPS
+#define PARAMS_COUNT 9
 //-----------------------------------------------------------------------------
 typedef tinyxml2::XMLElement* XMLNode;
 //-----------------------------------------------------------------------------
 namespace ng
 {
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	extern const char *DEFAULT[PARAMS_COUNT*2];
+	extern const bool RES_PARAMS[PARAMS_COUNT];
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
 	{
