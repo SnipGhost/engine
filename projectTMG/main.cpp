@@ -42,14 +42,13 @@ int main()
 
 	while (kernel.window->isOpen())
 	{
-		sf::Event event; //Убрать куда-нить
-		CheckEvent checkEvent;
+		Event event;
 		while (kernel.window->pollEvent(event))
 		{
-			if(checkEvent.isKeyboardKey(sf::Keyboard::Escape, event) || 
-				checkEvent.isWinClosed(event)) kernel.window->close();
-			if(checkEvent.isMouseKey(sf::Mouse::Left)) sound.play();
-			if(!checkEvent.isMusicPlay(music)) music.play();
+			if(event.isKeyboardKey(event.keyboard.Escape) || 
+				event.isWinClosed()) kernel.window->close();
+			if(event.isMouseKey(sf::Mouse::Left)) sound.play();
+			if(!event.isMusicPlay(music)) music.play();
 		}
 
 		kernel.window->pushGLStates();

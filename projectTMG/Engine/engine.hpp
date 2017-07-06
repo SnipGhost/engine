@@ -64,6 +64,17 @@ namespace ng
 		void print(std::string msg, size_t tag = 0);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Event: public sf::Event
+	{
+	 public:
+		sf::Keyboard keyboard;
+		sf::Mouse mouse;
+		bool isKeyboardKey(sf::Keyboard::Key keyboard);
+		bool isWinClosed();
+		bool isMouseKey(sf::Mouse::Button mouse);
+		bool isMusicPlay(sf::Music &music);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
 	 private:        
@@ -202,18 +213,6 @@ namespace ng
 		Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
 		Text(TextData td);
 		void draw(sf::RenderWindow *win = kernel.window);
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class CheckEvent:public sf::Event
-	{
-	 protected:
-		sf::Keyboard keyboard;
-		sf::Mouse mouse;
-	 public:
-		bool isKeyboardKey(sf::Keyboard::Key keyboard, sf::Event event);
-		bool isWinClosed(sf::Event event);
-		bool isMouseKey(sf::Mouse::Button mouse);
-		bool isMusicPlay(sf::Music &music);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };

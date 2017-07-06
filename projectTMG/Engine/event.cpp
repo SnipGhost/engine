@@ -3,25 +3,26 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-bool CheckEvent::isKeyboardKey(sf::Keyboard::Key keyboard, sf::Event event)
+bool Event::isKeyboardKey(sf::Keyboard::Key keyboard)
 {
-	if((event.type == sf::Event::KeyPressed) && (event.key.code == keyboard)) return 1;
+	if((type == sf::Event::KeyPressed) && (key.code == keyboard))
+		return 1;
 	return 0; 
 }
 //-----------------------------------------------------------------------------
-bool CheckEvent::isWinClosed(sf::Event event)
+bool Event::isWinClosed()
 {
-	if(event.type == sf::Event::Closed) return 1;
+	if(type == sf::Event::Closed) return 1;
 	return 0;
 }
 //-----------------------------------------------------------------------------
-bool CheckEvent::isMouseKey(sf::Mouse::Button mouse)
+bool Event::isMouseKey(sf::Mouse::Button mouse)
 {
 	if(sf::Mouse::isButtonPressed(mouse)) return 1;
 	return 0;
 }
 //-----------------------------------------------------------------------------
-bool CheckEvent::isMusicPlay(sf::Music &music)
+bool Event::isMusicPlay(sf::Music &music)
 {
 	if(music.getStatus() == sf::Music::Playing) return 1;
 	return 0;

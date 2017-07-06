@@ -14,7 +14,7 @@ AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
 {
 	sideHeight = frameHeight;
-	if(frameWidth == 0) frameWidth = frameHeight; //Один аргумент setAnimation
+	if (frameWidth == 0) frameWidth = frameHeight; //Один аргумент setAnimation
 	sideWidth = frameWidth;
 	delay = ms;
 }
