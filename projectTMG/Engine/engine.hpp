@@ -6,15 +6,12 @@
 #define ENGINE_HPP
 //-----------------------------------------------------------------------------
 #include "../Modules/macros.h"
-//-----------------------------------------------------------------------------
-#define SCREEN_X 1024
-#define SCREEN_Y 768
-#define SCREEN_M 7
+#define _CRT_SECURE_NO_WARNINGS
 //-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
 	#define RES_PATH std::string("Resources/")
-	#define APP_ICON "icon.png"
+	#define DEFAULT_APP_ICON "icon.png"
 	#define SET_LOCALE system("chcp 1251 > nul")
 #else
 	#ifdef DEBUG
@@ -23,7 +20,7 @@
 		#include "pathfinder.hpp"
 		#define RES_PATH findPath()
 	#endif
-	#define APP_ICON "icon-mac.png"
+	#define DEFAULT_APP_ICON "icon-mac.png"
 #endif
 //-----------------------------------------------------------------------------
 #include <SFML/Graphics.hpp>
@@ -32,20 +29,37 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 //-----------------------------------------------------------------------------
 #define GETBIT(x,pos) (((x) & ( 0x1 << (pos) )) !=0)
+#define CONFIG_FILE std::string("config.ini")
+#define MAX_LINE 256
+#define CONF_DELIMS "="
 #define SHOW_ALL_TAG 31
+//-----------------------------------------------------------------------------
+// Настройки движка по-умолчанию
+//-----------------------------------------------------------------------------
+#define DEFAULT_SCENARIO "scenario/script.xml" // Путь до скрипта
+#define DEFAULT_XML_BODY "SCRIPTGAME"          // Заглавный тег XML скрипта
+#define DEFAULT_SCREEN_X "1024"                // Ширина окна
+#define DEFAULT_SCREEN_Y "768"                 // Высота окна
+#define DEFAULT_SCREEN_M "7"                   // Режим окна
+#define DEFAULT_WINDOW_N "NOVEL FOX ENGINE"    // Название окна
+#define DEFAULT_ALIASLVL "8"                   // Уровень сглаживания
+#define DEFAULT_FPSLIMIT "30"                  // Ограничение FPS
+//-----------------------------------------------------------------------------
+typedef tinyxml2::XMLElement* XMLNode;
 //-----------------------------------------------------------------------------
 namespace ng
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	enum TAGS { NONE, CRIT, WARN, NORM, INFO };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
 	{
 	 public:
 		int getMilliSecond();
 	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	enum TAGS { NONE, CRIT, WARN, NORM, INFO };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
@@ -77,21 +91,25 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
-	 private:        
-		Kernel(){}
-		Kernel(const Kernel& root);
-		Kernel& operator=(const Kernel&);
+	 private:       
+		std::map<std::string, std::string> conf;     // Конфигурация
+		Kernel();                                    // Конструктор синглтона
+		Kernel(const Kernel& root) {};
+		Kernel& operator=(const Kernel&) {};
 	 public:
+		LogStream *log;                              // Логи программы
+		Clock globalClock;                           // Счетчик времени
+		tinyxml2::XMLDocument *doc;                  // XML-документ сценария
+		sf::RenderWindow *window;                    // SFML-окно
+
+		static Kernel & init();                      // Instance-метод
 		~Kernel();
-		LogStream *log;
-		Clock globalClock;
-		tinyxml2::XMLDocument *doc;
-		sf::RenderWindow *window;
-		static Kernel & init();
-		void print(std::string msg, size_t tag);
+		bool parseConfig(std::string file);          // Загрузить конфигурацию
+		void print(std::string msg, size_t tag = 0); // Перенаправление на лог
+		std::string operator[] (std::string key);    // Выдает конфигурацию
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern Kernel &kernel;
+	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct SpriteData
 	{
@@ -138,13 +156,13 @@ namespace ng
 	    std::string namePerson;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	tinyxml2::XMLElement* parseXML();
-	tinyxml2::XMLElement* getSpriteXMLNode(tinyxml2::XMLElement* SPRITE);
-	void loadXMLComposer(std::string file);
-	SpriteData getSpriteData(tinyxml2::XMLElement *spNode, std::string path);
-	MusicData getMusicData(tinyxml2::XMLElement *mNode, std::string path);
-	SoundData getSoundData(tinyxml2::XMLElement *sNode, std::string path);
-	TextData getTextData(tinyxml2::XMLElement *tNode, std::string path);
+	XMLNode parseXML(const char *tag);
+	XMLNode getNextXMLNode(XMLNode node, const char *tag);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	SpriteData getSpriteData(XMLNode spNode, std::string path);
+	//MusicData getMusicData(XMLNode mNode, std::string path);
+	//SoundData getSoundData(XMLNode sNode, std::string path);
+	//TextData getTextData(XMLNode tNode, std::string path);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -158,7 +176,6 @@ namespace ng
 	 protected:
 		sf::Texture texture;
 		unsigned int layer;
-		std::string id;
 	 public:
 		Sprite() {}
 		Sprite(std::string src, bool smooth = true);
