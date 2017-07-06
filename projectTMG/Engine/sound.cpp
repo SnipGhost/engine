@@ -6,18 +6,19 @@ using namespace ng;
 Sound::Sound(std::string src, float volume)
 {
 	if (!setSound(src, volume))
-		std::cout << "ErrorSound " << src << std::endl;
+		kernel.print("ErrorSound " + src, NORM);
 }
 //-----------------------------------------------------------------------------
 Sound::Sound(SoundData sod)
 {
 	if (!setSound(sod.src, sod.volume))
-	std::cout << "ErrorSound " << sod.src << std::endl;
+		kernel.print("ErrorSound " + sod.src, NORM);
 }
 //-----------------------------------------------------------------------------
 bool Sound::setSound(std::string src, float volume)
 {
-	if (!buffer.loadFromFile(src)) return 0;
+	if (!buffer.loadFromFile(src)) 
+		return 0;
 	setBuffer(buffer);
 	setVolume(volume);
 	return 1;

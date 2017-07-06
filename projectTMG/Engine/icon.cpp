@@ -5,12 +5,12 @@ using namespace ng;
 Icon::Icon(std::string src)
 {
 	if (!setIcon(src))
-	std::cout << "ErrorIcon " << src << std::endl;
+		kernel.print("ErrorIcon " + src, NORM);
 }
 //-----------------------------------------------------------------------------
 bool Icon::setIcon(std::string src)
 {
 	if (!loadFromFile(src)) return 0;
-	return 1;
+		return 1;
 }
 //-----------------------------------------------------------------------------
