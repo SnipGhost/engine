@@ -11,8 +11,8 @@ const char *ng::DEFAULT[PARAMS_COUNT*2] = \
 {
 	"scenario",       "scenario/script.xml",   // [0] Путь до скрипта
 	"xml_body",       "SCRIPTGAME",            // [1] Заглавный тег сценария
-	"screen_x",       "1024",                  // [2] Ширина окна
-	"screen_y",       "768",                   // [3] Высота окна
+	"screen_x",       "1280",                  // [2] Ширина окна
+	"screen_y",       "720",                   // [3] Высота окна
 	"screen_mode",    "7",                     // [4] Режим окна
 	"window_name",    "NOVEL FOX ENGINE",      // [5] Название окна
 	"app_icon",       DEFAULT_APP_ICON,        // [6] Иконка приложения

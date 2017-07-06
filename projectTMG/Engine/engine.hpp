@@ -78,6 +78,7 @@ namespace ng
 		sf::Mouse mouse;
 		bool isKeyboardKey(sf::Keyboard::Key keyboard);
 		bool isWinClosed();
+		bool isMouseClickKey(sf::Mouse::Button mouse);
 		bool isMouseKey(sf::Mouse::Button mouse);
 		bool isMusicPlay(sf::Music &music);
 	};
@@ -198,10 +199,13 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
 	{
+	 private:
+		 float volume;
 	 public:
 		Music(std::string src, float volume = 100, bool loop = true); 
 		Music(MusicData md); //TO DO: Показатель volume одинаков для всей музыки
 		bool setMusic(std::string src, float volume, bool loop);
+		void stopMusic();
 		//void change(); //TO DO: Изменение volume
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

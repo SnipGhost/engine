@@ -25,7 +25,7 @@ bool Event::isWinClosed()
 	return false;
 }
 //-----------------------------------------------------------------------------
-bool Event::isMouseKey(sf::Mouse::Button mouse)
+bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 {
 	static bool flag = true;
 	if(flag == true && type == MouseButtonPressed && mouseButton.button == mouse) 
@@ -37,6 +37,13 @@ bool Event::isMouseKey(sf::Mouse::Button mouse)
 	if(type == MouseButtonReleased && mouseButton.button == mouse) 
 		flag = true;
 
+	return false;
+}
+//-----------------------------------------------------------------------------
+bool Event::isMouseKey(sf::Mouse::Button mouse)
+{
+	if(type == MouseButtonPressed && mouseButton.button == mouse) 
+		return true;
 	return false;
 }
 //-----------------------------------------------------------------------------

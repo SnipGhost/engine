@@ -10,7 +10,7 @@ int main()
 
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
 	unsigned int screen_x = kernel.window->getSize().x;
-	Text text(L"Привет", (float)screen_x-200, 50, 20, RES_PATH); 
+	Text text(L"Хуманизацию подвезли", (float)screen_x-250, 50, 20, RES_PATH); 
 
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	Sprite background(RES_PATH + "texture.png");
@@ -25,16 +25,17 @@ int main()
 
 	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
 	tinyxml2::XMLElement* sp = parseXML("SPRITE");
-	Sprite slavya1(getSpriteData(sp, RES_PATH));
+	Sprite maya1(getSpriteData(sp, RES_PATH));
 
 	sp = getNextXMLNode(sp, "SPRITE"); // Нода1 -> Нода2
-	Sprite slavya2(getSpriteData(sp, RES_PATH));
+	Sprite maya2(getSpriteData(sp, RES_PATH));
 
 	//std::map <sf::Sprite, std::string> mapping; //TO DO
 
 	//[МУЗЫКА][СТАНДАРТ]
 	Music music(RES_PATH + "music.ogg");
-	
+	music.play();
+
 	//[ЗВУК][СТАНДАРТ]
 	Sound sound(RES_PATH + "sound.ogg");
 
@@ -48,16 +49,17 @@ int main()
 		{
 			if(event.isKeyboardKey(event.keyboard.Escape) || 
 				event.isWinClosed()) kernel.window->close();
-			if(event.isMouseKey(sf::Mouse::Left)) sound.play();
-			if(!event.isMusicPlay(music)) music.play();
+			if(event.isMouseClickKey(sf::Mouse::Left)) sound.play();
+			/*if(!event.isMusicPlay(music)) music.play();*/
 		}
+		if(event.isMouseKey(sf::Mouse::Right)) music.stopMusic();
 
 		kernel.window->pushGLStates();
 		kernel.window->clear();
 
 		background.draw();
-		slavya1.draw();
-		slavya2.draw();
+		maya1.draw();
+		maya2.draw();
 		text.draw();
 		gif.draw();
 		gif1.draw();
