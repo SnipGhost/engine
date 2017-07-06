@@ -38,7 +38,7 @@ int main()
 	//[ЗВУК][СТАНДАРТ]
 	Sound sound(RES_PATH + "sound.ogg");
 
-	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", 3);
+	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", NORM);
 
 	while (kernel.window->isOpen())
 	{
