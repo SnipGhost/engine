@@ -6,7 +6,6 @@
 using namespace ng;
 //-----------------------------------------------------------------------------
 // Настройки движка по-умолчанию
-//-----------------------------------------------------------------------------
 const char *ng::DEFAULT[PARAMS_COUNT*2] = \
 {
 	"scenario",       "scenario/script.xml",   // [0] Путь до скрипта
@@ -38,7 +37,6 @@ Kernel::Kernel()
 	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());
 	int screen_y = atoi(conf["screen_y"].c_str());
-	log->print(conf["screen_y"]);
 	int screen_mode = atoi(conf["screen_mode"].c_str());
 	int anti_aliasing = atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = atoi(conf["frame_limit"].c_str());
@@ -100,7 +98,7 @@ bool Kernel::parseConfig(std::string file)
 	std::ifstream fin(file);
 	if (fin.fail())
 	{
-		log->print("Ошибка при загрузке конфгурации: " + file, CRIT);
+		log->print("Ошибка при загрузке конфигурации: " + file, CRIT);
 		return 0;
 	}
 	else log->print("Файл конфигурации открыт: " + file, INFO);
@@ -124,11 +122,10 @@ bool Kernel::parseConfig(std::string file)
 	}
 	for (int i = 0; i < PARAMS_COUNT*2; i += 2)
 	{
-		if (!conf.count(DEFAULT[i]))
+		if (!conf.count(DEFAULT[i]) || (conf[DEFAULT[i]].length() == 0))
 		{
 			conf[DEFAULT[i]] = DEFAULT[i+1];
 			log->print(std::string(DEFAULT[i]) + " взято по-умолчанию", WARN);
-			log->print(std::string("\t ") + DEFAULT[i+1], WARN);
 		}
 		if (RES_PARAMS[i/2]) conf[DEFAULT[i]] = RES_PATH + conf[DEFAULT[i]];
 	}
@@ -161,7 +158,6 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 {
 	const char *x = spNode->Attribute("x");
 	const char *y = spNode->Attribute("y");
-	const char *id = spNode->Attribute("id");
 	const char *src = spNode->Attribute("src");
 	const char *scale = spNode->Attribute("scale");
 	const char *layer = spNode->Attribute("layer");
@@ -169,7 +165,6 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	SpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
-	res.id = std::string(id);
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);

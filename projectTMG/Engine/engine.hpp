@@ -23,36 +23,30 @@
 	#define DEFAULT_APP_ICON "icon-mac.png"
 #endif
 //-----------------------------------------------------------------------------
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include "../Modules/tinyxml2.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "../Modules/tinyxml2.hpp"
 //-----------------------------------------------------------------------------
-#define GETBIT(x,pos) (((x) & ( 0x1 << (pos) )) !=0)
-#define CONFIG_FILE std::string("config.ini")
-#define MAX_LINE 256
-#define CONF_DELIMS "="
-#define SHOW_ALL_TAG 31
-#define PARAMS_COUNT 9
+#define GETBIT(x,pos) (((x) & ( 1 << (pos) )) !=0) // Получить pos бит числа x
+//-----------------------------------------------------------------------------
+#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
+#define MAX_LINE 256                           // Максимальный размер строки
+#define CONF_DELIMS "="                        // Разделители в конфиге
+#define SHOW_ALL_TAG 31                        // 0b11111
+#define PARAMS_COUNT 9                         // Количество настроек
 //-----------------------------------------------------------------------------
 typedef tinyxml2::XMLElement* XMLNode;
 //-----------------------------------------------------------------------------
 namespace ng
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern const char *DEFAULT[PARAMS_COUNT*2];
-	extern const bool RES_PARAMS[PARAMS_COUNT];
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Clock: public sf::Clock
-	{
-	 public:
-		int getMilliSecond();
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	enum TAGS { NONE, CRIT, WARN, NORM, INFO };
+	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
+	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
+	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
@@ -68,7 +62,13 @@ namespace ng
 
 		bool check();
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		void print(std::string msg, size_t tag = 0);
+		void print(std::string msg, size_t tag = NONE);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Clock: public sf::Clock
+	{
+	 public:
+		int getMilliSecond();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Event: public sf::Event
@@ -112,7 +112,6 @@ namespace ng
 		float scale;
 		int layer;
 		bool smooth;
-		std::string id;
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,10 +202,10 @@ namespace ng
 		 float volume;
 	 public:
 		Music(std::string src, float volume = 100, bool loop = true); 
-		Music(MusicData md); //TO DO: Показатель volume одинаков для всей музыки
+		Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
 		bool setMusic(std::string src, float volume, bool loop);
 		void stopMusic();
-		//void change(); //TO DO: Изменение volume
+		//void change(); //TODO: Изменение volume
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound:public sf::Sound
@@ -215,7 +214,7 @@ namespace ng
 		sf::SoundBuffer buffer;
 	 public:
 		Sound( std::string src, float volume = 100); 
-		Sound(SoundData sod); //TO DO: Показатель volume одинаков для всех звуков
+		Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
 		bool setSound(std::string src, float volume);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,7 +224,8 @@ namespace ng
 		sf::Font font;
 		std::map <std::string, int> mapping;
 	 public:
-		Text(std::wstring text, float x, float y, int size, std::string path, std::string color = "black");
+		Text(std::wstring text, float x, float y, int size, 
+			 std::string path, std::string color = "black");
 		Text(TextData td);
 		void draw(sf::RenderWindow *win = kernel.window);
 	};
