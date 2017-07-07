@@ -34,18 +34,11 @@ void Music::stopMusic()
 {
 	if (getStatus() == sf::Music::Playing) {
 		volume = getVolume();
-		float k = kernel.globalClock.getMilliSecond()*0.0001;
-		std::cout << k << std::endl; //!
-		volume-=k;
+		volume-=1;
 		if (volume <= 0)	
-		{ 
 			stop();
-			kernel.globalClock.restart();
-		}
 		else 
-		{
 			setVolume(volume);
-		}
 	}
 }
 //-----------------------------------------------------------------------------
