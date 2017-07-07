@@ -12,16 +12,16 @@
 	#include <windows.h>
 	#define RES_PATH std::string("Resources/")     // Путь до Ресурсов
 	#define DEFAULT_APP_ICON "icon.png"
-    #define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
+	#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 	#define SET_LOCALE system("chcp 1251 > nul")
 #else
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
-        #define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
+		#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 	#else
 		#include "pathfinder.hpp"
 		#define RES_PATH findPath()
-        #define CONFIG_FILE findPath() + "config.ini"  // Путь до конфигурации
+		#define CONFIG_FILE findPath() + "config.ini"  // Путь до конфигурации
 	#endif
 	#define DEFAULT_APP_ICON "icon-mac.png"
 #endif
@@ -90,8 +90,8 @@ namespace ng
 	 private:       
 		std::map<std::string, std::string> conf;     // Конфигурация
 		Kernel();                                    // Конструктор синглтона
-		Kernel(const Kernel& root) = delete;
-		Kernel& operator=(const Kernel&) = delete;
+		Kernel(const Kernel& root);
+		Kernel & operator=(const Kernel&);
 	 public:
 		LogStream *log;                              // Логи программы
 		Clock globalClock;                           // Счетчик времени
@@ -147,7 +147,7 @@ namespace ng
 	{
 		std::string text;
 		std::string color;
-	    std::string namePerson;
+		std::string namePerson;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	XMLNode parseXML(const char *tag);
