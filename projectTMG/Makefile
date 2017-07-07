@@ -3,57 +3,56 @@
 # Для cборки projectTMG
 #------------------------------------------------------------------------------
 # Компиляторы
-CC = g++
+CC = g++ -std=c++11
 OC = gcc
 # Флаги транслятора
-CF = -c -Wall
+CF = -c -MD -Wall
 # Префикс компоновщика
 PR = -framework
 # Для компиляции Objective-C поиска путей до файла
-OO = -framework Foundation
+OO = $(PR) Foundation
 # Опции линковки с SFML библиотеками/фреймворками
 LF = $(PR) sfml-window $(PR) sfml-graphics $(PR) sfml-system $(PR) sfml-audio
 # Имя исполняемого файла
 OF = game
 #------------------------------------------------------------------------------
-MPATH = modules/
-DG = Debug/
+DIR = Debug
 #------------------------------------------------------------------------------
-all: $(DG)$(OF)
+source_dirs := . Engine Modules
+#------------------------------------------------------------------------------
+search_wildcards := $(addsuffix /*.cpp,$(source_dirs)) 
+#------------------------------------------------------------------------------
+depend := $(notdir $(patsubst %.cpp,%.o,$(wildcard $(search_wildcards))))
+#------------------------------------------------------------------------------
+depend += pathfinder.o
+#------------------------------------------------------------------------------
+depend := $(addprefix $(DIR)/,$(depend))
+#------------------------------------------------------------------------------
+all: $(DIR)/$(OF)
 #------------------------------------------------------------------------------
 debug: CF += -DDEBUG
-debug: $(DG)$(OF)
+debug: $(DIR)/$(OF)
 #------------------------------------------------------------------------------
-# Скомпилировать main.cpp
-$(DG)main.o: main.cpp macros.h
-	$(CC) $(CF) -o $(DG)main.o main.cpp
+$(DIR)/$(OF): $(depend)
+	$(CC) $(LF) $(OO) $^ -o $@
 #------------------------------------------------------------------------------
-# Скомпилировать engine.cpp
-$(DG)engine.o: $(MPATH)engine.cpp $(MPATH)engine.hpp
-	$(CC) $(CF) -o $(DG)engine.o $(MPATH)engine.cpp
+VPATH := $(source_dirs)
 #------------------------------------------------------------------------------
-# Скомпилировать pathfinder
-$(DG)pathfinder.o: $(MPATH)pathfinder.mm $(MPATH)pathfinder.hpp
-	$(OC) $(CF) -o $(DG)pathfinder.o $(MPATH)pathfinder.mm
+# Все C++ файлы в директориях source_dirs
+$(DIR)/%.o: %.cpp
+	$(CC) $(CF) $(addprefix -I,$(source_dirs)) $< -o $@
 #------------------------------------------------------------------------------
-# Скомпилировать tinyxml2
-$(DG)tinyxml2.o: $(MPATH)tinyxml2.cpp $(MPATH)tinyxml2.hpp
-	$(CC) $(CF) -o $(DG)tinyxml2.o $(MPATH)tinyxml2.cpp
+# Все Objective-C файлы в директориях source_dirs
+$(DIR)/%.o: %.mm
+	$(OC) $(CF) $(addprefix -I,$(source_dirs)) $< -o $@
 #------------------------------------------------------------------------------
-# Скомпилировать loadRes
-$(DG)loadRes.o: $(MPATH)loadRes.cpp $(MPATH)loadRes.hpp $(DG)tinyxml2.o
-	$(CC) $(CF) -o $(DG)loadRes.o $(MPATH)loadRes.cpp
-#------------------------------------------------------------------------------
-# Залинковать все в один исполняемый файл
-$(DG)$(OF): $(DG)main.o $(DG)pathfinder.o $(DG)tinyxml2.o $(DG)loadRes.o $(DG)engine.o
-	$(CC) $(LF) $(OO) -o $(DG)$(OF) $(DG)main.o \
-	$(DG)pathfinder.o $(DG)loadRes.o $(DG)tinyxml2.o $(DG)engine.o
+include $(wildcard *.d) 
 #------------------------------------------------------------------------------
 # Удалить все object-файлы и исполняемый файл проекта
 clean:
-	rm -rf $(DG)*.o $(DG)$(OF)
+	rm -rf $(addprefix $(DIR)/,*.o *.d $(OF))
 #------------------------------------------------------------------------------
 # Запустить исполняемый файл
-run: $(DG)$(OF)
+run: $(DIR)/$(OF)
 	./start ./Frameworks
 #------------------------------------------------------------------------------

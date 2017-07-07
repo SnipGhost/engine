@@ -5,6 +5,7 @@
 *.bak
 *.log
 *.o
+*.d
 projectTMG/game
 
 # User-specific files

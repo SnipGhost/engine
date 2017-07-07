@@ -10,15 +10,18 @@
 //-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
-	#define RES_PATH std::string("Resources/")
+	#define RES_PATH std::string("Resources/")     // Путь до Ресурсов
 	#define DEFAULT_APP_ICON "icon.png"
+    #define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 	#define SET_LOCALE system("chcp 1251 > nul")
 #else
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
+        #define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 	#else
 		#include "pathfinder.hpp"
 		#define RES_PATH findPath()
+        #define CONFIG_FILE findPath() + "config.ini"  // Путь до конфигурации
 	#endif
 	#define DEFAULT_APP_ICON "icon-mac.png"
 #endif
@@ -33,7 +36,6 @@
 //-----------------------------------------------------------------------------
 #define GETBIT(x,pos) (((x) & ( 1 << (pos) )) !=0) // Получить pos бит числа x
 //-----------------------------------------------------------------------------
-#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 #define MAX_LINE 256                           // Максимальный размер строки
 #define CONF_DELIMS "="                        // Разделители в конфиге
 #define SHOW_ALL_TAG 31                        // 0b11111
@@ -88,8 +90,8 @@ namespace ng
 	 private:       
 		std::map<std::string, std::string> conf;     // Конфигурация
 		Kernel();                                    // Конструктор синглтона
-		Kernel(const Kernel& root) {};
-		Kernel& operator=(const Kernel&) {};
+		Kernel(const Kernel& root) = delete;
+		Kernel& operator=(const Kernel&) = delete;
 	 public:
 		LogStream *log;                              // Логи программы
 		Clock globalClock;                           // Счетчик времени
@@ -122,7 +124,6 @@ namespace ng
 	//	float scale;
 	//	int layer;
 	//	bool smooth;
-	//	std::string id;
 	//	std::string src;
 	//};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,7 +177,7 @@ namespace ng
 		Sprite(SpriteData sd);
 		bool setStrTexture(std::string src, bool smooth);
 		void change(SpriteData sd);
-		void draw(sf::RenderWindow *win = kernel.window);
+		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class AnimateSprite: public ng::Sprite
@@ -193,7 +194,7 @@ namespace ng
 		bool setStrTexture(std::string src, bool smooth);
 		void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 		void update();
-		void draw(sf::RenderWindow *win = kernel.window);
+		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Music:public sf::Music
@@ -227,7 +228,7 @@ namespace ng
 		Text(std::wstring text, float x, float y, int size, 
 			 std::string path, std::string color = "black");
 		Text(TextData td);
-		void draw(sf::RenderWindow *win = kernel.window);
+		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };

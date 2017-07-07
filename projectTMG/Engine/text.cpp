@@ -36,7 +36,7 @@ Text::Text(TextData td)
 	//std::cout << "ErrorText " << td.text << std::endl;
 }
 //-----------------------------------------------------------------------------
-void Text::draw(sf::RenderWindow *win)
+void Text::display(sf::RenderWindow *win)
 {
 	win->draw(*this);
 }

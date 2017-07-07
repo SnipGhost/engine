@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// logstream.cpp                                        Реализация класса логов
+// logstream.cpp                                        Р РµР°Р»РёР·Р°С†РёСЏ РєР»Р°СЃСЃР° Р»РѕРіРѕРІ
 //-----------------------------------------------------------------------------
 #include "engine.hpp"
 //-----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ LogStream::LogStream(std::ostream &os, unsigned int mask)
 LogStream::LogStream(const char *file, unsigned int mask)
 {
 	tag_mask = mask;
-	if (file == "std::cout")
+	if (strcmp(file, "std::cout") == 0)
 	{
 		log = &std::cout;
 		isExtOS = true;
@@ -51,7 +51,7 @@ bool LogStream::check()
 	{
 		if (!isExtOS) delete log;
 		log = &std::cout;
-		std::cout << "Ошибка при открытии потока" << std::endl;
+		std::cout << "РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё РїРѕС‚РѕРєР°" << std::endl;
 		return 0;
 	}
 	return 1;

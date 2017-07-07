@@ -42,7 +42,7 @@ void Sprite::change(SpriteData sd)
 	setScale(sd.scale, sd.scale);
 }
 //-----------------------------------------------------------------------------
-void Sprite::draw(sf::RenderWindow *win) 
+void Sprite::display(sf::RenderWindow *win) 
 {
 	win->draw(*this);
 }

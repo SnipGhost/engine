@@ -31,7 +31,7 @@ void AnimateSprite::update()
 	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
 }
 //-----------------------------------------------------------------------------
-void AnimateSprite::draw(sf::RenderWindow *win) 
+void AnimateSprite::display(sf::RenderWindow *win) 
 {
 	this->update();
 	win->draw(*this);

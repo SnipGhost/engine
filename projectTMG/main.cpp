@@ -46,22 +46,25 @@ int main()
 		Event event;
 		while (kernel.window->pollEvent(event))
 		{
-			if(event.isKeyboardKey(event.keyboard.Escape) || 
+			if (event.isKeyboardKey(event.keyboard.Escape) || 
 				event.isWinClosed()) kernel.window->close();
-			if(event.isMouseClickKey(sf::Mouse::Left)) sound.play();
+			if (event.isMouseClickKey(sf::Mouse::Left)) sound.play();
+            //if (event.) // Lost focus
 			/*if(!event.isMusicPlay(music)) music.play();*/
 		}
 		if(event.isMouseKey(sf::Mouse::Right)) music.stopMusic();
 
+        //if (pause) continue; 
+
 		kernel.window->pushGLStates();
 		kernel.window->clear();
 
-		background.draw();
-		maya1.draw();
-		maya2.draw();
-		text.draw();
-		gif.draw();
-		gif1.draw();
+		background.display();
+		maya1.display();
+		maya2.display();
+		text.display();
+		gif.display();
+		gif1.display();
 
 		kernel.window->popGLStates();
 		kernel.window->display();
