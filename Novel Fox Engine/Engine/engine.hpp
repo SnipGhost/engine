@@ -160,6 +160,7 @@ namespace ng
 		std::string src;
 		std::string id;
 		float volume;
+		bool loop;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	XMLNode parseXML(const char *tag);
@@ -245,12 +246,15 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Video :public sfe::Movie
 	{
+	 private:
+		 bool loopVideo;
 	 public:
 		Video(std::string src, float width, float height,
-			float x = 0, float y = 0, float volume = 100);
+			float x = 0, float y = 0, float volume = 100, bool loop = false);
 		Video(VideoData vd);
 		bool setVideo(std::string src, float width, float height,
-			float x, float y, float volume);
+			float x, float y, float volume, bool loop);
+		void setLoop(bool loop);
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

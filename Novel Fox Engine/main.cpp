@@ -39,7 +39,7 @@ int main()
 	Sound sound(RES_PATH + "sound.ogg");
 
 	//[ВИДЕО][СТАНДАРТ]
-	Video video(RES_PATH + "video.ogv", 711, 400, 0, 0, 0);
+	Video video(RES_PATH + "video.ogv", 750, 300, 10, 20, 0, true);
 	video.play();
 
 	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", NORM);
@@ -67,12 +67,12 @@ int main()
 		kernel.window->clear();
 
 		background.display();
+		video.display();
 		maya1.display();
 		maya2.display();
 		text.display();
 		gif.display();
 		gif1.display();
-		video.display();
 
 		kernel.window->popGLStates();
 		kernel.window->display();
