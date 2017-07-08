@@ -36,6 +36,7 @@ endif
 ifeq ($(UNAME), Darwin)
     PR := -framework
     LF := $(PR) sfml-window $(PR) sfml-graphics $(PR) sfml-system $(PR) sfml-audio
+    LF += $(PR) sfeMovie
     LF += $(PR) Foundation
 endif
 #--------------------------------------------------------------------------------------------------
