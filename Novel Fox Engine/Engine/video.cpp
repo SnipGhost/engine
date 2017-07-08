@@ -40,9 +40,13 @@ void Video::setLoop(bool loop)
 void Video::display(sf::RenderWindow *win)
 {
 	setLoop(loopVideo);
-	if (getStatus() == sfe::Playing) //Åñëè âèäåî stop, òî no Draw //ÎØÈÁÊÀ Â ÊÎÍÑÎËÅ!
+	if (getStatus() != sfe::Paused)
 	{
 		update();
+		win->draw(*this);
+	}
+	if (getStatus() == sfe::Playing) //Åñëè âèäåî stop, òî no Draw //ÎØÈÁÊÀ Â ÊÎÍÑÎËÅ!
+	{
 		win->draw(*this);
 	}
 }

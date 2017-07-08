@@ -7,6 +7,9 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
+	kernel.version = "0.06.3";
+	kernel.print("Текущая версия игрового двигателя: " + kernel.version, INFO);
+
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
 	unsigned int screen_x = kernel.window->getSize().x;
 	Text text(L"Привет", (float)screen_x-250, 50, 20, RES_PATH); 
@@ -56,12 +59,13 @@ int main()
 		}
 		if (event.isMouseKey(sf::Mouse::Right)) music.stopMusic();
 
-		//if (!kernel.window->hasFocus()) //АДЕКВАТСТВА БЫ ПОБОЛЬШЕ
-		//{
-		//	music.pause();
-		//	sound.pause();
-		//	continue;
-		//}
+		if (!kernel.window->hasFocus()) //АДЕКВАТСТВА БЫ ПОБОЛЬШЕ
+		{
+			music.pause();
+			sound.pause();
+			video.pause();
+			continue;
+		}
 
 		kernel.window->pushGLStates();
 		kernel.window->clear();

@@ -91,13 +91,14 @@ namespace ng
 	 private:       
 		std::map<std::string, std::string> conf;     // Конфигурация
 		Kernel();                                    // Конструктор синглтона
-		Kernel(const Kernel& root);
-		Kernel & operator=(const Kernel&);
+		Kernel(const Kernel& root) = delete;
+		Kernel & operator=(const Kernel&) = delete;
 	 public:
 		LogStream *log;                              // Логи программы
 		Clock globalClock;                           // Счетчик времени
 		tinyxml2::XMLDocument *doc;                  // XML-документ сценария
 		sf::RenderWindow *window;                    // SFML-окно
+		std::string version;
 
 		static Kernel & init();                      // Instance-метод
 		~Kernel();

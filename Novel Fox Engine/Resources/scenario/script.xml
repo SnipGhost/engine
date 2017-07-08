@@ -1,6 +1,6 @@
 <SCRIPTGAME> <!-- Начало сценария -->
 
     <SPRITE id="maya1" layer="1" smooth="true" x="1040" y="50" scale="1" src="maya1.png"/>
-    <SPRITE id="maya2" layer="2" smooth="true" x="700" y="310" scale="0.8" src="maya2.png"/>
+    <SPRITE id="maya2" layer="2" smooth="true" x="700" y="290" scale="0.7" src="maya2.png"/>
 
 </SCRIPTGAME> <!-- Конец сценария -->
