@@ -9,7 +9,7 @@ int main()
 {
 	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
 	unsigned int screen_x = kernel.window->getSize().x;
-	Text text(L"Хуманизацию подвезли", (float)screen_x-250, 50, 20, RES_PATH); 
+	Text text(L"Привет", (float)screen_x-250, 50, 20, RES_PATH); 
 
 	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
 	Sprite background(RES_PATH + "texture.png");
