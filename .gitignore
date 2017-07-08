@@ -6,6 +6,7 @@
 *.log
 *.o
 *.d
+*.VC.db
 projectTMG/game
 
 # User-specific files
