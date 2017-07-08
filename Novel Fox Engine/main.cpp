@@ -32,7 +32,21 @@ int main()
 	sp = getNextXMLNode(sp, "SPRITE"); // Нода1 -> Нода2
 	Sprite maya2(getSpriteData(sp, RES_PATH));
 
-	//std::map <sf::Sprite, std::string> mapping; //TO DO
+	//[ВИДЕО][СТАНДАРТ]
+	Video video(RES_PATH + "video.ogv", 750, 300, 10, 20, 0, true);
+	video.play();
+
+	// MAP
+	std::map<std::string, ng::Displayable*> objects;
+	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
+
+	objects["maya1"] = &maya1;
+	objects["maya2"] = &maya2;
+	objects["bg"] = &background;
+	objects["text"] = &text;
+	objects["gif_1"] = &gif;
+	objects["gif_2"] = &gif1;
+	objects["video"] = &video;
 
 	//[МУЗЫКА][СТАНДАРТ]
 	Music music(RES_PATH + "music.ogg");
@@ -41,9 +55,7 @@ int main()
 	//[ЗВУК][СТАНДАРТ]
 	Sound sound(RES_PATH + "sound.ogg");
 
-	//[ВИДЕО][СТАНДАРТ]
-	Video video(RES_PATH + "video.ogv", 750, 300, 10, 20, 0, true);
-	video.play();
+	
 
 	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", NORM);
 
@@ -63,20 +75,17 @@ int main()
 		{
 			music.pause();
 			sound.pause();
-			video.pause();
+			//video.pause();
 			continue;
 		}
 
 		kernel.window->pushGLStates();
 		kernel.window->clear();
 
-		background.display();
-		video.display();
-		maya1.display();
-		maya2.display();
-		text.display();
-		gif.display();
-		gif1.display();
+		for (Iter it = objects.begin(); it != objects.end(); ++it)
+		{
+			it->second->display();
+		}
 
 		kernel.window->popGLStates();
 		kernel.window->display();

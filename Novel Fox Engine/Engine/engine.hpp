@@ -184,11 +184,41 @@ namespace ng
 		bool setIcon(std::string src);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Sprite: public sf::Sprite
+	class Music :public sf::Music
+	{
+	private:
+		float volume;
+	public:
+		Music(std::string src, float volume = 100, bool loop = true);
+		Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
+		bool setMusic(std::string src, float volume, bool loop);
+		void stopMusic();
+		//void change(); //TODO: Изменение volume
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Sound :public sf::Sound
+	{
+	protected:
+		sf::SoundBuffer buffer;
+	public:
+		Sound(std::string src, float volume = 100);
+		Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
+		bool setSound(std::string src, float volume);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Displayable // Абстрактный класс
+	{
+		protected:
+			unsigned int layer;
+		public:
+			unsigned int getLayer() { return layer; }
+			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Sprite: public sf::Sprite, public ng::Displayable
 	{
 	 protected:
 		sf::Texture texture;
-		unsigned int layer;
 	 public:
 		Sprite() {}
 		Sprite(std::string src, bool smooth = true);
@@ -214,29 +244,7 @@ namespace ng
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Music:public sf::Music
-	{
-	 private:
-		 float volume;
-	 public:
-		Music(std::string src, float volume = 100, bool loop = true); 
-		Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
-		bool setMusic(std::string src, float volume, bool loop);
-		void stopMusic();
-		//void change(); //TODO: Изменение volume
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Sound:public sf::Sound
-	{
-	 protected:
-		sf::SoundBuffer buffer;
-	 public:
-		Sound( std::string src, float volume = 100); 
-		Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
-		bool setSound(std::string src, float volume);
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Text:public sf::Text
+	class Text:public sf::Text, public ng::Displayable
 	{
 	 protected:
 		sf::Font font;
@@ -248,7 +256,7 @@ namespace ng
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Video :public sfe::Movie
+	class Video: public sfe::Movie, public ng::Displayable
 	{
 	 private:
 		 bool loopVideo;
