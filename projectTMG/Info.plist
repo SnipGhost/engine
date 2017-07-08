@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>AppIcon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>subset.game</string>
+	<string>snipghost.game</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -19,25 +19,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.03.1</string>
+	<string>0.06.3</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>DTCompiler</key>
-	<string>com.apple.compilers.llvmgcc42</string>
-	<key>DTPlatformVersion</key>
-	<string>GM</string>
-	<key>DTSDKBuild</key>
-	<string>11D50a</string>
-	<key>DTSDKName</key>
-	<string>macosx10.7</string>
-	<key>DTXcode</key>
-	<string>0432</string>
-	<key>DTXcodeBuild</key>
-	<string>4E2002</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.games</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.5</string>
+	<string>10.7</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2017                                                  Mikhail Kucherenko &amp; Tagir Khanmurzin</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

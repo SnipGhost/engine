@@ -32,7 +32,7 @@ Kernel::Kernel()
 		#endif
 	#endif
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	log = new LogStream("main.log");
+	log = new LogStream(LOG_FILE);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());

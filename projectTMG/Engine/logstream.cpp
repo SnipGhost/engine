@@ -20,10 +20,10 @@ LogStream::LogStream(std::ostream &os, unsigned int mask)
 	check();
 }
 //-----------------------------------------------------------------------------
-LogStream::LogStream(const char *file, unsigned int mask)
+LogStream::LogStream(std::string file, unsigned int mask)
 {
 	tag_mask = mask;
-	if (strcmp(file, "std::cout") == 0)
+	if (strcmp(file.c_str(), "std::cout") == 0)
 	{
 		log = &std::cout;
 		isExtOS = true;
