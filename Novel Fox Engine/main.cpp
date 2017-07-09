@@ -7,26 +7,32 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-	typedef tinyxml2::XMLElement Elem;
+    kernel.print("0");
 
 	// [ТЕКСТ][ДОРАБОТАТЬ][ЛИТЕРАЛ!!!]
-	Elem* tElement = parseXML("TEXT");
+	XMLNode tElement = parseXML("TEXT");
 	Text text1(getTextData(tElement, RES_PATH));
 	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
 	Text text2(getTextData(tElement, RES_PATH));
 
+    kernel.print("1");
+
 	// [GIF-АНИМАЦИЯ]
-	Elem* asElement = parseXML("GIF");
+	XMLNode asElement = parseXML("GIF");
 	AnimateSprite gif1(getAnimateSpriteData(asElement, RES_PATH));
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
 	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
+
+    kernel.print("2");
 
 	// [MAP]
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
 
+    kernel.print("3");
+
 	// [СПРАЙТ]
-	Elem* spElement = parseXML("SPRITE");
+	XMLNode spElement = parseXML("SPRITE");
 	Sprite *sprite = NULL;
 	while (spElement != NULL)
 	{
@@ -37,11 +43,14 @@ int main()
 		spElement = getNextXMLNode(spElement, "SPRITE");
 	}
 
+    kernel.print("4");
+
 	// [ВИДЕО]
-	Elem* vElement = parseXML("VIDEO");
+	XMLNode vElement = parseXML("VIDEO");
 	Video video(getVideoData(vElement, RES_PATH));
 	video.play();
 
+    kernel.print("5");
 	
 	objects["gif_1"] = &gif1;
 	objects["gif_2"] = &gif2;
@@ -49,14 +58,17 @@ int main()
 	objects["text1"] = &text1;
 	objects["text2"] = &text2;
 
+    kernel.print("6");
 
 	// [МУЗЫКА]
-	Elem* mElement = parseXML("MUSIC");
+	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement, RES_PATH));
 	music.play();
 
+    kernel.print("7");
+
 	// [ЗВУК]
-	Elem* sElement = parseXML("SOUND");
+	XMLNode sElement = parseXML("SOUND");
 	Sound sound(getSoundData(sElement, RES_PATH));
 
 	kernel.print("Resources loaded.", NORM);
@@ -79,7 +91,7 @@ int main()
 			music.setPause();
 			sound.stop();
 			video.setPause();
-			sleep(100);
+			delay(100);
 			continue;
 		}
 

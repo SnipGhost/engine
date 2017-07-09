@@ -29,11 +29,11 @@ std::wstring wide_string(std::string const &s, std::locale const &loc)
 //-----------------------------------------------------------------------------
 bool Text::setText(std::string text, std::string color, float x, float y, unsigned int size)
 {
-	font.loadFromFile("Resources/font.ttf");
+	font.loadFromFile(RES_PATH + "font.ttf");
 
-	std::locale loc("rus");
+	std::locale loc(""); // Can not construct with rus, only ru_RU.UTF-8
 	std::wstring const textR = wide_string(text, loc);
-	std::locale::global(loc);
+    std::locale::global(loc);
 
 	setString(textR);
 	setFont(font);

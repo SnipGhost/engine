@@ -166,7 +166,7 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	res.id = id;
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
-	res.layer = std::atoi(layer);
+	res.layer = (unsigned)std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
 }
@@ -177,7 +177,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	const char *y = asdNode->Attribute("y");
 	const char *src = asdNode->Attribute("src");
 	const char *scale = asdNode->Attribute("scale");
-	const char *layer = asdNode->Attribute("layer");
+	//const char *layer = asdNode->Attribute("layer");
 	const char *smooth = asdNode->Attribute("smooth");
 	const char *height = asdNode->Attribute("height");
 	const char *width = asdNode->Attribute("width");
@@ -188,6 +188,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	res.y = std::stof(y);
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
+    //res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);

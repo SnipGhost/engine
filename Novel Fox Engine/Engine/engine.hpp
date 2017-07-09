@@ -13,7 +13,7 @@
 #ifdef OS_IS_WIN
 	#include <windows.h>
 	#include <time.h>
-	#define sleep(ms) Sleep(ms)
+	#define delay(ms) Sleep(ms)
 	#define RES_PATH std::string("Resources/")
 	#define DEFAULT_APP_ICON "icon.png"
 	#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
@@ -21,7 +21,7 @@
 	#define LOG_FILE std::string("main.log")
 #else
 	#include <unistd.h>
-	#define sleep(ms) usleep(ms*1000)
+	#define delay(ms) usleep((ms)*1000)
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
 		#define CONFIG_FILE std::string("config.ini")
@@ -160,6 +160,7 @@ namespace ng
 		int frameHeight;
 		int frameWidth;
 		int ms;
+        int layer;
 		float scale;
 		bool smooth;
 		std::string src;
@@ -247,7 +248,7 @@ namespace ng
 	class Displayable // Абстрактный класс
 	{
 		protected:
-			unsigned int layer;
+			int layer;
 		public:
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
