@@ -247,27 +247,12 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 
 	TextData res;
 
-	kernel.print("!1");
-
 	res.text = text;
 	res.color = color;
-
-	kernel.print("!2");
-
 	res.namePerson = namePerson;
-
-	kernel.print("!3");
-
 	res.layer = std::atoi(layer);
-
-	kernel.print("!4");
-
 	res.size = std::atoi(size);
-
-	kernel.print(font);
 	res.font = fonts[font];
-	kernel.print(font);
-	
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	return res;
