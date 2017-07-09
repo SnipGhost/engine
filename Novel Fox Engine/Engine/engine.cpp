@@ -166,7 +166,7 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	res.id = id;
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
-	res.layer = (unsigned)std::atoi(layer);
+	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
 }
@@ -175,9 +175,10 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 {
 	const char *x = asdNode->Attribute("x");
 	const char *y = asdNode->Attribute("y");
+	const char *id = asdNode->Attribute("id");
 	const char *src = asdNode->Attribute("src");
 	const char *scale = asdNode->Attribute("scale");
-	//const char *layer = asdNode->Attribute("layer");
+	const char *layer = asdNode->Attribute("layer");
 	const char *smooth = asdNode->Attribute("smooth");
 	const char *height = asdNode->Attribute("height");
 	const char *width = asdNode->Attribute("width");
@@ -186,9 +187,10 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	AnimateSpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
+	res.id = id;
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
-    //res.layer = std::atoi(layer);
+	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);
@@ -226,6 +228,7 @@ TextData ng::getTextData(XMLNode tNode, std::string path)
 {
 	const char *text = tNode->Attribute("text");
 	const char *color = tNode->Attribute("color");
+	const char *layer = tNode->Attribute("layer");
 	const char *namePerson = tNode->Attribute("name");
 	const char *size = tNode->Attribute("size");
 	const char *x = tNode->Attribute("x");
@@ -235,6 +238,7 @@ TextData ng::getTextData(XMLNode tNode, std::string path)
 	res.text = text;
 	res.color = color;
 	res.namePerson = namePerson;
+	res.layer = std::atoi(layer);
 	res.size = std::atoi(size);
 	res.x = std::stof(x);
 	res.y = std::stof(y);
@@ -245,15 +249,19 @@ VideoData ng::getVideoData(XMLNode vNode, std::string path)
 {
 	const char *x = vNode->Attribute("x");
 	const char *y = vNode->Attribute("y");
+	const char *id = vNode->Attribute("id");
 	const char *src = vNode->Attribute("src");
+	const char *layer = vNode->Attribute("layer");
 	const char *volume = vNode->Attribute("volume");
 	const char *loop = vNode->Attribute("loop");
 	const char *width = vNode->Attribute("width");
 	const char *height = vNode->Attribute("height");
 
 	VideoData res;
+	res.id = id;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
+	res.layer = std::atoi(layer);
 	res.width = std::stof(width);
 	res.height = std::stof(height);
 	res.src = path + std::string(src);

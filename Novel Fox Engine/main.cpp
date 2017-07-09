@@ -20,8 +20,10 @@ int main()
 	// [GIF-АНИМАЦИЯ]
 	XMLNode asElement = parseXML("GIF");
 	AnimateSprite gif1(getAnimateSpriteData(asElement, RES_PATH));
+	kernel.print(gif1, INFO);
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
 	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
+	kernel.print(gif2, INFO);
 
 	kernel.print("2");
 
@@ -48,6 +50,7 @@ int main()
 	// [ВИДЕО]
 	XMLNode vElement = parseXML("VIDEO");
 	Video video(getVideoData(vElement, RES_PATH));
+	kernel.print(video, INFO);
 	video.play();
 
 	kernel.print("5");

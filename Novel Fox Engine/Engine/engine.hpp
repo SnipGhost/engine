@@ -160,9 +160,10 @@ namespace ng
 		int frameHeight;
 		int frameWidth;
 		int ms;
-        int layer;
+		int layer;
 		float scale;
 		bool smooth;
+		std::string id;
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,6 +187,7 @@ namespace ng
 		std::string color;
 		std::string namePerson;
 		unsigned int size;
+		int layer;
 		float x;
 		float y;
 	};
@@ -194,11 +196,13 @@ namespace ng
 	{
 		float x;
 		float y;
-		float width;
-		float height;
-		std::string src;
-		float volume;
 		bool loop;
+		int layer;
+		float width;
+		float volume;
+		float height;
+		std::string id;
+		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	XMLNode parseXML(const char *tag);
@@ -257,6 +261,7 @@ namespace ng
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{
 	 protected:
+		int layer;
 		sf::Texture texture;
 		std::string id;
 	 public:
@@ -272,6 +277,7 @@ namespace ng
 	class AnimateSprite: public ng::Sprite
 	{
 	 protected:
+		 int layer;
 		int lastTime;            // Предыдущее время смены кадра
 		unsigned int numFrame;   // Текущий номер кадра
 		unsigned int sideWidth;  // Ширина кадра
@@ -283,12 +289,15 @@ namespace ng
 		void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 		void update();
 		void display(sf::RenderWindow *win = kernel.window);
+		friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Text:public sf::Text, public ng::Displayable
 	{
 	 protected:
+		 int layer;
 		sf::Font font;
+		std::string id;
 		std::map <std::string, int> mapping;
 	 public:
 		Text(std::string text, std::string color, float x, float y, unsigned int size);
@@ -300,7 +309,9 @@ namespace ng
 	class Video: public sfe::Movie, public ng::Displayable
 	{
 	 private:
+		 int layer;
 		 bool loopVideo;
+		 std::string id;
 	 public:
 		Video(std::string src, float width, float height,
 			float x = 0, float y = 0, float volume = 100, bool loop = false);
@@ -310,6 +321,7 @@ namespace ng
 		void setLoop(bool loop);
 		void setPause();
 		void display(sf::RenderWindow *win = kernel.window);
+		friend std::ostream & operator << (std::ostream &os, const Video &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };

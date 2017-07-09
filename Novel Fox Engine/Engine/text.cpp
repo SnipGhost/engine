@@ -30,12 +30,12 @@ bool Text::setText(std::string text, std::string color, float x, float y, unsign
 
 	switch (mapping[color])
 	{
-	case 1: setFillColor(sf::Color::Red);    break;
-	case 2: setFillColor(sf::Color::Green);  break;
-	case 3: setFillColor(sf::Color::Blue);   break;
-	case 4: setFillColor(sf::Color::Yellow); break;
-	case 5: setFillColor(sf::Color::White);  break;
-	case 6: setFillColor(sf::Color::Black);  break;
+		case 1: setFillColor(sf::Color::Red);    break;
+		case 2: setFillColor(sf::Color::Green);  break;
+		case 3: setFillColor(sf::Color::Blue);   break;
+		case 4: setFillColor(sf::Color::Yellow); break;
+		case 5: setFillColor(sf::Color::White);  break;
+		case 6: setFillColor(sf::Color::Black);  break;
 	}
 
 	setPosition(x, y);
