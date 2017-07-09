@@ -122,6 +122,7 @@ namespace ng
 		float scale;
 		int layer;
 		bool smooth;
+		std::string id;
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

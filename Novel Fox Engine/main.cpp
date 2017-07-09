@@ -21,31 +21,50 @@ int main()
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
 	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
 
+	// [MAP]
+	std::map<std::string, ng::Displayable*> objects;
+	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
+
 	// [СПРАЙТ]
 	Elem* spElement = parseXML("SPRITE");
-	Sprite background(getSpriteData(spElement, RES_PATH));
-	spElement = getNextXMLNode(spElement, "SPRITE"); // Нода1 -> Нода2
-	Sprite maya1(getSpriteData(spElement, RES_PATH));
-	spElement = getNextXMLNode(spElement, "SPRITE"); // Нода2 -> Нода3
-	Sprite maya2(getSpriteData(spElement, RES_PATH));
+	Sprite *sprite = NULL;
+	while (spElement != NULL)
+	{
+		SpriteData data = getSpriteData(spElement, RES_PATH);
+		sprite = new Sprite(data);
+		kernel.print(data.id);
+		kernel.print(std::to_string(data.x) + " " + std::to_string(data.y));
+		objects[data.id] = sprite;
+		spElement = getNextXMLNode(spElement, "SPRITE");
+	}
+	
+	//Sprite background(getSpriteData(spElement, RES_PATH));
+	//spElement = getNextXMLNode(spElement, "SPRITE"); // Нода1 -> Нода2
+	//Sprite maya1(getSpriteData(spElement, RES_PATH));
+	//spElement = getNextXMLNode(spElement, "SPRITE"); // Нода2 -> Нода3
+	//Sprite maya2(getSpriteData(spElement, RES_PATH));
 
 	// [ВИДЕО]
 	Elem* vElement = parseXML("VIDEO");
 	Video video(getVideoData(vElement, RES_PATH));
 	video.play();
 
-	// [MAP]
-	std::map<std::string, ng::Displayable*> objects;
-	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
+	
 
-	objects["bg"] = &background;
-	objects["maya1"] = &maya1;
-	objects["maya2"] = &maya2;
+	//objects["bg"] = &background;
+	//objects["maya1"] = &maya1;
+	//objects["maya2"] = &maya2;
 	objects["gif_1"] = &gif1;
 	objects["gif_2"] = &gif2;
 	objects["video"] = &video;
 	objects["text1"] = &text1;
 	objects["text2"] = &text2;
+
+
+	for (Iter it = objects.begin(); it != objects.end(); ++it)
+	{
+		kernel.print(it->first);
+	}
 
 	// [МУЗЫКА]
 	Elem* mElement = parseXML("MUSIC");
@@ -86,6 +105,8 @@ int main()
 		}
 		endDisplay();
 	}
+
+	// DELETE ALL OBJECTS
 
 	return EXIT_SUCCESS;
 }

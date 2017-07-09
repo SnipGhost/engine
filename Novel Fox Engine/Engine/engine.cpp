@@ -161,6 +161,7 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 {
 	const char *x = spNode->Attribute("x");
 	const char *y = spNode->Attribute("y");
+	const char *id = spNode->Attribute("id");
 	const char *src = spNode->Attribute("src");
 	const char *scale = spNode->Attribute("scale");
 	const char *layer = spNode->Attribute("layer");
@@ -169,6 +170,7 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	SpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
+	res.id = id;
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);
@@ -211,7 +213,7 @@ MusicData ng::getMusicData(XMLNode mNode, std::string path)
 	res.volume = std::stof(volume);
 	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
 	res.src = path + std::string(src);
-	res.cmd = std::string(cmd);
+	res.cmd = cmd;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -236,9 +238,9 @@ TextData ng::getTextData(XMLNode tNode, std::string path)
 	const char *y = tNode->Attribute("y");
 
 	TextData res;
-	res.text = std::string(text);
-	res.color = std::string(color);
-	res.namePerson = std::string(namePerson);
+	res.text = text;
+	res.color = color;
+	res.namePerson = namePerson;
 	res.size = std::atoi(size);
 	res.x = std::stof(x);
 	res.y = std::stof(y);
