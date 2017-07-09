@@ -4,22 +4,22 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Text::Text(std::string text, std::string color, float x, float y, unsigned int size)
+Text::Text(std::string text, Font *font, std::string color, float x, float y, unsigned int size)
 {
-	setText(text, color, x, y, size);
+	setText(text, font, color, x, y, size);
 }
 //-----------------------------------------------------------------------------
 Text::Text(TextData td)
 {
-	setText(td.text, td.color, td.x, td.y, td.size);
+	setText(td.text, td.font, td.color, td.x, td.y, td.size);
 }
 //-----------------------------------------------------------------------------
-bool Text::setText(std::string text, std::string color, float x, float y, unsigned int size)
+bool Text::setText(std::string text, Font *font, std::string color, float x, float y, unsigned int size)
 {
-	font.loadFromFile(RES_PATH + "font.ttf");
+	//font.loadFromFile(RES_PATH);
 
 	setString(sf::String::fromUtf8(text.begin(), text.end()));
-	setFont(font);
+	setFont(*font);
 
 	mapping["red"] = 1;
 	mapping["green"] = 2;
@@ -30,12 +30,12 @@ bool Text::setText(std::string text, std::string color, float x, float y, unsign
 
 	switch (mapping[color])
 	{
-	case 1: setFillColor(sf::Color::Red);    break;
-	case 2: setFillColor(sf::Color::Green);  break;
-	case 3: setFillColor(sf::Color::Blue);   break;
-	case 4: setFillColor(sf::Color::Yellow); break;
-	case 5: setFillColor(sf::Color::White);  break;
-	case 6: setFillColor(sf::Color::Black);  break;
+		case 1: setFillColor(sf::Color::Red);    break;
+		case 2: setFillColor(sf::Color::Green);  break;
+		case 3: setFillColor(sf::Color::Blue);   break;
+		case 4: setFillColor(sf::Color::Yellow); break;
+		case 5: setFillColor(sf::Color::White);  break;
+		case 6: setFillColor(sf::Color::Black);  break;
 	}
 
 	setPosition(x, y);

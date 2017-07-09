@@ -13,7 +13,6 @@ AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
 //-----------------------------------------------------------------------------
 AnimateSprite::AnimateSprite(AnimateSpriteData asd) : Sprite(asd.src, asd.smooth)
 {
-    kernel.print("HI");
 	lastTime = 0;
 	numFrame = 1;
 	setAnimation(asd.frameHeight, asd.frameWidth, asd.ms);

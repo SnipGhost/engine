@@ -124,6 +124,7 @@
     <ClCompile Include="Engine\clock.cpp" />
     <ClCompile Include="Engine\engine.cpp" />
     <ClCompile Include="Engine\event.cpp" />
+    <ClCompile Include="Engine\font.cpp" />
     <ClCompile Include="Engine\icon.cpp" />
     <ClCompile Include="Engine\logstream.cpp" />
     <ClCompile Include="Engine\music.cpp" />
@@ -140,13 +141,10 @@
     <ClInclude Include="Modules\tinyxml2.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.ini" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="main.log" />
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="Resources\scenario\script.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

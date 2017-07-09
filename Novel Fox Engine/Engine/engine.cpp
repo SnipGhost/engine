@@ -31,12 +31,12 @@ Kernel::Kernel()
 		ShowWindow(hWnd, SW_HIDE);
 	#endif
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	log = new LogStream(LOG_FILE);
+	log = new LogStream(RES_PATH + LOG_FILE, 15);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	version = VERSION;
 	log->print("Novel fox engine v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
+	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());
 	int screen_y = atoi(conf["screen_y"].c_str());
 	int screen_mode = atoi(conf["screen_mode"].c_str());
@@ -149,7 +149,7 @@ XMLNode ng::getNextXMLNode(XMLNode node, const char *tag)
 	return node->NextSiblingElement(tag);
 }
 //-----------------------------------------------------------------------------
-SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
+SpriteData ng::getSpriteData(XMLNode spNode)
 {
 	const char *x = spNode->Attribute("x");
 	const char *y = spNode->Attribute("y");
@@ -163,14 +163,14 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	res.id = id;
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
 	res.layer = (unsigned)std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
 }
 //-----------------------------------------------------------------------------
-AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
+AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 {
 	const char *x = asdNode->Attribute("x");
 	const char *y = asdNode->Attribute("y");
@@ -185,7 +185,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	AnimateSpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
 	//res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
@@ -195,7 +195,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	return res;
 }
 //-----------------------------------------------------------------------------
-MusicData ng::getMusicData(XMLNode mNode, std::string path)
+MusicData ng::getMusicData(XMLNode mNode)
 {
 	const char *volume = mNode->Attribute("volume");
 	const char *loop = mNode->Attribute("loop");
@@ -205,28 +205,40 @@ MusicData ng::getMusicData(XMLNode mNode, std::string path)
 	MusicData res;
 	res.volume = std::stof(volume);
 	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.cmd = cmd;
 	return res;
 }
 //-----------------------------------------------------------------------------
-SoundData ng::getSoundData(XMLNode sNode, std::string path)
+SoundData ng::getSoundData(XMLNode sNode)
 {
 	const char *volume = sNode->Attribute("volume");
 	const char *src = sNode->Attribute("src");
 
 	SoundData res;
 	res.volume = std::stof(volume);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	return res;
 }
 //-----------------------------------------------------------------------------
-TextData ng::getTextData(XMLNode tNode, std::string path)
+FontData ng::getFontData(XMLNode tNode)
+{
+	const char *src = tNode->Attribute("src");
+	const char *id = tNode->Attribute("id");
+
+	FontData res;
+	res.id = id;
+	res.src = RES_PATH + src;
+	return res;
+}
+//-----------------------------------------------------------------------------
+TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 {
 	const char *text = tNode->Attribute("text");
 	const char *color = tNode->Attribute("color");
 	const char *namePerson = tNode->Attribute("name");
 	const char *size = tNode->Attribute("size");
+	const char *font = tNode->Attribute("font");
 	const char *x = tNode->Attribute("x");
 	const char *y = tNode->Attribute("y");
 
@@ -235,12 +247,13 @@ TextData ng::getTextData(XMLNode tNode, std::string path)
 	res.color = color;
 	res.namePerson = namePerson;
 	res.size = std::atoi(size);
+	res.font = fonts[font];
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	return res;
 }
 //-----------------------------------------------------------------------------
-VideoData ng::getVideoData(XMLNode vNode, std::string path)
+VideoData ng::getVideoData(XMLNode vNode)
 {
 	const char *x = vNode->Attribute("x");
 	const char *y = vNode->Attribute("y");
@@ -255,7 +268,7 @@ VideoData ng::getVideoData(XMLNode vNode, std::string path)
 	res.y = std::stof(y);
 	res.width = std::stof(width);
 	res.height = std::stof(height);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.volume = std::stof(volume);
 	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
 	return res;

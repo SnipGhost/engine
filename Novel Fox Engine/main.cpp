@@ -9,19 +9,32 @@ int main()
 {
 	kernel.print("0");
 
+	std::map<std::string, Font*> fonts;
+	XMLNode fontElem = parseXML("FONT");
+	Font *font;
+	while (fontElem != NULL)
+	{
+		FontData fd = getFontData(fontElem);
+		font = new Font(fd);
+		kernel.print(fd.src);
+		fonts[fd.id] = font;
+		fontElem = getNextXMLNode(fontElem, "FONT");
+	}
+
+
 	// [ТЕКСТ][ДОРАБОТАТЬ][ЛИТЕРАЛ!!!]
 	XMLNode tElement = parseXML("TEXT");
-	Text text1(getTextData(tElement, RES_PATH));
+	Text text1(getTextData(tElement, fonts));
 	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
-	Text text2(getTextData(tElement, RES_PATH));
+	Text text2(getTextData(tElement, fonts));
 
 	kernel.print("1");
 
 	// [GIF-АНИМАЦИЯ]
 	XMLNode asElement = parseXML("GIF");
-	AnimateSprite gif1(getAnimateSpriteData(asElement, RES_PATH));
+	AnimateSprite gif1(getAnimateSpriteData(asElement));
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
-	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
+	AnimateSprite gif2(getAnimateSpriteData(asElement));
 
 	kernel.print("2");
 
@@ -36,7 +49,7 @@ int main()
 	Sprite *sprite = NULL;
 	while (spElement != NULL)
 	{
-		SpriteData data = getSpriteData(spElement, RES_PATH);
+		SpriteData data = getSpriteData(spElement);
 		sprite = new Sprite(data);
 		kernel.print(*sprite, INFO);
 		objects[data.id] = sprite;
@@ -47,7 +60,7 @@ int main()
 
 	// [ВИДЕО]
 	XMLNode vElement = parseXML("VIDEO");
-	Video video(getVideoData(vElement, RES_PATH));
+	Video video(getVideoData(vElement));
 	video.play();
 
 	kernel.print("5");
@@ -62,14 +75,14 @@ int main()
 
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
-	Music music(getMusicData(mElement, RES_PATH));
+	Music music(getMusicData(mElement));
 	music.play();
 
 	kernel.print("7");
 
 	// [ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
-	Sound sound(getSoundData(sElement, RES_PATH));
+	Sound sound(getSoundData(sElement));
 
 	kernel.print("Resources loaded.", NORM);
 

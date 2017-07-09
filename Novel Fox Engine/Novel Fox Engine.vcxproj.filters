@@ -54,6 +54,9 @@
     <ClCompile Include="Engine\video.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\font.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\engine.hpp">
@@ -67,18 +70,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.ini">
-      <Filter>Файлы ресурсов</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="main.log">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="Resources\scenario\script.xml">
       <Filter>Файлы ресурсов</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config.ini">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>
