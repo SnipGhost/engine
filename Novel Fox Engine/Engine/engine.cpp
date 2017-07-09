@@ -35,7 +35,7 @@ Kernel::Kernel()
 	log = new LogStream(LOG_FILE);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	version = VERSION;
-	log->print("Версия игрового движка: " + version, INFO);
+	log->print("Novel fox engine v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());
@@ -50,34 +50,33 @@ Kernel::Kernel()
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
 	if (window->isOpen()) 
-		log->print("Окно запущено", INFO);
+		log->print("Window open", INFO);
 	else
 	{
-		log->print("Ошибка при открытии окна", CRIT);
-		std::string vm = conf["screen_x"] + "x" + conf["screen_y"];
-		log->print("\t video mode:    " + vm, CRIT);
-		log->print("\t anti-Aliasing: " + conf["anti_aliasing"], CRIT);
-		log->print("\t window name:   " + conf["window_name"], CRIT);
+		std::string msg = "Failed to open window\n";
+		msg += "\tvideo mode:\t" + conf["screen_x"] + "x" + conf["screen_y"];
+		msg += "\n\tanti-Aliasing:\t" + conf["anti_aliasing"];
+		msg += "\n\twindow name:\t" + conf["window_name"];
+		log->print(msg, CRIT);
 		exit(EXIT_FAILURE);	
 	}
 	window->setFramerateLimit(frame_limit);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ng::Icon icon;
 	if(!icon.loadFromFile(conf["app_icon"]))
-		log->print("Failed load icon " + conf["app_icon"], INFO);
+		log->print("Failed to load icon " + conf["app_icon"], WARN);
 	else 
-		log->print("Icon loaded " + conf["app_icon"], INFO);
+		log->print("Icon loaded " + conf["app_icon"], NORM);
 	window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	log->print("Icon set " + conf["app_icon"], INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	doc = new tinyxml2::XMLDocument();
 	doc->LoadFile((conf["scenario"]).c_str());
 	if (doc->Error())
 	{
-		log->print("Ошибка при чтении сценария: " + conf["scenario"], CRIT);
+		log->print("Failed to read script: " + conf["scenario"], CRIT);
 		exit(EXIT_FAILURE);	
 	}
-	else log->print("Сценарий загружен", INFO);
+	else log->print("Script loaded", NORM);
 }
 //-----------------------------------------------------------------------------
 Kernel & Kernel::init()
@@ -88,11 +87,11 @@ Kernel & Kernel::init()
 //-----------------------------------------------------------------------------
 Kernel::~Kernel()
 {
-	log->print("Выгрузка ядра", INFO);
+	log->print("Unloading the kernel", INFO);
 	if (doc != NULL) delete doc;
-	log->print("Удаление XML документа завершено", INFO);
+	log->print("Closing the script is complete", NORM);
 	if (window != NULL) delete window;
-	log->print("Удаление окна завершено", INFO);
+	log->print("Closing the window is complete", NORM);
 	if (log != NULL) delete log;
 }
 //-----------------------------------------------------------------------------
@@ -101,13 +100,12 @@ bool Kernel::parseConfig(std::string file)
 	std::ifstream fin(file);
 	if (fin.fail())
 	{
-		log->print("Ошибка при загрузке конфигурации: " + file, CRIT);
-		return 0;
+		log->print("Failed to open config-file: " + file, CRIT);
 	}
-	else log->print("Открыт файл конфигурации: " + file, INFO);
+	else log->print("Open config-file: " + file, INFO);
 	char line[MAX_LINE];
 	char *key, *value;
-	while(fin.getline(line, MAX_LINE-1))
+	while(!fin.fail() && fin.getline(line, MAX_LINE-1))
 	{
 		if (strlen(line) <= 2) continue;
 		size_t i = 0;
@@ -121,24 +119,19 @@ bool Kernel::parseConfig(std::string file)
 		value = strtok(NULL, CONF_DELIMS);
 		if (value[0] == ' ' || value[0] == '\t') value = value+1;
 		conf[std::string(key)] = std::string(value);
-		log->print(std::string(key) + " = " + conf[key]); // Проверка
+		log->print(std::string(key) + " = " + conf[key], NORM);
 	}
 	for (int i = 0; i < PARAMS_COUNT*2; i += 2)
 	{
 		if (!conf.count(DEFAULT[i]) || (conf[DEFAULT[i]].length() == 0))
 		{
 			conf[DEFAULT[i]] = DEFAULT[i+1];
-			log->print(std::string(DEFAULT[i]) + " взято по-умолчанию", WARN);
+			log->print(std::string(DEFAULT[i]) + " taken by default", WARN);
 		}
 		if (RES_PARAMS[i/2]) conf[DEFAULT[i]] = RES_PATH + conf[DEFAULT[i]];
 	}
 	fin.close();
 	return 1;
-}
-//-----------------------------------------------------------------------------
-void Kernel::print(std::string msg, size_t tag)
-{
-	log->print(msg, tag);
 }
 //-----------------------------------------------------------------------------
 std::string Kernel::operator [] (std::string key)

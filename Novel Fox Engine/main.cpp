@@ -32,17 +32,10 @@ int main()
 	{
 		SpriteData data = getSpriteData(spElement, RES_PATH);
 		sprite = new Sprite(data);
-		kernel.print(data.id);
-		kernel.print(std::to_string(data.x) + " " + std::to_string(data.y));
+		kernel.print(*sprite, INFO);
 		objects[data.id] = sprite;
 		spElement = getNextXMLNode(spElement, "SPRITE");
 	}
-	
-	//Sprite background(getSpriteData(spElement, RES_PATH));
-	//spElement = getNextXMLNode(spElement, "SPRITE"); // Нода1 -> Нода2
-	//Sprite maya1(getSpriteData(spElement, RES_PATH));
-	//spElement = getNextXMLNode(spElement, "SPRITE"); // Нода2 -> Нода3
-	//Sprite maya2(getSpriteData(spElement, RES_PATH));
 
 	// [ВИДЕО]
 	Elem* vElement = parseXML("VIDEO");
@@ -50,21 +43,12 @@ int main()
 	video.play();
 
 	
-
-	//objects["bg"] = &background;
-	//objects["maya1"] = &maya1;
-	//objects["maya2"] = &maya2;
 	objects["gif_1"] = &gif1;
 	objects["gif_2"] = &gif2;
 	objects["video"] = &video;
 	objects["text1"] = &text1;
 	objects["text2"] = &text2;
 
-
-	for (Iter it = objects.begin(); it != objects.end(); ++it)
-	{
-		kernel.print(it->first);
-	}
 
 	// [МУЗЫКА]
 	Elem* mElement = parseXML("MUSIC");
@@ -75,7 +59,7 @@ int main()
 	Elem* sElement = parseXML("SOUND");
 	Sound sound(getSoundData(sElement, RES_PATH));
 
-	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", NORM);
+	kernel.print("Resources loaded.", NORM);
 
 	while (kernel.window->isOpen())
 	{
@@ -90,19 +74,20 @@ int main()
 		}
 		if (event.isMouseKey(sf::Mouse::Right)) music.setStop();
 
-		if (!kernel.window->hasFocus())
+		if (!kernel.window->hasFocus()) // УЖАСНАЯ ИДЕЯ БЕЗ SLEEP
 		{
 			music.setPause();
 			sound.stop();
 			video.setPause();
+			sleep(100);
 			continue;
 		}
 
 		startDisplay();
+
 		for (Iter it = objects.begin(); it != objects.end(); ++it)
-		{
 			it->second->display();
-		}
+
 		endDisplay();
 	}
 

@@ -51,7 +51,7 @@ bool LogStream::check()
 	{
 		if (!isExtOS) delete log;
 		log = &std::cout;
-		std::cout << "Ошибка при открытии потока" << std::endl;
+		std::cout << "Error opening ostream!" << std::endl;
 		return 0;
 	}
 	return 1;
@@ -62,20 +62,20 @@ void LogStream::setTagMask(unsigned int mask)
 	tag_mask = mask;
 }
 //-----------------------------------------------------------------------------
-void LogStream::print(std::string msg, size_t tag)
-{
-	const size_t TAG_COUNT = 5;
-	const char *TAGM[TAG_COUNT] = { "[ ] ", "[!] ", "[-] ", "[+] ", "[i] " };
-	//                    levels:  [0 NONE][1 CRIT][2 WARN][3 NORM][4 INFO]
-	check();
-	if (tag >= TAG_COUNT)
-	{
-		print("Unknown tag", 2);
-		print(msg, 0);
-		return;
-	}
-	if (GETBIT(tag_mask, TAG_COUNT-tag-1) == 0)
-		return;
-	*log << TAGM[tag] << msg << std::endl;
-}
+//void LogStream::print(T msg, size_t tag) const
+//{
+//	const size_t TAG_COUNT = 5;
+//	const char *TAGM[TAG_COUNT] = { "[ ] ", "[!] ", "[-] ", "[+] ", "[i] " };
+//	//                    levels:  [0 NONE][1 CRIT][2 WARN][3 NORM][4 INFO]
+//	check();
+//	if (tag >= TAG_COUNT)
+//	{
+//		print("Unknown tag", 2);
+//		print(msg, 0);
+//		return;
+//	}
+//	if (GETBIT(tag_mask, TAG_COUNT-tag-1) == 0)
+//		return;
+//	*log << TAGM[tag] << msg << std::endl;
+//}
 //-----------------------------------------------------------------------------

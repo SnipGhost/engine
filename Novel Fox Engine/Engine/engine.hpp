@@ -8,16 +8,20 @@
 #include "../Modules/macros.h"
 #define _CRT_SECURE_NO_WARNINGS
 //-----------------------------------------------------------------------------
-#define VERSION "0.06.3"
+#define VERSION "0.06.5"
 //-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
+	#include <time.h>
+	#define sleep(ms) Sleep(ms)
 	#define RES_PATH std::string("Resources/")
 	#define DEFAULT_APP_ICON "icon.png"
 	#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
 	#define SET_LOCALE system("chcp 1251 > nul")
 	#define LOG_FILE std::string("main.log")
 #else
+	#include <unistd.h>
+	#define sleep(ms) usleep(ms*1000)
 	#ifdef DEBUG
 		#define RES_PATH std::string("Resources/")
 		#define CONFIG_FILE std::string("config.ini")
@@ -70,7 +74,27 @@ namespace ng
 
 		bool check();
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		void print(std::string msg, size_t tag = NONE);
+		template <typename T> void print(T msg, size_t tag = NONE)
+		{
+			const size_t TAG_COUNT = 5;
+			const char *TAGM[TAG_COUNT] = {
+				"[ ] ", // [0 NONE]
+				"[!] ", // [1 CRIT]
+				"[-] ", // [2 WARN]
+				"[+] ", // [3 NORM]
+				"[i] "  // [4 INFO]
+			};
+			check();
+			if (tag >= TAG_COUNT)
+			{
+				print("Unknown tag", 2);
+				print(msg, 0);
+				return;
+			}
+			if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
+				return;
+			*log << TAGM[tag] << msg << std::endl;
+		}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
@@ -109,7 +133,10 @@ namespace ng
 		static Kernel & init();                      // Instance-метод
 		~Kernel();
 		bool parseConfig(std::string file);          // Загрузить конфигурацию
-		void print(std::string msg, size_t tag = 0); // Перенаправление на лог
+		template <typename T> void print(T msg, size_t tag = NONE)
+		{
+			log->print(msg, tag);
+		}
 		std::string operator[] (std::string key);    // Выдает конфигурацию
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,6 +257,7 @@ namespace ng
 	{
 	 protected:
 		sf::Texture texture;
+		std::string id;
 	 public:
 		Sprite() {}
 		Sprite(std::string src, bool smooth = true);
@@ -237,6 +265,7 @@ namespace ng
 		bool setStrTexture(std::string src, bool smooth);
 		void change(SpriteData sd);
 		void display(sf::RenderWindow *win = kernel.window);
+		friend std::ostream & operator << (std::ostream &os, const Sprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class AnimateSprite: public ng::Sprite
