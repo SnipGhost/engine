@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+п»ї<?xml version="1.0" encoding="windows-1251"?>
 <SCRIPTGAME>
 
     <SPRITE id="background" layer="1" smooth="true" x="0" y="0" scale="1" src="texture.png"/>
@@ -12,7 +12,7 @@
 
     <SOUND volume="100" src="sound.ogg"/>
 
-    <TEXT name="Maya" color="blue" text="- Привет, Tolya!" size="30" x="400" y="320"/>
+    <TEXT name="Maya" color="blue" text="- РџСЂРёРІРµС‚, Tolya!" size="30" x="400" y="320"/>
     <TEXT name="Tolya" color="red" text="- Hello, Maya!" size="30" x="400" y="360"/>
 
     <VIDEO volume="0" loop="true" x="10" y="20" width="750" height="300" src="video.ogv"/>

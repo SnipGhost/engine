@@ -1,5 +1,6 @@
 //-----------------------------------------------------------------------------
 #include "engine.hpp"
+#include <codecvt>
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
@@ -13,29 +14,11 @@ Text::Text(TextData td)
 	setText(td.text, td.color, td.x, td.y, td.size);
 }
 //-----------------------------------------------------------------------------
-std::wstring wide_string(std::string const &s, std::locale const &loc)
-{
-	if (s.empty())
-		return std::wstring();
-	std::ctype<wchar_t> const &facet = std::use_facet<std::ctype<wchar_t> >(loc);
-	char const *first = s.c_str();
-	char const *last = first + s.size();
-	std::vector<wchar_t> result(s.size());
-
-	facet.widen(first, last, &result[0]);
-
-	return std::wstring(result.begin(), result.end());
-}
-//-----------------------------------------------------------------------------
 bool Text::setText(std::string text, std::string color, float x, float y, unsigned int size)
 {
 	font.loadFromFile(RES_PATH + "font.ttf");
 
-	std::locale loc(""); // Can not construct with rus, only ru_RU.UTF-8
-	std::wstring const textR = wide_string(text, loc);
-    std::locale::global(loc);
-
-	setString(textR);
+	setString(sf::String::fromUtf8(text.begin(), text.end()));
 	setFont(font);
 
 	mapping["red"] = 1;

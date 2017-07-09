@@ -7,7 +7,7 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-    kernel.print("0");
+	kernel.print("0");
 
 	// [ТЕКСТ][ДОРАБОТАТЬ][ЛИТЕРАЛ!!!]
 	XMLNode tElement = parseXML("TEXT");
@@ -15,7 +15,7 @@ int main()
 	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
 	Text text2(getTextData(tElement, RES_PATH));
 
-    kernel.print("1");
+	kernel.print("1");
 
 	// [GIF-АНИМАЦИЯ]
 	XMLNode asElement = parseXML("GIF");
@@ -23,13 +23,13 @@ int main()
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
 	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
 
-    kernel.print("2");
+	kernel.print("2");
 
 	// [MAP]
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
 
-    kernel.print("3");
+	kernel.print("3");
 
 	// [СПРАЙТ]
 	XMLNode spElement = parseXML("SPRITE");
@@ -43,14 +43,14 @@ int main()
 		spElement = getNextXMLNode(spElement, "SPRITE");
 	}
 
-    kernel.print("4");
+	kernel.print("4");
 
 	// [ВИДЕО]
 	XMLNode vElement = parseXML("VIDEO");
 	Video video(getVideoData(vElement, RES_PATH));
 	video.play();
 
-    kernel.print("5");
+	kernel.print("5");
 	
 	objects["gif_1"] = &gif1;
 	objects["gif_2"] = &gif2;
@@ -58,14 +58,14 @@ int main()
 	objects["text1"] = &text1;
 	objects["text2"] = &text2;
 
-    kernel.print("6");
+	kernel.print("6");
 
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement, RES_PATH));
 	music.play();
 
-    kernel.print("7");
+	kernel.print("7");
 
 	// [ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
