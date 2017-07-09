@@ -8,6 +8,8 @@
 #include "../Modules/macros.h"
 #define _CRT_SECURE_NO_WARNINGS
 //-----------------------------------------------------------------------------
+#define VERSION "0.06.3"
+//-----------------------------------------------------------------------------
 #ifdef OS_IS_WIN
 	#include <windows.h>
 	#define RES_PATH std::string("Resources/")
@@ -87,6 +89,7 @@ namespace ng
 		bool isMouseClickKey(sf::Mouse::Button mouse);
 		bool isMouseKey(sf::Mouse::Button mouse);
 		bool isMusicPlay(sf::Music &music);
+		bool isVideoPlay(sfe::Movie &video);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
@@ -122,21 +125,22 @@ namespace ng
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//struct AnimateSpriteData
-	//{
-	//	float x;
-	//	float y;
-	//	float scale;
-	//	int layer;
-	//	bool smooth;
-	//	std::string src;
-	//};
+	struct AnimateSpriteData
+	{
+		float x;
+		float y;
+		int frameHeight;
+		int frameWidth;
+		int ms;
+		float scale;
+		bool smooth;
+		std::string src;
+	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct MusicData
 	{
 		float volume;
 		bool loop;
-		std::string id;
 		std::string src;
 		std::string cmd;
 	};
@@ -144,7 +148,6 @@ namespace ng
 	struct SoundData
 	{
 		float volume;
-		std::string id;
 		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,6 +156,9 @@ namespace ng
 		std::string text;
 		std::string color;
 		std::string namePerson;
+		unsigned int size;
+		float x;
+		float y;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct VideoData
@@ -162,7 +168,6 @@ namespace ng
 		float width;
 		float height;
 		std::string src;
-		std::string id;
 		float volume;
 		bool loop;
 	};
@@ -171,10 +176,11 @@ namespace ng
 	XMLNode getNextXMLNode(XMLNode node, const char *tag);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SpriteData getSpriteData(XMLNode spNode, std::string path);
-	//MusicData getMusicData(XMLNode mNode, std::string path);
-	//SoundData getSoundData(XMLNode sNode, std::string path);
-	//TextData getTextData(XMLNode tNode, std::string path);
-	//VideoData getVideoData(XMLNode vNode, std::string path);
+	AnimateSpriteData getAnimateSpriteData(XMLNode asNode, std::string path);
+	MusicData getMusicData(XMLNode mNode, std::string path);
+	SoundData getSoundData(XMLNode sNode, std::string path);
+	TextData getTextData(XMLNode tNode, std::string path);
+	VideoData getVideoData(XMLNode vNode, std::string path);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -192,7 +198,8 @@ namespace ng
 		Music(std::string src, float volume = 100, bool loop = true);
 		Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
 		bool setMusic(std::string src, float volume, bool loop);
-		void stopMusic();
+		void setPause();
+		void setStop();
 		//void change(); //TODO: Изменение volume
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,6 +212,9 @@ namespace ng
 		Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
 		bool setSound(std::string src, float volume);
 	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	extern void startDisplay();
+	extern void endDisplay();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Displayable // Абстрактный класс
 	{
@@ -238,7 +248,7 @@ namespace ng
 		int delay;               // Время между кадрами в миллисекундах
 	 public:
 		AnimateSprite(std::string src, bool smooth = true);
-		/*AnimateSprite(AnimateSpriteData asd);*/
+		AnimateSprite(AnimateSpriteData asd);
 		void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 		void update();
 		void display(sf::RenderWindow *win = kernel.window);
@@ -250,9 +260,9 @@ namespace ng
 		sf::Font font;
 		std::map <std::string, int> mapping;
 	 public:
-		Text(std::wstring text, float x, float y, int size, 
-			 std::string path, std::string color = "black");
+		Text(std::string text, std::string color, float x, float y, unsigned int size);
 		Text(TextData td);
+		bool setText(std::string text, std::string color, float x, float y, unsigned int size);
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -267,6 +277,7 @@ namespace ng
 		bool setVideo(std::string src, float width, float height,
 			float x, float y, float volume, bool loop);
 		void setLoop(bool loop);
+		void setPause();
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

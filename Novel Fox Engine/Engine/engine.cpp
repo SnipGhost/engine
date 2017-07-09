@@ -34,6 +34,9 @@ Kernel::Kernel()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	log = new LogStream(LOG_FILE);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	version = VERSION;
+	log->print("Версия игрового движка: " + version, INFO);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (!parseConfig(CONFIG_FILE)) exit(EXIT_FAILURE);
 	int screen_x = atoi(conf["screen_x"].c_str());
 	int screen_y = atoi(conf["screen_y"].c_str());
@@ -101,7 +104,7 @@ bool Kernel::parseConfig(std::string file)
 		log->print("Ошибка при загрузке конфигурации: " + file, CRIT);
 		return 0;
 	}
-	else log->print("Файл конфигурации открыт: " + file, INFO);
+	else log->print("Открыт файл конфигурации: " + file, INFO);
 	char line[MAX_LINE];
 	char *key, *value;
 	while(fin.getline(line, MAX_LINE-1))
@@ -162,6 +165,7 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	const char *scale = spNode->Attribute("scale");
 	const char *layer = spNode->Attribute("layer");
 	const char *smooth = spNode->Attribute("smooth");
+
 	SpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
@@ -170,5 +174,107 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
+}
+//-----------------------------------------------------------------------------
+AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
+{
+	const char *x = asdNode->Attribute("x");
+	const char *y = asdNode->Attribute("y");
+	const char *src = asdNode->Attribute("src");
+	const char *scale = asdNode->Attribute("scale");
+	const char *layer = asdNode->Attribute("layer");
+	const char *smooth = asdNode->Attribute("smooth");
+	const char *height = asdNode->Attribute("height");
+	const char *width = asdNode->Attribute("width");
+	const char *delay = asdNode->Attribute("delay");
+
+	AnimateSpriteData res;
+	res.x = std::stof(x);
+	res.y = std::stof(y);
+	res.src = path + std::string(src);
+	res.scale = std::stof(scale);
+	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
+	res.frameHeight = std::atoi(height);
+	res.frameWidth = std::atoi(width);
+	res.ms = std::atoi(delay);
+	return res;
+}
+//-----------------------------------------------------------------------------
+MusicData ng::getMusicData(XMLNode mNode, std::string path)
+{
+	const char *volume = mNode->Attribute("volume");
+	const char *loop = mNode->Attribute("loop");
+	const char *src = mNode->Attribute("src");
+	const char *cmd = mNode->Attribute("cmd");
+
+	MusicData res;
+	res.volume = std::stof(volume);
+	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
+	res.src = path + std::string(src);
+	res.cmd = std::string(cmd);
+	return res;
+}
+//-----------------------------------------------------------------------------
+SoundData ng::getSoundData(XMLNode sNode, std::string path)
+{
+	const char *volume = sNode->Attribute("volume");
+	const char *src = sNode->Attribute("src");
+
+	SoundData res;
+	res.volume = std::stof(volume);
+	res.src = path + std::string(src);
+	return res;
+}
+//-----------------------------------------------------------------------------
+TextData ng::getTextData(XMLNode tNode, std::string path)
+{
+	const char *text = tNode->Attribute("text");
+	const char *color = tNode->Attribute("color");
+	const char *namePerson = tNode->Attribute("name");
+	const char *size = tNode->Attribute("size");
+	const char *x = tNode->Attribute("x");
+	const char *y = tNode->Attribute("y");
+
+	TextData res;
+	res.text = std::string(text);
+	res.color = std::string(color);
+	res.namePerson = std::string(namePerson);
+	res.size = std::atoi(size);
+	res.x = std::stof(x);
+	res.y = std::stof(y);
+	return res;
+}
+//-----------------------------------------------------------------------------
+VideoData ng::getVideoData(XMLNode vNode, std::string path)
+{
+	const char *x = vNode->Attribute("x");
+	const char *y = vNode->Attribute("y");
+	const char *src = vNode->Attribute("src");
+	const char *volume = vNode->Attribute("volume");
+	const char *loop = vNode->Attribute("loop");
+	const char *width = vNode->Attribute("width");
+	const char *height = vNode->Attribute("height");
+
+	VideoData res;
+	res.x = std::stof(x);
+	res.y = std::stof(y);
+	res.width = std::stof(width);
+	res.height = std::stof(height);
+	res.src = path + std::string(src);
+	res.volume = std::stof(volume);
+	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
+	return res;
+}
+//-----------------------------------------------------------------------------
+void ng::startDisplay()
+{
+	kernel.window->pushGLStates();
+	kernel.window->clear();
+}
+//-----------------------------------------------------------------------------
+void ng::endDisplay()
+{
+	kernel.window->popGLStates();
+	kernel.window->display();
 }
 //-----------------------------------------------------------------------------

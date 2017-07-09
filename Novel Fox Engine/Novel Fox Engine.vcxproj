@@ -143,6 +143,9 @@
     <None Include="config.ini" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="main.log" />
+  </ItemGroup>
+  <ItemGroup>
     <Xml Include="Resources\scenario\script.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

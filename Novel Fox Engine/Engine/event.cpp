@@ -54,3 +54,10 @@ bool Event::isMusicPlay(sf::Music &music)
 	return false;
 }
 //-----------------------------------------------------------------------------
+bool Event::isVideoPlay(sfe::Movie &video)
+{
+	if (video.getStatus() == sfe::Playing)
+		return true;
+	return false;
+}
+//-----------------------------------------------------------------------------

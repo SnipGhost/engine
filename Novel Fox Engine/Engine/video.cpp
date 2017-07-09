@@ -32,21 +32,21 @@ bool Video::setVideo(std::string src, float width, float height, float x, float 
 void Video::setLoop(bool loop)
 {
 	if (loop == true && getStatus() == sfe::Stopped)
-	{
 		play();
-	}
+}
+//-----------------------------------------------------------------------------
+void Video::setPause()
+{
+	if (getStatus() == sfe::Playing)
+		pause();
 }
 //-----------------------------------------------------------------------------
 void Video::display(sf::RenderWindow *win)
 {
-	setLoop(loopVideo);
-	if (getStatus() != sfe::Paused)
+	setLoop(loopVideo); //Ïðàâèëüíî
+	if (getStatus() == sfe::Playing || getStatus() != sfe::Paused)
 	{
 		update();
-		win->draw(*this);
-	}
-	if (getStatus() == sfe::Playing) //Åñëè âèäåî stop, òî no Draw //ÎØÈÁÊÀ Â ÊÎÍÑÎËÅ!
-	{
 		win->draw(*this);
 	}
 }

@@ -30,7 +30,7 @@ bool Music::setMusic(std::string src, float volume, bool loop)
 	return 1;
 }
 //-----------------------------------------------------------------------------
-void Music::stopMusic()
+void Music::setStop()
 {
 	if (getStatus() == sf::Music::Playing) {
 		volume = getVolume();
@@ -40,6 +40,12 @@ void Music::stopMusic()
 		else 
 			setVolume(volume);
 	}
+}
+//-----------------------------------------------------------------------------
+void Music::setPause()
+{
+	if (getStatus() == sf::Music::Playing)
+		pause();
 }
 //-----------------------------------------------------------------------------
 //void Music::change() 

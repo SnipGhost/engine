@@ -7,55 +7,54 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-	kernel.version = "0.06.3";
-	kernel.print("Текущая версия игрового двигателя: " + kernel.version, INFO);
+	typedef tinyxml2::XMLElement Elem;
 
-	//[ШРИФТ][ТЕКСТ][СТАНДАРТ][ДОРАБОТАТЬ]
-	unsigned int screen_x = kernel.window->getSize().x;
-	Text text(L"Привет", (float)screen_x-250, 50, 20, RES_PATH); 
+	// [ТЕКСТ][ДОРАБОТАТЬ][ЛИТЕРАЛ!!!]
+	Elem* tElement = parseXML("TEXT");
+	Text text1(getTextData(tElement, RES_PATH));
+	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
+	Text text2(getTextData(tElement, RES_PATH));
 
-	//[ТЕКСТУРА][СПРАЙТ][СТАНДАРТ]
-	Sprite background(RES_PATH + "texture.png");
+	// [GIF-АНИМАЦИЯ]
+	Elem* asElement = parseXML("GIF");
+	AnimateSprite gif1(getAnimateSpriteData(asElement, RES_PATH));
+	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
+	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
 
-	//[GIF-АНИМАЦИЯ][СТАНДАРТ]
-	AnimateSprite gif(RES_PATH + "gifFile.png");   // [12 КАДРОВ GIF]
-	gif.setAnimation(256);
-	gif.setPosition(50, 300);
-	AnimateSprite gif1(RES_PATH + "gifFile1.png"); // [ 6 КАДРОВ GIF]
-	gif1.setAnimation(256);
-	gif1.setPosition(50, 500);
+	// [СПРАЙТ]
+	Elem* spElement = parseXML("SPRITE");
+	Sprite background(getSpriteData(spElement, RES_PATH));
+	spElement = getNextXMLNode(spElement, "SPRITE"); // Нода1 -> Нода2
+	Sprite maya1(getSpriteData(spElement, RES_PATH));
+	spElement = getNextXMLNode(spElement, "SPRITE"); // Нода2 -> Нода3
+	Sprite maya2(getSpriteData(spElement, RES_PATH));
 
-	//[ЗАГРУЗКА СПРАЙТОВ С ПОМОЩЬЮ XMLLOADER]
-	tinyxml2::XMLElement* sp = parseXML("SPRITE");
-	Sprite maya1(getSpriteData(sp, RES_PATH));
-
-	sp = getNextXMLNode(sp, "SPRITE"); // Нода1 -> Нода2
-	Sprite maya2(getSpriteData(sp, RES_PATH));
-
-	//[ВИДЕО][СТАНДАРТ]
-	Video video(RES_PATH + "video.ogv", 750, 300, 10, 20, 0, true);
+	// [ВИДЕО]
+	Elem* vElement = parseXML("VIDEO");
+	Video video(getVideoData(vElement, RES_PATH));
 	video.play();
 
-	// MAP
+	// [MAP]
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
 
+	objects["bg"] = &background;
 	objects["maya1"] = &maya1;
 	objects["maya2"] = &maya2;
-	objects["bg"] = &background;
-	objects["text"] = &text;
-	objects["gif_1"] = &gif;
-	objects["gif_2"] = &gif1;
+	objects["gif_1"] = &gif1;
+	objects["gif_2"] = &gif2;
 	objects["video"] = &video;
+	objects["text1"] = &text1;
+	objects["text2"] = &text2;
 
-	//[МУЗЫКА][СТАНДАРТ]
-	Music music(RES_PATH + "music.ogg");
+	// [МУЗЫКА]
+	Elem* mElement = parseXML("MUSIC");
+	Music music(getMusicData(mElement, RES_PATH));
 	music.play();
 
-	//[ЗВУК][СТАНДАРТ]
-	Sound sound(RES_PATH + "sound.ogg");
-
-	
+	// [ЗВУК]
+	Elem* sElement = parseXML("SOUND");
+	Sound sound(getSoundData(sElement, RES_PATH));
 
 	kernel.print("Ресурсы загружены. Возможные ошибки выведены.", NORM);
 
@@ -68,27 +67,24 @@ int main()
 				event.isWinClosed()) kernel.window->close();
 			if (event.isMouseClickKey(sf::Mouse::Left)) sound.play();
 			if (!event.isMusicPlay(music)) music.play();
+			if (!event.isVideoPlay(video)) video.play();
 		}
-		if (event.isMouseKey(sf::Mouse::Right)) music.stopMusic();
+		if (event.isMouseKey(sf::Mouse::Right)) music.setStop();
 
-		if (!kernel.window->hasFocus()) //АДЕКВАТСТВА БЫ ПОБОЛЬШЕ
+		if (!kernel.window->hasFocus())
 		{
-			music.pause();
-			sound.pause();
-			//video.pause();
+			music.setPause();
+			sound.stop();
+			video.setPause();
 			continue;
 		}
 
-		kernel.window->pushGLStates();
-		kernel.window->clear();
-
+		startDisplay();
 		for (Iter it = objects.begin(); it != objects.end(); ++it)
 		{
 			it->second->display();
 		}
-
-		kernel.window->popGLStates();
-		kernel.window->display();
+		endDisplay();
 	}
 
 	return EXIT_SUCCESS;

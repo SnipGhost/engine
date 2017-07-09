@@ -72,6 +72,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="main.log">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
     <Xml Include="Resources\scenario\script.xml">
       <Filter>Файлы ресурсов</Filter>
     </Xml>
