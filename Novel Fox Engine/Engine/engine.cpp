@@ -150,7 +150,7 @@ XMLNode ng::getNextXMLNode(XMLNode node, const char *tag)
 	return node->NextSiblingElement(tag);
 }
 //-----------------------------------------------------------------------------
-SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
+SpriteData ng::getSpriteData(XMLNode spNode)
 {
 	const char *x = spNode->Attribute("x");
 	const char *y = spNode->Attribute("y");
@@ -164,14 +164,14 @@ SpriteData ng::getSpriteData(XMLNode spNode, std::string path)
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	res.id = id;
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
 }
 //-----------------------------------------------------------------------------
-AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
+AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 {
 	const char *x = asdNode->Attribute("x");
 	const char *y = asdNode->Attribute("y");
@@ -188,7 +188,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	res.id = id;
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
@@ -198,7 +198,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	return res;
 }
 //-----------------------------------------------------------------------------
-MusicData ng::getMusicData(XMLNode mNode, std::string path)
+MusicData ng::getMusicData(XMLNode mNode)
 {
 	const char *volume = mNode->Attribute("volume");
 	const char *loop = mNode->Attribute("loop");
@@ -208,23 +208,23 @@ MusicData ng::getMusicData(XMLNode mNode, std::string path)
 	MusicData res;
 	res.volume = std::stof(volume);
 	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.cmd = cmd;
 	return res;
 }
 //-----------------------------------------------------------------------------
-SoundData ng::getSoundData(XMLNode sNode, std::string path)
+SoundData ng::getSoundData(XMLNode sNode)
 {
 	const char *volume = sNode->Attribute("volume");
 	const char *src = sNode->Attribute("src");
 
 	SoundData res;
 	res.volume = std::stof(volume);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	return res;
 }
 //-----------------------------------------------------------------------------
-TextData ng::getTextData(XMLNode tNode, std::string path)
+TextData ng::getTextData(XMLNode tNode)
 {
 	const char *text = tNode->Attribute("text");
 	const char *color = tNode->Attribute("color");
@@ -245,7 +245,7 @@ TextData ng::getTextData(XMLNode tNode, std::string path)
 	return res;
 }
 //-----------------------------------------------------------------------------
-VideoData ng::getVideoData(XMLNode vNode, std::string path)
+VideoData ng::getVideoData(XMLNode vNode)
 {
 	const char *x = vNode->Attribute("x");
 	const char *y = vNode->Attribute("y");
@@ -264,7 +264,7 @@ VideoData ng::getVideoData(XMLNode vNode, std::string path)
 	res.layer = std::atoi(layer);
 	res.width = std::stof(width);
 	res.height = std::stof(height);
-	res.src = path + std::string(src);
+	res.src = RES_PATH + std::string(src);
 	res.volume = std::stof(volume);
 	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
 	return res;

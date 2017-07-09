@@ -28,3 +28,9 @@ bool Sound::setSound(std::string src, float volume)
 	return 1;
 }
 //-----------------------------------------------------------------------------
+std::ostream &ng::operator << (std::ostream &os, const Sound &s)
+{
+	os << "[ng::Sound]" << std::endl;
+	return os;
+}
+//-----------------------------------------------------------------------------

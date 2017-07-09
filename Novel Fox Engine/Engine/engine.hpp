@@ -208,12 +208,12 @@ namespace ng
 	XMLNode parseXML(const char *tag);
 	XMLNode getNextXMLNode(XMLNode node, const char *tag);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SpriteData getSpriteData(XMLNode spNode, std::string path);
-	AnimateSpriteData getAnimateSpriteData(XMLNode asNode, std::string path);
-	MusicData getMusicData(XMLNode mNode, std::string path);
-	SoundData getSoundData(XMLNode sNode, std::string path);
-	TextData getTextData(XMLNode tNode, std::string path);
-	VideoData getVideoData(XMLNode vNode, std::string path);
+	SpriteData getSpriteData(XMLNode spNode);
+	AnimateSpriteData getAnimateSpriteData(XMLNode asNode);
+	MusicData getMusicData(XMLNode mNode);
+	SoundData getSoundData(XMLNode sNode);
+	TextData getTextData(XMLNode tNode);
+	VideoData getVideoData(XMLNode vNode);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -223,7 +223,7 @@ namespace ng
 		bool setIcon(std::string src);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Music :public sf::Music
+	class Music: public sf::Music
 	{
 	private:
 		float volume;
@@ -234,9 +234,10 @@ namespace ng
 		void setPause();
 		void setStop();
 		//void change(); //TODO: Изменение volume
+		friend std::ostream & operator << (std::ostream &os, const Music &m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Sound :public sf::Sound
+	class Sound: public sf::Sound
 	{
 	protected:
 		sf::SoundBuffer buffer;
@@ -244,6 +245,7 @@ namespace ng
 		Sound(std::string src, float volume = 100);
 		Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
 		bool setSound(std::string src, float volume);
+		friend std::ostream & operator << (std::ostream &os, const Sound &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern void startDisplay();
@@ -292,7 +294,7 @@ namespace ng
 		friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Text:public sf::Text, public ng::Displayable
+	class Text: public sf::Text, public ng::Displayable
 	{
 	 protected:
 		 int layer;
@@ -321,7 +323,7 @@ namespace ng
 		void setLoop(bool loop);
 		void setPause();
 		void display(sf::RenderWindow *win = kernel.window);
-		friend std::ostream & operator << (std::ostream &os, const Video &s);
+		friend std::ostream & operator << (std::ostream &os, const Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };

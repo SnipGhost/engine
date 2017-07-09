@@ -7,53 +7,42 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-	kernel.print("0");
 
-	// [ТЕКСТ][ДОРАБОТАТЬ][ЛИТЕРАЛ!!!]
+	// [ТЕКСТ]
 	XMLNode tElement = parseXML("TEXT");
-	Text text1(getTextData(tElement, RES_PATH));
+	Text text1(getTextData(tElement));
 	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
-	Text text2(getTextData(tElement, RES_PATH));
-
-	kernel.print("1");
+	Text text2(getTextData(tElement));
 
 	// [GIF-АНИМАЦИЯ]
 	XMLNode asElement = parseXML("GIF");
-	AnimateSprite gif1(getAnimateSpriteData(asElement, RES_PATH));
+	AnimateSprite gif1(getAnimateSpriteData(asElement));
 	kernel.print(gif1, INFO);
 	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
-	AnimateSprite gif2(getAnimateSpriteData(asElement, RES_PATH));
+	AnimateSprite gif2(getAnimateSpriteData(asElement));
 	kernel.print(gif2, INFO);
-
-	kernel.print("2");
 
 	// [MAP]
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
-
-	kernel.print("3");
 
 	// [СПРАЙТ]
 	XMLNode spElement = parseXML("SPRITE");
 	Sprite *sprite = NULL;
 	while (spElement != NULL)
 	{
-		SpriteData data = getSpriteData(spElement, RES_PATH);
+		SpriteData data = getSpriteData(spElement);
 		sprite = new Sprite(data);
 		kernel.print(*sprite, INFO);
 		objects[data.id] = sprite;
 		spElement = getNextXMLNode(spElement, "SPRITE");
 	}
 
-	kernel.print("4");
-
 	// [ВИДЕО]
 	XMLNode vElement = parseXML("VIDEO");
-	Video video(getVideoData(vElement, RES_PATH));
+	Video video(getVideoData(vElement));
 	kernel.print(video, INFO);
 	video.play();
-
-	kernel.print("5");
 	
 	objects["gif_1"] = &gif1;
 	objects["gif_2"] = &gif2;
@@ -61,18 +50,16 @@ int main()
 	objects["text1"] = &text1;
 	objects["text2"] = &text2;
 
-	kernel.print("6");
-
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
-	Music music(getMusicData(mElement, RES_PATH));
+	Music music(getMusicData(mElement));
+	/*kernel.print(music, INFO);*/ //!!!
 	music.play();
-
-	kernel.print("7");
 
 	// [ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
-	Sound sound(getSoundData(sElement, RES_PATH));
+	Sound sound(getSoundData(sElement));
+	kernel.print(sound, INFO);
 
 	kernel.print("Resources loaded.", NORM);
 
@@ -94,7 +81,7 @@ int main()
 			music.setPause();
 			sound.stop();
 			video.setPause();
-			delay(100);
+			delay(500);
 			continue;
 		}
 
