@@ -70,13 +70,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\scenario\script.xml">
-      <Filter>Файлы ресурсов</Filter>
-    </Xml>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\config.ini">
       <Filter>Файлы ресурсов</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Resources\scenario\script.xml" />
   </ItemGroup>
 </Project>

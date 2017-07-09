@@ -31,7 +31,7 @@ Kernel::Kernel()
 		ShowWindow(hWnd, SW_HIDE);
 	#endif
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	log = new LogStream(RES_PATH + LOG_FILE, 15);
+	log = new LogStream(RES_PATH + LOG_FILE);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	version = VERSION;
 	log->print("Novel fox engine v" + version, NORM);
@@ -165,7 +165,7 @@ SpriteData ng::getSpriteData(XMLNode spNode)
 	res.id = id;
 	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
-	res.layer = (unsigned)std::atoi(layer);
+	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	return res;
 }
@@ -174,9 +174,10 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 {
 	const char *x = asdNode->Attribute("x");
 	const char *y = asdNode->Attribute("y");
+	const char *id = asdNode->Attribute("id");
 	const char *src = asdNode->Attribute("src");
 	const char *scale = asdNode->Attribute("scale");
-	//const char *layer = asdNode->Attribute("layer");
+	const char *layer = asdNode->Attribute("layer");
 	const char *smooth = asdNode->Attribute("smooth");
 	const char *height = asdNode->Attribute("height");
 	const char *width = asdNode->Attribute("width");
@@ -185,9 +186,10 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 	AnimateSpriteData res;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
+	res.id = id;
 	res.src = RES_PATH + std::string(src);
 	res.scale = std::stof(scale);
-	//res.layer = std::atoi(layer);
+	res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);
@@ -236,6 +238,7 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 {
 	const char *text = tNode->Attribute("text");
 	const char *color = tNode->Attribute("color");
+	const char *layer = tNode->Attribute("layer");
 	const char *namePerson = tNode->Attribute("name");
 	const char *size = tNode->Attribute("size");
 	const char *font = tNode->Attribute("font");
@@ -243,11 +246,28 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 	const char *y = tNode->Attribute("y");
 
 	TextData res;
+
+	kernel.print("!1");
+
 	res.text = text;
 	res.color = color;
+
+	kernel.print("!2");
+
 	res.namePerson = namePerson;
+
+	kernel.print("!3");
+
+	res.layer = std::atoi(layer);
+
+	kernel.print("!4");
+
 	res.size = std::atoi(size);
+
+	kernel.print(font);
 	res.font = fonts[font];
+	kernel.print(font);
+	
 	res.x = std::stof(x);
 	res.y = std::stof(y);
 	return res;
@@ -257,15 +277,19 @@ VideoData ng::getVideoData(XMLNode vNode)
 {
 	const char *x = vNode->Attribute("x");
 	const char *y = vNode->Attribute("y");
+	const char *id = vNode->Attribute("id");
 	const char *src = vNode->Attribute("src");
+	const char *layer = vNode->Attribute("layer");
 	const char *volume = vNode->Attribute("volume");
 	const char *loop = vNode->Attribute("loop");
 	const char *width = vNode->Attribute("width");
 	const char *height = vNode->Attribute("height");
 
 	VideoData res;
+	res.id = id;
 	res.x = std::stof(x);
 	res.y = std::stof(y);
+	res.layer = std::atoi(layer);
 	res.width = std::stof(width);
 	res.height = std::stof(height);
 	res.src = RES_PATH + std::string(src);

@@ -22,6 +22,7 @@ Sprite::Sprite(SpriteData sd)
 	setPosition(sd.x, sd.y);
 	setScale(sd.scale, sd.scale);
 	id = sd.id;
+	layer = sd.layer;
 }
 //-----------------------------------------------------------------------------
 bool Sprite::setStrTexture(std::string src, bool smooth)
@@ -55,7 +56,7 @@ std::ostream &ng::operator << (std::ostream& os, const Sprite &s)
 	os << s.id << " [ng::Sprite]" << std::endl;
 	os << "\tLayer: " << s.layer << std::endl;
 	os << "\tPosition: (" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale: (" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tScale: (" << scl.x << "; " << scl.y << ")" << std::endl; //Вывод размера 0.7 -> 0
 	return os;
 }
 //-----------------------------------------------------------------------------

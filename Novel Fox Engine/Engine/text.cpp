@@ -18,6 +18,8 @@ bool Text::setText(std::string text, Font *font, std::string color, float x, flo
 {
 	//font.loadFromFile(RES_PATH);
 
+	kernel.print(text);
+
 	setString(sf::String::fromUtf8(text.begin(), text.end()));
 	setFont(*font);
 

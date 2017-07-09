@@ -18,6 +18,8 @@ AnimateSprite::AnimateSprite(AnimateSpriteData asd) : Sprite(asd.src, asd.smooth
 	setAnimation(asd.frameHeight, asd.frameWidth, asd.ms);
 	setPosition(asd.x, asd.y);
 	setScale(asd.scale, asd.scale);
+	id = asd.id;
+	layer = asd.layer;
 }
 //-----------------------------------------------------------------------------
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
@@ -44,5 +46,16 @@ void AnimateSprite::display(sf::RenderWindow *win)
 {
 	this->update();
 	win->draw(*this);
+}
+//-----------------------------------------------------------------------------
+std::ostream &ng::operator << (std::ostream& os, const AnimateSprite &s)
+{
+	sf::Vector2f pos = s.getPosition();
+	sf::Vector2f scl = s.getScale();
+	os << s.id << " [ng::AnimateSprite]" << std::endl;
+	os << "\tLayer: " << s.layer << std::endl;
+	os << "\tPosition: (" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale: (" << scl.x << "; " << scl.y << ")" << std::endl;
+	return os;
 }
 //-----------------------------------------------------------------------------
