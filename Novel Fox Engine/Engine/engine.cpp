@@ -24,12 +24,11 @@ Kernel &ng::kernel = Kernel::init();       // Создаем ядро, загр�
 //-----------------------------------------------------------------------------
 Kernel::Kernel()
 {	
-	#ifdef OS_IS_WIN
-		SET_LOCALE;
-		#ifndef DEBUG
-			HWND hWnd = GetConsoleWindow();
-			ShowWindow(hWnd, SW_HIDE);
-		#endif
+	#if defined(OS_IS_WIN) && ! defined(DEBUG)
+		#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+		system("chcp 1251 > nul");
+		HWND hWnd = GetConsoleWindow();
+		ShowWindow(hWnd, SW_HIDE);
 	#endif
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	log = new LogStream(LOG_FILE);
@@ -188,7 +187,7 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode, std::string path)
 	res.y = std::stof(y);
 	res.src = path + std::string(src);
 	res.scale = std::stof(scale);
-    //res.layer = std::atoi(layer);
+	//res.layer = std::atoi(layer);
 	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);

@@ -17,7 +17,6 @@
 	#define RES_PATH std::string("Resources/")
 	#define DEFAULT_APP_ICON "icon.png"
 	#define CONFIG_FILE std::string("config.ini")  // Путь до конфигурации
-	#define SET_LOCALE system("chcp 1251 > nul")
 	#define LOG_FILE std::string("main.log")
 #else
 	#include <unistd.h>
@@ -160,7 +159,7 @@ namespace ng
 		int frameHeight;
 		int frameWidth;
 		int ms;
-        int layer;
+		int layer;
 		float scale;
 		bool smooth;
 		std::string src;
