@@ -9,8 +9,10 @@ int main()
 {
 	std::map<std::string, Font*> fonts;
 	XMLNode node = NULL;
+	std::map<std::string, ng::Video*> videos;
 	std::map<std::string, ng::Displayable*> objects;
-	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
+	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
+	typedef std::map<std::string, ng::Video*>::iterator VidIt;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ШРИФТЫ]
 	node = parseXML("FONT");
@@ -56,7 +58,7 @@ int main()
 		node = getNextXMLNode(node, "SPRITE");
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// [ВИДЕО] ТОЛЬКО ОДНО, ИЗ-ЗА 93 101 СТРОК
+	// [ВИДЕО]
 	node = parseXML("VIDEO");
 	Video *video = NULL;
 	if (node != NULL)
@@ -64,6 +66,7 @@ int main()
 		VideoData data = getVideoData(node);
 		video = new Video(data);
 		video->play();
+		videos[data.id] = video;
 		objects[data.id] = video;
 		kernel.print(video, INFO);
 	}
@@ -89,31 +92,37 @@ int main()
 			if (event.isKeyboardKey(event.keyboard.Escape) ||
 				event.isWinClosed()) kernel.window->close();
 			if (event.isMouseClickKey(sf::Mouse::Left)) sound.play();
-			if (!event.isMusicPlay(music)) music.play();
-			if (!event.isVideoPlay(*video)) video->play();
 		}
 		if (event.isMouseKey(sf::Mouse::Right)) music.setStop();
 
-		if (!kernel.window->hasFocus()) // УЖАСНАЯ ИДЕЯ БЕЗ SLEEP
-		{
+		if (event.type == sf::Event::LostFocus) //Теряет фокус
+		{ 
 			music.setPause();
 			sound.stop();
-			video->setPause();
+			for (VidIt it = videos.begin(); it != videos.end(); ++it)
+				it->second->setPause();
 			delay(FOCUS_DELAY);
 			continue;
+		}
+		if (kernel.window->hasFocus()) //Имеет фокус
+		{
+			for (VidIt it = videos.begin(); it != videos.end(); ++it)
+				if (!event.isVideoPlay(*(it->second)))
+					it->second->play();
+			if (!event.isMusicPlay(music)) music.play();
 		}
 
 		startDisplay();
 
-		for (Iter it = objects.begin(); it != objects.end(); ++it)
+		for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 			it->second->display();
 
 		endDisplay();
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	for (Iter it = objects.begin(); it != objects.end(); ++it)
+	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 	{
-		kernel.print("Deleting: " + it->first, INFO);
+		kernel.print("Deleting objects: " + it->first, INFO);
 		delete it->second;
 		it->second = NULL;
 	}
