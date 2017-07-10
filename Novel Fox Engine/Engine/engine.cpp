@@ -163,11 +163,10 @@ SpriteData ng::getSpriteData(XMLNode spNode)
 	res.id = id;
 	res.layer = std::atoi(layer);
 	res.src = RES_PATH + std::string(src);
-	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
-	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
-	(scale != NULL) ? res.scale = std::stof(scale) : res.scale = 1;
-	(smooth != NULL) ? res.smooth = 
-		   ((strcmp(smooth, "true") == 0) ? true : false) : res.smooth = false;
+	(x) ? res.x = std::stof(x) : res.x = 0;
+	(y) ? res.y = std::stof(y) : res.y = 0;
+	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
+	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -190,13 +189,11 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 	res.src = RES_PATH + std::string(src);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);
-
-	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
-	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
-	(scale != NULL) ? res.scale = std::stof(scale) : res.scale = 1;
-	(smooth != NULL) ? res.smooth = 
-		   ((strcmp(smooth, "true") == 0) ? true : false) : res.smooth = false;
-	(delay != NULL) ? res.ms = std::atoi(delay) : res.ms = 40;
+	(x) ? res.x = std::stof(x) : res.x = 0;
+	(y) ? res.y = std::stof(y) : res.y = 0;
+	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
+	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = false;
+	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -209,10 +206,9 @@ MusicData ng::getMusicData(XMLNode mNode)
 
 	MusicData res;
 	res.src = RES_PATH + std::string(src);
-	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
-	(loop != NULL) ? res.loop = ((strcmp(loop, "true") == 0) ? true : false) : 
-															  res.loop = true;
-	(cmd != NULL) ? res.cmd = cmd : res.cmd = "play";
+	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
+	(loop) ? res.loop = CONVTRUE(loop) : res.loop = true;
+	(cmd) ? res.cmd = cmd : res.cmd = "play";
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -223,7 +219,7 @@ SoundData ng::getSoundData(XMLNode sNode)
 
 	SoundData res;
 	res.src = RES_PATH + std::string(src);
-	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
+	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -253,11 +249,11 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 	res.text = text;
 	res.namePerson = namePerson;
 	res.layer = std::atoi(layer);
-	(color != NULL) ? res.color = color : res.color = "black";
-	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
-	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
-	(size != NULL) ? res.size = std::atoi(size) : res.size = 1;
-	(font != NULL) ? res.font = fonts[font] : res.font = fonts["standart"];
+	(color) ? res.color = color : res.color = "black";
+	(x) ? res.x = std::stof(x) : res.x = 0;
+	(y) ? res.y = std::stof(y) : res.y = 0;
+	(size) ? res.size = std::atoi(size) : res.size = 1;
+	(font) ? res.font = fonts[font] : res.font = fonts["standart"];
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -279,11 +275,10 @@ VideoData ng::getVideoData(XMLNode vNode)
 	res.width = std::stof(width);
 	res.height = std::stof(height);
 	res.src = RES_PATH + std::string(src);
-	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
-	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
-	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
-	(loop != NULL) ? res.loop = ((strcmp(loop, "true") == 0) ? true : false) : 
-															 res.loop = false;
+	(x) ? res.x = std::stof(x) : res.x = 0;
+	(y) ? res.y = std::stof(y) : res.y = 0;
+	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
+	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
 	return res;
 }
 //-----------------------------------------------------------------------------
