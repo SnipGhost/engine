@@ -249,11 +249,10 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 	const char *x = tNode->Attribute("x");
 	const char *y = tNode->Attribute("y");
 
-	TextData res; 
+	TextData res;
 	res.text = text;
 	res.namePerson = namePerson;
 	res.layer = std::atoi(layer);
-
 	(color != NULL) ? res.color = color : res.color = "black";
 	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
 	(y != NULL) ? res.y = std::stof(y) : res.y = 0;

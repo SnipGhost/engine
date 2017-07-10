@@ -22,16 +22,9 @@ int main()
 	kernel.print("0");
 
 	// [ТЕКСТ]
-
-	// TODO: Сделать проверки в Get%%%%Data(...) функциях
-	//       Сделать сеты по умолчанию
-
 	XMLNode tElement = parseXML("TEXT");
-	kernel.print("0.1");
 	Text text1(getTextData(tElement, fonts));
-	kernel.print("0.2");
 	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
-	kernel.print("0.3");
 	Text text2(getTextData(tElement, fonts));
 
 	kernel.print("1");
