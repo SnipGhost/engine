@@ -28,13 +28,16 @@ bool Event::isWinClosed()
 bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 {
 	static bool flag = true;
-	if(flag == true && type == MouseButtonPressed && mouseButton.button == mouse) 
+	if (flag == true && type == MouseButtonPressed && mouseButton.button == mouse) 
 	{
 		flag = false;
+		std::string m = "Mouse click: (" + std::to_string(mouseButton.x);
+		m += "; " + std::to_string(mouseButton.y) + ")";
+		kernel.print(m);
 		return true;
 	}
 
-	if(type == MouseButtonReleased && mouseButton.button == mouse) 
+	if (type == MouseButtonReleased && mouseButton.button == mouse) 
 		flag = true;
 
 	return false;
