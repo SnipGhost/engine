@@ -103,7 +103,7 @@ int main()
 			music.setPause();
 			sound.stop();
 			video->setPause();
-			delay(500);
+			delay(FOCUS_DELAY);
 			continue;
 		}
 
