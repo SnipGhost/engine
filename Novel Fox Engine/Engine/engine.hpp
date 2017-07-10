@@ -70,6 +70,7 @@ namespace ng
 
 		bool check();
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
+		void print(std::string msg, size_t tag = NONE);
 		template <typename T> void print(T &msg, size_t tag = NONE)
 		{
 			const size_t TAG_COUNT = 5;
