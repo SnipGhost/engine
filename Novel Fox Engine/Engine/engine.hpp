@@ -63,6 +63,14 @@ namespace ng
 		std::ostream *log;
 		bool isExtOS;
 		unsigned int tag_mask;
+		static const size_t TAG_COUNT = 5;
+		const char *TAGM[TAG_COUNT] = {
+			"[ ] ", // [0 NONE]
+			"[!] ", // [1 CRIT]
+			"[-] ", // [2 WARN]
+			"[+] ", // [3 NORM]
+			"[i] "  // [4 INFO]
+		};
 	 public:
 		LogStream(unsigned int mask = SHOW_ALL_TAG);
 		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
@@ -73,14 +81,6 @@ namespace ng
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
 		template<typename T> void print(T msg, size_t tag = NONE)
 		{
-			const size_t TAG_COUNT = 5;
-			const char *TAGM[TAG_COUNT] = {
-				"[ ] ", // [0 NONE]
-				"[!] ", // [1 CRIT]
-				"[-] ", // [2 WARN]
-				"[+] ", // [3 NORM]
-				"[i] "  // [4 INFO]
-			};
 			check();
 			if (tag >= TAG_COUNT)
 			{
@@ -92,30 +92,22 @@ namespace ng
 				return;
 			*log << TAGM[tag] << msg << std::endl;
 		}
-        template<typename T> void print(T *msg, size_t tag = NONE)
-        {
-            const size_t TAG_COUNT = 5;
-            const char *TAGM[TAG_COUNT] = {
-                "[ ] ", // [0 NONE]
-                "[!] ", // [1 CRIT]
-                "[-] ", // [2 WARN]
-                "[+] ", // [3 NORM]
-                "[i] "  // [4 INFO]
-            };
-            check();
-            if (tag >= TAG_COUNT)
-            {
-                print("Unknown tag", 2);
-                print(msg, 0);
-                return;
-            }
-            if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
-                return;
-            if (std::is_same<T, const char>::value)
-                *log << TAGM[tag] << msg << std::endl;
-            else
-                *log << TAGM[tag] << *msg << std::endl;
-        }
+		template<typename T> void print(T *msg, size_t tag = NONE)
+		{
+			check();
+			if (tag >= TAG_COUNT)
+			{
+				print("Unknown tag", 2);
+				print(msg, 0);
+				return;
+			}
+			if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
+				return;
+			if (std::is_same<T, const char>::value)
+				*log << TAGM[tag] << msg << std::endl;
+			else
+				*log << TAGM[tag] << *msg << std::endl;
+		}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
@@ -264,6 +256,7 @@ namespace ng
 		private:
 			float volume;
 		public:
+			Music(const Music &copy) {}; // TODO: констурктор копий
 			Music(std::string src, float volume = 100, bool loop = true);
 			Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
 			bool setMusic(std::string src, float volume, bool loop);

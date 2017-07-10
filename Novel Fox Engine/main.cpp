@@ -71,7 +71,7 @@ int main()
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement));
-	kernel.print(&music, INFO);
+	kernel.print(&music, INFO); // Открыл конструктор копий, но указатель лучше
 	music.play();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ЗВУК]
