@@ -30,7 +30,7 @@ int main()
 		TextData data = getTextData(node, fonts);
 		Text *text = new Text(data);
 		objects[data.id] = text;
-		kernel.print(*text, INFO);
+		kernel.print(text, INFO);
 		node = getNextXMLNode(node, "TEXT");
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +41,7 @@ int main()
 		AnimateSpriteData data = getAnimateSpriteData(node);
 		AnimateSprite *asprite = new AnimateSprite(data);
 		objects[data.id] = asprite;
-		kernel.print(*asprite, INFO);
+		kernel.print(asprite, INFO);
 		node = getNextXMLNode(node, "GIF");
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,7 +51,7 @@ int main()
 	{
 		SpriteData data = getSpriteData(node);
 		Sprite *sprite = new Sprite(data);
-		kernel.print(*sprite, INFO);
+		kernel.print(sprite, INFO);
 		objects[data.id] = sprite;
 		node = getNextXMLNode(node, "SPRITE");
 	}
@@ -65,19 +65,19 @@ int main()
 		video = new Video(data);
 		video->play();
 		objects[data.id] = video;
-		kernel.print(*video, INFO);
+		kernel.print(video, INFO);
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement));
-	kernel.print(music, INFO);
+	kernel.print(&music, INFO);
 	music.play();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
 	Sound sound(getSoundData(sElement));
-	kernel.print(sound, INFO);
+	kernel.print(&sound, INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

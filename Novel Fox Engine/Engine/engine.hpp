@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <type_traits>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <sfeMovie/Movie.hpp>
@@ -70,8 +71,7 @@ namespace ng
 
 		bool check();
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		void print(std::string msg, size_t tag = NONE);
-		template <typename T> void print(T &msg, size_t tag = NONE)
+		template<typename T> void print(T msg, size_t tag = NONE)
 		{
 			const size_t TAG_COUNT = 5;
 			const char *TAGM[TAG_COUNT] = {
@@ -92,6 +92,30 @@ namespace ng
 				return;
 			*log << TAGM[tag] << msg << std::endl;
 		}
+        template<typename T> void print(T *msg, size_t tag = NONE)
+        {
+            const size_t TAG_COUNT = 5;
+            const char *TAGM[TAG_COUNT] = {
+                "[ ] ", // [0 NONE]
+                "[!] ", // [1 CRIT]
+                "[-] ", // [2 WARN]
+                "[+] ", // [3 NORM]
+                "[i] "  // [4 INFO]
+            };
+            check();
+            if (tag >= TAG_COUNT)
+            {
+                print("Unknown tag", 2);
+                print(msg, 0);
+                return;
+            }
+            if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
+                return;
+            if (std::is_same<T, const char>::value)
+                *log << TAGM[tag] << msg << std::endl;
+            else
+                *log << TAGM[tag] << *msg << std::endl;
+        }
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
@@ -130,7 +154,7 @@ namespace ng
 			static Kernel & init();                   // Instance-метод
 			~Kernel();
 			bool parseConfig(std::string file);       // Загрузить конфигурацию
-			template <typename T> void print(T &msg, size_t tag = NONE)
+			template<typename T> void print(T msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
 	};
