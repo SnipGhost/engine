@@ -160,13 +160,14 @@ SpriteData ng::getSpriteData(XMLNode spNode)
 	const char *smooth = spNode->Attribute("smooth");
 
 	SpriteData res;
-	res.x = std::stof(x);
-	res.y = std::stof(y);
 	res.id = id;
-	res.src = RES_PATH + std::string(src);
-	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);
-	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
+	res.src = RES_PATH + std::string(src);
+	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
+	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
+	(scale != NULL) ? res.scale = std::stof(scale) : res.scale = 1;
+	(smooth != NULL) ? res.smooth = 
+		   ((strcmp(smooth, "true") == 0) ? true : false) : res.smooth = false;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -184,16 +185,18 @@ AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 	const char *delay = asdNode->Attribute("delay");
 
 	AnimateSpriteData res;
-	res.x = std::stof(x);
-	res.y = std::stof(y);
 	res.id = id;
-	res.src = RES_PATH + std::string(src);
-	res.scale = std::stof(scale);
 	res.layer = std::atoi(layer);
-	res.smooth = ((strcmp(smooth, "true") == 0) ? true : false);
+	res.src = RES_PATH + std::string(src);
 	res.frameHeight = std::atoi(height);
 	res.frameWidth = std::atoi(width);
-	res.ms = std::atoi(delay);
+
+	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
+	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
+	(scale != NULL) ? res.scale = std::stof(scale) : res.scale = 1;
+	(smooth != NULL) ? res.smooth = 
+		   ((strcmp(smooth, "true") == 0) ? true : false) : res.smooth = false;
+	(delay != NULL) ? res.ms = std::atoi(delay) : res.ms = 40;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -205,10 +208,11 @@ MusicData ng::getMusicData(XMLNode mNode)
 	const char *cmd = mNode->Attribute("cmd");
 
 	MusicData res;
-	res.volume = std::stof(volume);
-	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
 	res.src = RES_PATH + std::string(src);
-	res.cmd = cmd;
+	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
+	(loop != NULL) ? res.loop = ((strcmp(loop, "true") == 0) ? true : false) : 
+															  res.loop = true;
+	(cmd != NULL) ? res.cmd = cmd : res.cmd = "play";
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -218,8 +222,8 @@ SoundData ng::getSoundData(XMLNode sNode)
 	const char *src = sNode->Attribute("src");
 
 	SoundData res;
-	res.volume = std::stof(volume);
 	res.src = RES_PATH + std::string(src);
+	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -245,31 +249,16 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 	const char *x = tNode->Attribute("x");
 	const char *y = tNode->Attribute("y");
 
-	TextData res;
-
-	kernel.print("!1");
-
+	TextData res; 
 	res.text = text;
-	res.color = color;
-
-	kernel.print("!2");
-
 	res.namePerson = namePerson;
-
-	kernel.print("!3");
-
 	res.layer = std::atoi(layer);
 
-	kernel.print("!4");
-
-	res.size = std::atoi(size);
-
-	kernel.print(font);
-	res.font = fonts[font];
-	kernel.print(font);
-	
-	res.x = std::stof(x);
-	res.y = std::stof(y);
+	(color != NULL) ? res.color = color : res.color = "black";
+	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
+	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
+	(size != NULL) ? res.size = std::atoi(size) : res.size = 1;
+	(font != NULL) ? res.font = fonts[font] : res.font = fonts["standart"];
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -287,14 +276,15 @@ VideoData ng::getVideoData(XMLNode vNode)
 
 	VideoData res;
 	res.id = id;
-	res.x = std::stof(x);
-	res.y = std::stof(y);
 	res.layer = std::atoi(layer);
 	res.width = std::stof(width);
 	res.height = std::stof(height);
 	res.src = RES_PATH + std::string(src);
-	res.volume = std::stof(volume);
-	res.loop = ((strcmp(loop, "true") == 0) ? true : false);
+	(x != NULL) ? res.x = std::stof(x) : res.x = 0;
+	(y != NULL) ? res.y = std::stof(y) : res.y = 0;
+	(volume != NULL) ? res.volume = std::stof(volume) : res.volume = 100;
+	(loop != NULL) ? res.loop = ((strcmp(loop, "true") == 0) ? true : false) : 
+															 res.loop = false;
 	return res;
 }
 //-----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SCRIPTGAME>
 
-  <FONT id="std" src="scenario/fonts/font.ttf"/>
+  <FONT id="standart" src="scenario/fonts/font.ttf"/>
   <FONT id="classic" src="scenario/fonts/CyrilicOld.TTF"/>
   
   <SPRITE id="background" layer="1" smooth="true" x="0" y="0" scale="1" src="scenario/texture.png"/>
@@ -15,7 +15,7 @@
   
   <SOUND volume="100" src="scenario/sound.ogg"/>
 
-  <TEXT name="Maya" layer="1" font="std" color="blue" text="- Привет, Tolya!" size="30" x="400" y="320"/>
+  <TEXT name="Maya" layer="1" font="standart" color="blue" text="- Привет, Tolya!" size="30" x="400" y="320"/>
   <TEXT name="Tolya" layer="1" font="classic" color="red" text="- Hello, Maya!" size="30" x="400" y="360"/>
 
   <VIDEO id="video1" volume="0" layer="1" loop="true" x="10" y="20" width="750" height="300" src="scenario/video.ogv"/>
