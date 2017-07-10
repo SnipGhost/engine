@@ -14,11 +14,10 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ШРИФТЫ]
 	node = parseXML("FONT");
-	Font *font = NULL;
 	while (node != NULL)
 	{
 		FontData data = getFontData(node);
-		font = new Font(data);
+		Font *font = new Font(data);
 		fonts[data.id] = font;
 		kernel.print("Loaded font: " + data.src, INFO);
 		node = getNextXMLNode(node, "FONT");
@@ -26,11 +25,10 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ТЕКСТ]
 	node = parseXML("TEXT");
-	Text *text = NULL;
 	while (node != NULL)
 	{
 		TextData data = getTextData(node, fonts);
-		text = new Text(data);
+		Text *text = new Text(data);
 		objects[data.id] = text;
 		kernel.print(data.text, INFO);
 		node = getNextXMLNode(node, "TEXT");
@@ -38,11 +36,10 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [АНИМАЦИЯ]
 	node = parseXML("GIF");
-	AnimateSprite *asprite = NULL;
 	while (node != NULL)
 	{
 		AnimateSpriteData data = getAnimateSpriteData(node);
-		asprite = new AnimateSprite(data);
+		AnimateSprite *asprite = new AnimateSprite(data);
 		objects[data.id] = asprite;
 		kernel.print(*asprite, INFO);
 		node = getNextXMLNode(node, "GIF");
@@ -50,11 +47,10 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [СПРАЙТ]
 	node = parseXML("SPRITE");
-	Sprite *sprite = NULL;
 	while (node != NULL)
 	{
 		SpriteData data = getSpriteData(node);
-		sprite = new Sprite(data);
+		Sprite *sprite = new Sprite(data);
 		kernel.print(*sprite, INFO);
 		objects[data.id] = sprite;
 		node = getNextXMLNode(node, "SPRITE");
