@@ -17,6 +17,7 @@ Text::Text(TextData td)
 //-----------------------------------------------------------------------------
 bool Text::setText(TextData &td)
 {
+	(td.namePerson != "") ? td.text = td.namePerson + ": " + td.text : td.text;
 	setString(sf::String::fromUtf8(td.text.begin(), td.text.end()));
 	setFont(*td.font);
 

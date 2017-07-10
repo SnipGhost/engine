@@ -15,9 +15,10 @@
   
   <SOUND volume="100" src="scenario/sound.ogg"/>
 
-  <TEXT id="txt1" name="Maya" layer="1" font="standart" color="blue" text="- Привет, Tolya!" size="30" x="400" y="320"/>
-  <TEXT id="txt2" name="Tolya" layer="1" font="classic" color="red" text="- Hello, Maya!" size="30" x="400" y="360"/>
-  <TEXT id="txt3" name="Tolya" layer="1" font="classic" color="red" text="- Как дела, милашка?" size="30" x="400" y="400"/>
+  <TEXT id="txt1" name="Майа" layer="1" font="standart" color="blue" text="- Привет, Tolya!" size="30" x="360" y="320"/>
+  <TEXT id="txt2" name="Толя" layer="1" font="classic" color="red" text="- Привет, Maya!" size="30" x="360" y="360"/>
+  <TEXT id="txt3" name="Майа" layer="1" font="standart" color="blue" text="- Как дела, малыш?" size="30" x="360" y="400"/>
+  <TEXT id="txt4" layer="1" font="classic" color="black" text="Толя был в сети 15 минут назад..." size="24" x="360" y="440"/>
 
   <VIDEO id="video1" volume="0" layer="1" loop="true" x="10" y="20" width="750" height="300" src="scenario/video.ogv"/>
 

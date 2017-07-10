@@ -57,6 +57,9 @@
     <ClCompile Include="Engine\font.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Modules\primitiveGui.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\engine.hpp">
@@ -66,6 +69,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Modules\macros.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\primitiveGui.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
