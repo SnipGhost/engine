@@ -9,8 +9,6 @@ Music::Music(std::string src, float volume, bool loop)
 		kernel.print("Failed load music " + src, WARN);
 	else
 		kernel.print("Created music " + src, INFO);
-
-
 }
 //-----------------------------------------------------------------------------
 Music::Music(MusicData md)
@@ -56,6 +54,10 @@ void Music::setPause()
 std::ostream &ng::operator << (std::ostream &os, const Music &m)
 {
 	os << "[ng::Music]" << std::endl;
+	os << "\tDuration (sec):\t" << m.getDuration().asSeconds() << std::endl;
+	os << "\tChannel count: \t" << m.getChannelCount() << std::endl;
+	os << "\tVolume level:  \t" << m.getVolume() << std::endl;
+	os << "\tLooping value: \t" << m.getLoop() << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

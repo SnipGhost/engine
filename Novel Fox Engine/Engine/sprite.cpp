@@ -54,9 +54,9 @@ std::ostream &ng::operator << (std::ostream& os, const Sprite &s)
 	sf::Vector2f pos = s.getPosition();
 	sf::Vector2f scl = s.getScale();
 	os << s.id << " [ng::Sprite]" << std::endl;
-	os << "\tLayer: " << s.layer << std::endl;
-	os << "\tPosition: (" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale: (" << scl.x << "; " << scl.y << ")" << std::endl; //Вывод размера 0.7 -> 0
+	os << "\tLayer:   \t" << s.layer << std::endl;
+	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

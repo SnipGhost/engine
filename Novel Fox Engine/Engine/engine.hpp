@@ -316,6 +316,7 @@ namespace ng
 			Text(TextData td);
 			bool setText(TextData &td);
 			void display(sf::RenderWindow *win = kernel.window);
+			friend std::ostream &operator<<(std::ostream &os, const Text &t);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Video: public sfe::Movie, public ng::Displayable

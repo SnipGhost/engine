@@ -30,7 +30,7 @@ int main()
 		TextData data = getTextData(node, fonts);
 		Text *text = new Text(data);
 		objects[data.id] = text;
-		kernel.print(data.text, INFO);
+		kernel.print(*text, INFO);
 		node = getNextXMLNode(node, "TEXT");
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +71,7 @@ int main()
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement));
-	/*kernel.print(music, INFO);*/ //!!!
+	kernel.print(music, INFO);
 	music.play();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ЗВУК]
