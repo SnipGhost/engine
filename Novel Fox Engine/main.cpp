@@ -8,79 +8,83 @@ using namespace ng;
 int main()
 {
 	std::map<std::string, Font*> fonts;
-	XMLNode fontElem = parseXML("FONT");
-	Font *font;
-	while (fontElem != NULL)
-	{
-		FontData fd = getFontData(fontElem);
-		font = new Font(fd);
-		kernel.print(fd.src);
-		fonts[fd.id] = font;
-		fontElem = getNextXMLNode(fontElem, "FONT");
-	}
-
-	kernel.print("0");
-
-	// [ТЕКСТ]
-	XMLNode tElement = parseXML("TEXT");
-	Text text1(getTextData(tElement, fonts));
-	tElement = getNextXMLNode(tElement, "TEXT"); // Нода1 -> Нода2
-	Text text2(getTextData(tElement, fonts));
-
-	kernel.print("1");
-
-	// [GIF-АНИМАЦИЯ]
-	XMLNode asElement = parseXML("GIF");
-	AnimateSprite gif1(getAnimateSpriteData(asElement));
-	kernel.print(gif1, INFO);
-	asElement = getNextXMLNode(asElement, "GIF"); // Нода1 -> Нода2
-	AnimateSprite gif2(getAnimateSpriteData(asElement));
-	kernel.print(gif2, INFO);
-
-	kernel.print("2");
-
-	// [MAP]
+	XMLNode node = NULL;
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator Iter;
-
-	// [СПРАЙТ]
-	XMLNode spElement = parseXML("SPRITE");
-	Sprite *sprite = NULL;
-	while (spElement != NULL)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// [ШРИФТЫ]
+	node = parseXML("FONT");
+	Font *font = NULL;
+	while (node != NULL)
 	{
-		SpriteData data = getSpriteData(spElement);
+		FontData data = getFontData(node);
+		font = new Font(data);
+		fonts[data.id] = font;
+		kernel.print("Loaded font: " + data.src, INFO);
+		node = getNextXMLNode(node, "FONT");
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// [ТЕКСТ]
+	node = parseXML("TEXT");
+	Text *text = NULL;
+	while (node != NULL)
+	{
+		TextData data = getTextData(node, fonts);
+		text = new Text(data);
+		objects[data.id] = text;
+		kernel.print(data.text, INFO);
+		node = getNextXMLNode(node, "TEXT");
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// [АНИМАЦИЯ]
+	node = parseXML("GIF");
+	AnimateSprite *asprite = NULL;
+	while (node != NULL)
+	{
+		AnimateSpriteData data = getAnimateSpriteData(node);
+		asprite = new AnimateSprite(data);
+		objects[data.id] = asprite;
+		kernel.print(*asprite, INFO);
+		node = getNextXMLNode(node, "GIF");
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// [СПРАЙТ]
+	node = parseXML("SPRITE");
+	Sprite *sprite = NULL;
+	while (node != NULL)
+	{
+		SpriteData data = getSpriteData(node);
 		sprite = new Sprite(data);
 		kernel.print(*sprite, INFO);
 		objects[data.id] = sprite;
-		spElement = getNextXMLNode(spElement, "SPRITE");
+		node = getNextXMLNode(node, "SPRITE");
 	}
-
-	// [ВИДЕО]
-	XMLNode vElement = parseXML("VIDEO");
-	Video video(getVideoData(vElement));
-	kernel.print(video, INFO);
-
-	video.play();
-	
-	objects["gif_1"] = &gif1;
-	objects["gif_2"] = &gif2;
-	objects["video"] = &video;
-	objects["text1"] = &text1;
-	objects["text2"] = &text2;
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// [ВИДЕО] ТОЛЬКО ОДНО, ИЗ-ЗА 97 и 105 строк
+	node = parseXML("VIDEO");
+	Video *video = NULL;
+	if (node != NULL)
+	{
+		VideoData data = getVideoData(node);
+		video = new Video(data);
+		video->play();
+		objects[data.id] = video;
+		kernel.print(*video, INFO);
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
 	Music music(getMusicData(mElement));
 	/*kernel.print(music, INFO);*/ //!!!
 	music.play();
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// [ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
 	Sound sound(getSoundData(sElement));
 	kernel.print(sound, INFO);
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	while (kernel.window->isOpen())
 	{
 		Event event;
@@ -90,7 +94,7 @@ int main()
 				event.isWinClosed()) kernel.window->close();
 			if (event.isMouseClickKey(sf::Mouse::Left)) sound.play();
 			if (!event.isMusicPlay(music)) music.play();
-			if (!event.isVideoPlay(video)) video.play();
+			if (!event.isVideoPlay(*video)) video->play();
 		}
 		if (event.isMouseKey(sf::Mouse::Right)) music.setStop();
 
@@ -98,7 +102,7 @@ int main()
 		{
 			music.setPause();
 			sound.stop();
-			video.setPause();
+			video->setPause();
 			delay(500);
 			continue;
 		}
@@ -110,9 +114,14 @@ int main()
 
 		endDisplay();
 	}
-
-	// DELETE ALL OBJECTS
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	for (Iter it = objects.begin(); it != objects.end(); ++it)
+	{
+		kernel.print("Deleting: " + it->first, INFO);
+		delete it->second;
+		it->second = NULL;
+	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	return EXIT_SUCCESS;
 }
 //-----------------------------------------------------------------------------

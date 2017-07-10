@@ -244,8 +244,10 @@ TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 	const char *font = tNode->Attribute("font");
 	const char *x = tNode->Attribute("x");
 	const char *y = tNode->Attribute("y");
+	const char *id = tNode->Attribute("id");
 
 	TextData res;
+	res.id = id;
 	res.text = text;
 	res.namePerson = namePerson;
 	res.layer = std::atoi(layer);

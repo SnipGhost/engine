@@ -6,22 +6,19 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 Text::Text(std::string text, Font *font, std::string color, float x, float y, unsigned int size)
 {
-	setText(text, font, color, x, y, size);
+	TextData td = { "NONE", text, color, "UNKNOWN", font, size, 0, x, y };
+	setText(td);
 }
 //-----------------------------------------------------------------------------
 Text::Text(TextData td)
 {
-	setText(td.text, td.font, td.color, td.x, td.y, td.size);
+	setText(td);
 }
 //-----------------------------------------------------------------------------
-bool Text::setText(std::string text, Font *font, std::string color, float x, float y, unsigned int size)
+bool Text::setText(TextData &td)
 {
-	//font.loadFromFile(RES_PATH);
-
-	kernel.print(text);
-
-	setString(sf::String::fromUtf8(text.begin(), text.end()));
-	setFont(*font);
+	setString(sf::String::fromUtf8(td.text.begin(), td.text.end()));
+	setFont(*td.font);
 
 	mapping["red"] = 1;
 	mapping["green"] = 2;
@@ -30,7 +27,7 @@ bool Text::setText(std::string text, Font *font, std::string color, float x, flo
 	mapping["white"] = 5;
 	mapping["black"] = 6;
 
-	switch (mapping[color])
+	switch (mapping[td.color])
 	{
 		case 1: setFillColor(sf::Color::Red);    break;
 		case 2: setFillColor(sf::Color::Green);  break;
@@ -40,8 +37,8 @@ bool Text::setText(std::string text, Font *font, std::string color, float x, flo
 		case 6: setFillColor(sf::Color::Black);  break;
 	}
 
-	setPosition(x, y);
-	setCharacterSize(size);
+	setPosition(td.x, td.y);
+	setCharacterSize(td.size);
 
 	return 1;
 }

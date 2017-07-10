@@ -70,7 +70,7 @@ namespace ng
 
 		bool check();
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		template <typename T> void print(T msg, size_t tag = NONE)
+		template <typename T> void print(T &msg, size_t tag = NONE)
 		{
 			const size_t TAG_COUNT = 5;
 			const char *TAGM[TAG_COUNT] = {
@@ -129,7 +129,7 @@ namespace ng
 			static Kernel & init();                   // Instance-метод
 			~Kernel();
 			bool parseConfig(std::string file);       // Загрузить конфигурацию
-			template <typename T> void print(T msg, size_t tag = NONE)
+			template <typename T> void print(T &msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
 	};
@@ -191,6 +191,7 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct TextData
 	{
+		std::string id;
 		std::string text;
 		std::string color;
 		std::string namePerson;
@@ -265,7 +266,12 @@ namespace ng
 	{
 		protected:
 			int layer;
+			std::string id;
 		public:
+			virtual ~Displayable() 
+			{ 
+				kernel.print("Deleted displayble object: " + id, INFO); 
+			}
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
 	};
@@ -274,7 +280,6 @@ namespace ng
 	{
 		protected:
 			sf::Texture texture;
-			std::string id;
 		public:
 			Sprite() {}
 			Sprite(std::string src, bool smooth = true);
@@ -305,12 +310,11 @@ namespace ng
 	class Text: public sf::Text, public ng::Displayable
 	{
 		protected:
-			//sf::Font font;
 			std::map <std::string, int> mapping;
 		public:
 			Text(std::string text, Font *font, std::string color, float x, float y, unsigned int size);
 			Text(TextData td);
-			bool setText(std::string text, Font *font, std::string color, float x, float y, unsigned int size);
+			bool setText(TextData &td);
 			void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -318,7 +322,6 @@ namespace ng
 	{
 		protected:
 			bool loopVideo;
-			std::string id;
 		public:
 			Video(std::string src, float width, float height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
