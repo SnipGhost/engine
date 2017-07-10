@@ -133,13 +133,11 @@
     <ClCompile Include="Engine\text.cpp" />
     <ClCompile Include="Engine\video.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Modules\primitiveGui.cpp" />
     <ClCompile Include="Modules\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\engine.hpp" />
     <ClInclude Include="Modules\macros.h" />
-    <ClInclude Include="Modules\primitiveGui.h" />
     <ClInclude Include="Modules\tinyxml2.hpp" />
   </ItemGroup>
   <ItemGroup>
