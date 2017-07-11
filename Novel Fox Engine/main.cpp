@@ -53,6 +53,16 @@ int main()
 		objects[data.id] = sprite;
 		node = getNextXMLNode(node, "SPRITE");
 	}
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ИЗМЕНЕНИЕ СПРАЙТА]
+	node = parseXML("CHANGE-SPRITE");
+	while (node != NULL)
+	{
+		//SpriteData data = getChangeSpriteData(node);
+		//Sprite *sprite = new Sprite(data);
+		//objects[data.id] = sprite;
+		//kernel.print(sprite, INFO);
+		node = getNextXMLNode(node, "CHANGE-SPRITE");
+	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ВИДЕО]
 	node = parseXML("VIDEO");
 	Video *video = NULL;

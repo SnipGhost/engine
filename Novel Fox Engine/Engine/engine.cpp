@@ -170,6 +170,27 @@ SpriteData ng::getSpriteData(XMLNode spNode)
 	return res;
 }
 //-----------------------------------------------------------------------------
+SpriteData ng::getChangeSpriteData(XMLNode cspNode)
+{
+	const char *x = cspNode->Attribute("x");
+	const char *y = cspNode->Attribute("y");
+	const char *id = cspNode->Attribute("id");
+	const char *src = cspNode->Attribute("src");
+	const char *scale = cspNode->Attribute("scale");
+	const char *layer = cspNode->Attribute("layer");
+	const char *smooth = cspNode->Attribute("smooth");
+
+	SpriteData res;
+	res.id = id;
+	if (layer) res.layer = std::atoi(layer);
+	if (src) res.src = RES_PATH + std::string(src);
+	if (x) res.x = std::stof(x);
+	if (y) res.y = std::stof(y);
+	if (scale) res.scale = std::stof(scale);
+	if (smooth) res.smooth = CONVTRUE(smooth);
+	return res;
+}
+//-----------------------------------------------------------------------------
 AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
 {
 	const char *x = asdNode->Attribute("x");
@@ -236,7 +257,7 @@ FontData ng::getFontData(XMLNode tNode)
 //-----------------------------------------------------------------------------
 TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
 {
-	const char *text = tNode->Attribute("text");
+	const char *text = tNode->GetText();
 	const char *color = tNode->Attribute("color");
 	const char *layer = tNode->Attribute("layer");
 	const char *namePerson = tNode->Attribute("name");

@@ -236,6 +236,7 @@ namespace ng
 	XMLNode getNextXMLNode(XMLNode node, const char *tag);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SpriteData getSpriteData(XMLNode spNode);
+	SpriteData getChangeSpriteData(XMLNode cspNode);
 	AnimateSpriteData getAnimateSpriteData(XMLNode asNode);
 	MusicData getMusicData(XMLNode mNode);
 	SoundData getSoundData(XMLNode sNode);
