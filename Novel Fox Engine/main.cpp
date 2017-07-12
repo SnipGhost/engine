@@ -82,9 +82,9 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Event event;
 	while (kernel.window->isOpen())
 	{
-		Event event;
 		while (kernel.window->pollEvent(event))
 		{
 			if (event.isKeyboardKey(event.keyboard.Escape) ||
