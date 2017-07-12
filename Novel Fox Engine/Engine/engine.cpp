@@ -149,159 +149,62 @@ XMLNode ng::getNextXMLNode(XMLNode node, const char *tag)
 	return node->NextSiblingElement(tag);
 }
 //-----------------------------------------------------------------------------
-SpriteData ng::getSpriteData(XMLNode spNode)
+ResData ng::getResData(XMLNode node)
 {
-	const char *x = spNode->Attribute("x");
-	const char *y = spNode->Attribute("y");
-	const char *id = spNode->Attribute("id");
-	const char *src = spNode->Attribute("src");
-	const char *scale = spNode->Attribute("scale");
-	const char *layer = spNode->Attribute("layer");
-	const char *smooth = spNode->Attribute("smooth");
+	const char *x = node->Attribute("x");
+	const char *y = node->Attribute("y");
+	const char *id = node->Attribute("id");
+	const char *src = node->Attribute("src");
+	const char *cmd = node->Attribute("cmd");
+	const char *size = node->Attribute("size");
+	const char *fontId = node->Attribute("font");
+	const char *loop = node->Attribute("loop");
+	const char *color = node->Attribute("color");
+	const char *scale = node->Attribute("scale");
+	const char *layer = node->Attribute("layer");
+	const char *width = node->Attribute("width");
+	const char *delay = node->Attribute("delay");
+	const char *smooth = node->Attribute("smooth");
+	const char *height = node->Attribute("height");
+	const char *volume = node->Attribute("volume");
+	const char *namePerson = node->Attribute("name");
+	/*const char *text = node->GetText();*/ //TODO
+	const char *text = "";
 
-	SpriteData res;
-	res.id = id;
-	res.layer = std::atoi(layer);
-	res.src = RES_PATH + std::string(src);
-	(x) ? res.x = std::stof(x) : res.x = 0;
-	(y) ? res.y = std::stof(y) : res.y = 0;
-	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
-	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
-	return res;
-}
-//-----------------------------------------------------------------------------
-SpriteData ng::getChangeSpriteData(XMLNode cspNode)
-{
-	const char *x = cspNode->Attribute("x");
-	const char *y = cspNode->Attribute("y");
-	const char *id = cspNode->Attribute("id");
-	const char *src = cspNode->Attribute("src");
-	const char *scale = cspNode->Attribute("scale");
-	const char *layer = cspNode->Attribute("layer");
-	const char *smooth = cspNode->Attribute("smooth");
+	ResData res;
 
-	SpriteData res;
-	res.id = id;
-	if (layer) res.layer = std::atoi(layer);
-	if (src) res.src = RES_PATH + std::string(src);
-	if (x) res.x = std::stof(x);
-	if (y) res.y = std::stof(y);
-	if (scale) res.scale = std::stof(scale);
-	if (smooth) res.smooth = CONVTRUE(smooth);
-	return res;
-}
-//-----------------------------------------------------------------------------
-AnimateSpriteData ng::getAnimateSpriteData(XMLNode asdNode)
-{
-	const char *x = asdNode->Attribute("x");
-	const char *y = asdNode->Attribute("y");
-	const char *id = asdNode->Attribute("id");
-	const char *src = asdNode->Attribute("src");
-	const char *scale = asdNode->Attribute("scale");
-	const char *layer = asdNode->Attribute("layer");
-	const char *smooth = asdNode->Attribute("smooth");
-	const char *height = asdNode->Attribute("height");
-	const char *width = asdNode->Attribute("width");
-	const char *delay = asdNode->Attribute("delay");
-
-	AnimateSpriteData res;
-	res.id = id;
-	res.layer = std::atoi(layer);
-	res.src = RES_PATH + std::string(src);
-	res.frameHeight = std::atoi(height);
-	res.frameWidth = std::atoi(width);
-	(x) ? res.x = std::stof(x) : res.x = 0;
-	(y) ? res.y = std::stof(y) : res.y = 0;
-	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
-	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = false;
+	(fontId) ? res.fontId = fontId : res.fontId = "standart";
 	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
-	return res;
-}
-//-----------------------------------------------------------------------------
-MusicData ng::getMusicData(XMLNode mNode)
-{
-	const char *volume = mNode->Attribute("volume");
-	const char *loop = mNode->Attribute("loop");
-	const char *src = mNode->Attribute("src");
-	const char *cmd = mNode->Attribute("cmd");
-
-	MusicData res;
-	res.src = RES_PATH + std::string(src);
+	(x) ? res.x = std::stof(x) : res.x = 0;
+	(y) ? res.y = std::stof(y) : res.y = 0;
+	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
+	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
+	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
+	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
+	(width) ? res.width = std::stof(width) : res.width = 256;
+	(height) ? res.height = std::stof(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
-	(loop) ? res.loop = CONVTRUE(loop) : res.loop = true;
+	(width) ?  res.frameHeight = std::atoi(height) : res.frameHeight = 256; //TODO
+	(height) ? res.frameWidth = std::atoi(width) : res.frameWidth = 256;    //TODO
+	(size) ? res.size = std::atoi(size) : res.size = 1;
+	(id) ? res.id = id : res.id = "NULL";
 	(cmd) ? res.cmd = cmd : res.cmd = "play";
-	return res;
-}
-//-----------------------------------------------------------------------------
-SoundData ng::getSoundData(XMLNode sNode)
-{
-	const char *volume = sNode->Attribute("volume");
-	const char *src = sNode->Attribute("src");
+	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
+	(src) ? res.text = text : res.text = "NO TEXT";
+	(color) ? res.color = color : res.color = "black";
+	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
 
-	SoundData res;
-	res.src = RES_PATH + std::string(src);
-	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
 	return res;
 }
 //-----------------------------------------------------------------------------
-FontData ng::getFontData(XMLNode tNode)
+FontData ng::getFontData(XMLNode node)
 {
-	const char *src = tNode->Attribute("src");
-	const char *id = tNode->Attribute("id");
+	const char *src = node->Attribute("src");
+	const char *id = node->Attribute("id");
 
 	FontData res;
 	res.id = id;
 	res.src = RES_PATH + src;
-	return res;
-}
-//-----------------------------------------------------------------------------
-TextData ng::getTextData(XMLNode tNode, std::map<std::string, Font*> fonts)
-{
-	const char *text = tNode->GetText();
-	const char *color = tNode->Attribute("color");
-	const char *layer = tNode->Attribute("layer");
-	const char *namePerson = tNode->Attribute("name");
-	const char *size = tNode->Attribute("size");
-	const char *font = tNode->Attribute("font");
-	const char *x = tNode->Attribute("x");
-	const char *y = tNode->Attribute("y");
-	const char *id = tNode->Attribute("id");
-
-	TextData res;
-	res.id = id;
-	res.text = text;
-	res.layer = std::atoi(layer);
-	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
-	(color) ? res.color = color : res.color = "black";
-	(x) ? res.x = std::stof(x) : res.x = 0;
-	(y) ? res.y = std::stof(y) : res.y = 0;
-	(size) ? res.size = std::atoi(size) : res.size = 1;
-	(font) ? res.font = fonts[font] : res.font = fonts["standart"];
-	return res;
-}
-//-----------------------------------------------------------------------------
-VideoData ng::getVideoData(XMLNode vNode)
-{
-	const char *x = vNode->Attribute("x");
-	const char *y = vNode->Attribute("y");
-	const char *id = vNode->Attribute("id");
-	const char *src = vNode->Attribute("src");
-	const char *layer = vNode->Attribute("layer");
-	const char *volume = vNode->Attribute("volume");
-	const char *loop = vNode->Attribute("loop");
-	const char *width = vNode->Attribute("width");
-	const char *height = vNode->Attribute("height");
-
-	VideoData res;
-	res.id = id;
-	res.layer = std::atoi(layer);
-	res.width = std::stof(width);
-	res.height = std::stof(height);
-	res.src = RES_PATH + std::string(src);
-	(x) ? res.x = std::stof(x) : res.x = 0;
-	(y) ? res.y = std::stof(y) : res.y = 0;
-	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
-	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
 	return res;
 }
 //-----------------------------------------------------------------------------

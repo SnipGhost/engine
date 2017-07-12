@@ -13,16 +13,16 @@ Sprite::Sprite(std::string src, bool smooth)
 		kernel.print("Load texture " + src, INFO);
 }
 //-----------------------------------------------------------------------------
-Sprite::Sprite(SpriteData sd)
+Sprite::Sprite(ResData rd)
 {
-	if (!setStrTexture(sd.src, sd.smooth))
-		kernel.print("Failed to create sprite " + sd.id, WARN);
+	if (!setStrTexture(rd.src, rd.smooth))
+		kernel.print("Failed to create sprite " + rd.id, WARN);
 	else
-		kernel.print("Sprite created " + sd.id, INFO);
-	setPosition(sd.x, sd.y);
-	setScale(sd.scale, sd.scale);
-	id = sd.id;
-	layer = sd.layer;
+		kernel.print("Sprite created " + rd.id, INFO);
+	setPosition(rd.x, rd.y);
+	setScale(rd.scale, rd.scale);
+	id = rd.id;
+	layer = rd.layer;
 }
 //-----------------------------------------------------------------------------
 bool Sprite::setStrTexture(std::string src, bool smooth)
@@ -34,14 +34,14 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 	return 1;
 }
 //-----------------------------------------------------------------------------
-void Sprite::change(SpriteData sd) 
+void Sprite::change(ResData rd)
 {
-	if (!setStrTexture(sd.src, sd.smooth))
-		kernel.print("Failed to change sprite " + sd.id, WARN);
+	if (!setStrTexture(rd.src, rd.smooth))
+		kernel.print("Failed to change sprite " + rd.id, WARN);
 	else
-		kernel.print("Sprite changed: " + sd.id, INFO);
-	setPosition(sd.x, sd.y);
-	setScale(sd.scale, sd.scale);
+		kernel.print("Sprite changed: " + rd.id, INFO);
+	setPosition(rd.x, rd.y);
+	setScale(rd.scale, rd.scale);
 }
 //-----------------------------------------------------------------------------
 void Sprite::display(sf::RenderWindow *win) 

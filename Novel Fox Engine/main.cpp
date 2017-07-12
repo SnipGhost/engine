@@ -7,7 +7,6 @@ using namespace ng;
 //-----------------------------------------------------------------------------
 int main()
 {
-	std::map<std::string, Font*> fonts;
 	XMLNode node = NULL;
 	std::map<std::string, ng::Video*> videos;
 	std::map<std::string, ng::Displayable*> objects;
@@ -19,7 +18,7 @@ int main()
 	{
 		FontData data = getFontData(node);
 		Font *font = new Font(data);
-		fonts[data.id] = font;
+		kernel.fonts[data.id] = font;
 		kernel.print("Loaded font: " + data.src, INFO);
 		node = getNextXMLNode(node, "FONT");
 	}
@@ -27,7 +26,7 @@ int main()
 	node = parseXML("TEXT");
 	while (node != NULL)
 	{
-		TextData data = getTextData(node, fonts);
+		ResData data = getResData(node);
 		Text *text = new Text(data);
 		objects[data.id] = text;
 		kernel.print(text, INFO);
@@ -37,7 +36,7 @@ int main()
 	node = parseXML("GIF");
 	while (node != NULL)
 	{
-		AnimateSpriteData data = getAnimateSpriteData(node);
+		ResData data = getResData(node);
 		AnimateSprite *asprite = new AnimateSprite(data);
 		objects[data.id] = asprite;
 		kernel.print(asprite, INFO);
@@ -47,7 +46,7 @@ int main()
 	node = parseXML("SPRITE");
 	while (node != NULL)
 	{
-		SpriteData data = getSpriteData(node);
+		ResData data = getResData(node);
 		Sprite *sprite = new Sprite(data);
 		kernel.print(sprite, INFO);
 		objects[data.id] = sprite;
@@ -57,8 +56,9 @@ int main()
 	node = parseXML("CHANGE-SPRITE");
 	while (node != NULL)
 	{
-		//SpriteData data = getChangeSpriteData(node);
-		//Sprite *sprite = new Sprite(data);
+		/*ResData data = getResData(node);
+		Sprite *sprite;
+		sprite->change(data);*/
 		//objects[data.id] = sprite;
 		//kernel.print(sprite, INFO);
 		node = getNextXMLNode(node, "CHANGE-SPRITE");
@@ -68,7 +68,7 @@ int main()
 	Video *video = NULL;
 	if (node != NULL)
 	{
-		VideoData data = getVideoData(node);
+		ResData data = getResData(node);
 		video = new Video(data);
 		video->play();
 		videos[data.id] = video;
@@ -77,12 +77,12 @@ int main()
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[МУЗЫКА]
 	XMLNode mElement = parseXML("MUSIC");
-	Music music(getMusicData(mElement));
+	Music music(getResData(mElement));
 	kernel.print(&music, INFO); // Открыл конструктор копий, но указатель лучше
 	music.play();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЗВУК]
 	XMLNode sElement = parseXML("SOUND");
-	Sound sound(getSoundData(sElement));
+	Sound sound(getResData(sElement));
 	kernel.print(&sound, INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);

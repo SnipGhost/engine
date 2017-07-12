@@ -129,6 +129,20 @@ namespace ng
 		bool isVideoPlay(sfe::Movie &video);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	struct FontData
+	{
+		std::string src;
+		std::string id;
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Font : public sf::Font
+	{
+	public:
+		std::string id;
+		Font(std::string src);
+		Font(FontData fd);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
 		private:       
@@ -142,6 +156,7 @@ namespace ng
 			tinyxml2::XMLDocument *doc;               // XML-документ сценария
 			sf::RenderWindow *window;                 // SFML-окно
 			std::string version;
+			std::map<std::string, Font*> fonts;
 
 			static Kernel & init();                   // Instance-метод
 			~Kernel();
@@ -153,96 +168,35 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct FontData
+	struct ResData
 	{
-		std::string src;
-		std::string id;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Font: public sf::Font
-	{
-		public:
-			std::string id;
-			Font(std::string src);
-			Font(FontData fd);
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct SpriteData
-	{
-		float x;
-		float y;
-		float scale;
-		int layer;
-		bool smooth;
-		std::string id;
-		std::string src;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct AnimateSpriteData
-	{
-		float x;
-		float y;
-		int frameHeight;
-		int frameWidth;
 		int ms;
+		float x;
+		float y;
 		int layer;
-		float scale;
-		bool smooth;
-		std::string id;
-		std::string src;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct MusicData
-	{
-		float volume;
 		bool loop;
-		std::string src;
-		std::string cmd;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct SoundData
-	{
+		bool smooth;
+		float scale;
+		float width;
+		float height;
 		float volume;
-		std::string src;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct TextData
-	{
+		int frameWidth;
+		int frameHeight;
+		unsigned int size;
 		std::string id;
+		std::string cmd;
+		std::string src;
 		std::string text;
 		std::string color;
+		std::string fontId;
 		std::string namePerson;
-		Font *font;
-		unsigned int size;
-		int layer;
-		float x;
-		float y;
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct VideoData
-	{
-		float x;
-		float y;
-		bool loop;
-		int layer;
-		float width;
-		float volume;
-		float height;
-		std::string id;
-		std::string src;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	XMLNode parseXML(const char *tag);
 	XMLNode getNextXMLNode(XMLNode node, const char *tag);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SpriteData getSpriteData(XMLNode spNode);
-	SpriteData getChangeSpriteData(XMLNode cspNode);
-	AnimateSpriteData getAnimateSpriteData(XMLNode asNode);
-	MusicData getMusicData(XMLNode mNode);
-	SoundData getSoundData(XMLNode sNode);
 	FontData getFontData(XMLNode tNode);
-	TextData getTextData(XMLNode tNode, std::map<std::string, Font*> fonts);
-	VideoData getVideoData(XMLNode vNode);
+	ResData getResData(XMLNode node);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -259,7 +213,7 @@ namespace ng
 		public:
 			Music(const Music &copy) {}; // TODO: констурктор копий
 			Music(std::string src, float volume = 100, bool loop = true);
-			Music(MusicData md); //TODO: Показатель volume одинаков для всей музыки
+			Music(ResData rd); //TODO: Показатель volume одинаков для всей музыки
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
 			void setStop();
@@ -273,7 +227,7 @@ namespace ng
 			sf::SoundBuffer buffer;
 		public:
 			Sound(std::string src, float volume = 100);
-			Sound(SoundData sod); //TODO: Показатель volume одинаков для всех звуков
+			Sound(ResData rd); //TODO: Показатель volume одинаков для всех звуков
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound &s);
 	};
@@ -293,6 +247,7 @@ namespace ng
 			}
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
+			/*virtual void change(ResData rd){}*/
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite, public ng::Displayable
@@ -302,9 +257,9 @@ namespace ng
 		public:
 			Sprite() {}
 			Sprite(std::string src, bool smooth = true);
-			Sprite(SpriteData sd);
+			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
-			void change(SpriteData sd);
+			void change(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Sprite &s);
 	};
@@ -319,7 +274,7 @@ namespace ng
 			int delay;               // Время между кадрами в миллисекундах
 		public:
 			AnimateSprite(std::string src, bool smooth = true);
-			AnimateSprite(AnimateSpriteData asd);
+			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
 			void display(sf::RenderWindow *win = kernel.window);
@@ -331,9 +286,8 @@ namespace ng
 		protected:
 			std::map <std::string, int> mapping;
 		public:
-			Text(std::string text, Font *font, std::string color, float x, float y, unsigned int size);
-			Text(TextData td);
-			bool setText(TextData &td);
+			Text(ResData rd);
+			bool setText(ResData &rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Text &t);
 	};
@@ -345,7 +299,7 @@ namespace ng
 		public:
 			Video(std::string src, float width, float height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
-			Video(VideoData vd);
+			Video(ResData rd);
 			bool setVideo(std::string src, float width, float height,
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);

@@ -11,15 +11,15 @@ AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
 	numFrame = 1;
 }
 //-----------------------------------------------------------------------------
-AnimateSprite::AnimateSprite(AnimateSpriteData asd) : Sprite(asd.src, asd.smooth)
+AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd.src, rd.smooth)
 {
 	lastTime = 0;
 	numFrame = 1;
-	setAnimation(asd.frameHeight, asd.frameWidth, asd.ms);
-	setPosition(asd.x, asd.y);
-	setScale(asd.scale, asd.scale);
-	id = asd.id;
-	layer = asd.layer;
+	setAnimation(rd.frameHeight, rd.frameWidth, rd.ms);
+	setPosition(rd.x, rd.y);
+	setScale(rd.scale, rd.scale);
+	id = rd.id;
+	layer = rd.layer;
 }
 //-----------------------------------------------------------------------------
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 

@@ -11,12 +11,12 @@ Sound::Sound(std::string src, float volume)
 		kernel.print("Created sound " + src, INFO);
 }
 //-----------------------------------------------------------------------------
-Sound::Sound(SoundData sod)
+Sound::Sound(ResData rd)
 {
-	if (!setSound(sod.src, sod.volume))
-		kernel.print("Failed load sound " + sod.src, WARN);
+	if (!setSound(rd.src, rd.volume))
+		kernel.print("Failed load sound " + rd.src, WARN);
 	else
-		kernel.print("Load sound " + sod.src, INFO);
+		kernel.print("Load sound " + rd.src, INFO);
 }
 //-----------------------------------------------------------------------------
 bool Sound::setSound(std::string src, float volume)

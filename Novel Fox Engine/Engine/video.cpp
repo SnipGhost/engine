@@ -11,14 +11,14 @@ Video::Video(std::string src, float width, float height, float x, float y, float
 		kernel.print("Created video " + src, INFO);
 }
 //-----------------------------------------------------------------------------
-Video::Video(VideoData vd)
+Video::Video(ResData rd)
 {
-	if (!setVideo(vd.src, vd.width, vd.height, vd.x, vd.y, vd.volume, vd.loop))
-		kernel.print("Failed load video " + vd.id, WARN);
+	if (!setVideo(rd.src, rd.width, rd.height, rd.x, rd.y, rd.volume, rd.loop))
+		kernel.print("Failed load video " + rd.id, WARN);
 	else
-		kernel.print("Created video " + vd.id, INFO);
-	id = vd.id;
-	layer = vd.layer;
+		kernel.print("Created video " + rd.id, INFO);
+	id = rd.id;
+	layer = rd.layer;
 }
 //-----------------------------------------------------------------------------
 bool Video::setVideo(std::string src, float width, float height, float x, float y, float volume, bool loop)

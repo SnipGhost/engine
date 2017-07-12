@@ -11,12 +11,12 @@ Music::Music(std::string src, float volume, bool loop)
 		kernel.print("Created music " + src, INFO);
 }
 //-----------------------------------------------------------------------------
-Music::Music(MusicData md)
+Music::Music(ResData rd)
 {
-	if (!setMusic(md.src, md.volume, md.loop))
-		kernel.print("Failed load music " + md.src, WARN);
+	if (!setMusic(rd.src, rd.volume, rd.loop))
+		kernel.print("Failed load music " + rd.src, WARN);
 	else
-		kernel.print("Created music " + md.src, INFO);
+		kernel.print("Created music " + rd.src, INFO);
 }
 //-----------------------------------------------------------------------------
 bool Music::setMusic(std::string src, float volume, bool loop)
