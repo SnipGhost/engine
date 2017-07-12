@@ -185,8 +185,6 @@ ResData ng::getResData(XMLNode node)
 	(width) ? res.width = std::stof(width) : res.width = 256;
 	(height) ? res.height = std::stof(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
-	(width) ?  res.frameHeight = std::atoi(height) : res.frameHeight = 256; //TODO
-	(height) ? res.frameWidth = std::atoi(width) : res.frameWidth = 256;    //TODO
 	(size) ? res.size = std::atoi(size) : res.size = 1;
 	(id) ? res.id = id : res.id = "NULL";
 	(cmd) ? res.cmd = cmd : res.cmd = "play";

@@ -15,7 +15,7 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 {
 	lastTime = 0;
 	numFrame = 1;
-	setAnimation(rd.frameHeight, rd.frameWidth, rd.ms);
+	setAnimation(rd.height, rd.width, rd.ms);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
 	id = rd.id;

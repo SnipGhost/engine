@@ -171,18 +171,16 @@ namespace ng
 	struct ResData
 	{
 		int ms;
+		int layer;
+		int width;
+		int height;
+		unsigned int size;
 		float x;
 		float y;
-		int layer;
+		float scale;
+		float volume;
 		bool loop;
 		bool smooth;
-		float scale;
-		float width;
-		float height;
-		float volume;
-		int frameWidth;
-		int frameHeight;
-		unsigned int size;
 		std::string id;
 		std::string cmd;
 		std::string src;
@@ -297,10 +295,10 @@ namespace ng
 		protected:
 			bool loopVideo;
 		public:
-			Video(std::string src, float width, float height,
+			Video(std::string src, int width, int height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
 			Video(ResData rd);
-			bool setVideo(std::string src, float width, float height,
+			bool setVideo(std::string src, int width, int height,
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();

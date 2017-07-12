@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Video::Video(std::string src, float width, float height, float x, float y, float volume, bool loop)
+Video::Video(std::string src, int width, int height, float x, float y, float volume, bool loop)
 {
 	if (!setVideo(src, width, height, x, y, volume, loop))
 		kernel.print("Failed load video " + src, WARN);
@@ -21,11 +21,11 @@ Video::Video(ResData rd)
 	layer = rd.layer;
 }
 //-----------------------------------------------------------------------------
-bool Video::setVideo(std::string src, float width, float height, float x, float y, float volume, bool loop)
+bool Video::setVideo(std::string src, int width, int height, float x, float y, float volume, bool loop)
 {
 	if (!openFromFile(src)) 
 		return 0;
-	fit(x, y, width, height);
+	fit(x, y, (float)width, (float)height);
 	setVolume(volume);
 	loopVideo = loop;
 	return 1;
