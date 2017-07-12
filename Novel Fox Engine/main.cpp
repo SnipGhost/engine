@@ -12,6 +12,8 @@ int main()
 	std::map<std::string, ng::Displayable*> objects;
 	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
 	typedef std::map<std::string, ng::Video*>::iterator VidIt;
+	Music *music = NULL;
+	Sound *sound = NULL;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ШРИФТЫ]
 	node = parseXML("FONT");
 	while (node != NULL)
@@ -22,72 +24,64 @@ int main()
 		kernel.print("Loaded font: " + data.src, INFO);
 		node = getNextXMLNode(node, "FONT");
 	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ТЕКСТ]
-	node = parseXML("TEXT");
-	while (node != NULL)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	const size_t COUNT = 6;
+	const char *TAGS[COUNT] = {"TEXT", "GIF", "SPRITE", "VIDEO", "MUSIC", "SOUND"};
+	for (int i = 0; i < COUNT; ++i)
 	{
-		ResData data = getResData(node);
-		Text *text = new Text(data);
-		objects[data.id] = text;
-		kernel.print(text, INFO);
-		node = getNextXMLNode(node, "TEXT");
+		node = parseXML(TAGS[i]);
+		while (node != NULL)
+		{
+			ResData data = getResData(node);
+			switch (i) 
+			{
+				case 0:
+				{
+					objects[data.id] = new Text(data);
+					kernel.print((Text*)objects[data.id], INFO);
+					break;
+				}
+				case 1:
+				{
+					objects[data.id] = new AnimateSprite(data);
+					kernel.print((AnimateSprite*)objects[data.id], INFO);
+					break;
+				}
+				case 2:
+				{
+					objects[data.id] = new Sprite(data);
+					kernel.print((Sprite*)objects[data.id], INFO);
+					break;
+				}
+				case 3:
+				{
+					Video *video = new Video(data);
+					video->play();
+					videos[data.id] = video;
+					objects[data.id] = video;
+					kernel.print(video, INFO);
+					break;
+				}
+				case 4:
+				{
+					music = new Music(data);
+					music->play();
+					kernel.print(music, INFO);
+					break;
+				}
+				case 5:
+				{
+					sound = new Sound(data);
+					kernel.print(sound, INFO);
+					break;
+				}
+			}
+			node = getNextXMLNode(node, TAGS[i]);
+		}
 	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[АНИМАЦИЯ]
-	node = parseXML("GIF");
-	while (node != NULL)
-	{
-		ResData data = getResData(node);
-		AnimateSprite *asprite = new AnimateSprite(data);
-		objects[data.id] = asprite;
-		kernel.print(asprite, INFO);
-		node = getNextXMLNode(node, "GIF");
-	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СПРАЙТ]
-	node = parseXML("SPRITE");
-	while (node != NULL)
-	{
-		ResData data = getResData(node);
-		Sprite *sprite = new Sprite(data);
-		kernel.print(sprite, INFO);
-		objects[data.id] = sprite;
-		node = getNextXMLNode(node, "SPRITE");
-	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ИЗМЕНЕНИЕ СПРАЙТА]
-	node = parseXML("CHANGE-SPRITE");
-	while (node != NULL)
-	{
-		/*ResData data = getResData(node);
-		Sprite *sprite;
-		sprite->change(data);*/
-		//objects[data.id] = sprite;
-		//kernel.print(sprite, INFO);
-		node = getNextXMLNode(node, "CHANGE-SPRITE");
-	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ВИДЕО]
-	node = parseXML("VIDEO");
-	Video *video = NULL;
-	if (node != NULL)
-	{
-		ResData data = getResData(node);
-		video = new Video(data);
-		video->play();
-		videos[data.id] = video;
-		objects[data.id] = video;
-		kernel.print(video, INFO);
-	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[МУЗЫКА]
-	XMLNode mElement = parseXML("MUSIC");
-	Music music(getResData(mElement));
-	kernel.print(&music, INFO); // Открыл конструктор копий, но указатель лучше
-	music.play();
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЗВУК]
-	XMLNode sElement = parseXML("SOUND");
-	Sound sound(getResData(sElement));
-	kernel.print(&sound, INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	while (kernel.window->isOpen())
 	{
 		Event event;
@@ -95,14 +89,14 @@ int main()
 		{
 			if (event.isKeyboardKey(event.keyboard.Escape) ||
 				event.isWinClosed()) kernel.window->close();
-			if (event.isMouseClickKey(sf::Mouse::Left)) sound.play();
+			if (event.isMouseClickKey(sf::Mouse::Left)) sound->play();
 		}
-		if (event.isMouseKey(sf::Mouse::Right)) music.setStop();
+		if (event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
 		if (event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
 		{ 
-			music.setPause();
-			sound.stop();
+			music->setPause();
+			sound->stop();
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				it->second->setPause();
 			delay(FOCUS_DELAY);
@@ -113,7 +107,7 @@ int main()
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				if (!event.isVideoPlay(*(it->second)))
 					it->second->play();
-			if (!event.isMusicPlay(music)) music.play();
+			if (!event.isMusicPlay(*music)) music->play();
 		}
 
 		startDisplay();

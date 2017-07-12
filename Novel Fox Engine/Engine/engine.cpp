@@ -182,8 +182,8 @@ ResData ng::getResData(XMLNode node)
 	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
 	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
 	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
-	(width) ? res.width = std::stof(width) : res.width = 256;
-	(height) ? res.height = std::stof(height) : res.height = 256;
+	(width) ? res.width = std::atoi(width) : res.width = 256;
+	(height) ? res.height = std::atoi(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
 	(size) ? res.size = std::atoi(size) : res.size = 1;
 	(id) ? res.id = id : res.id = "NULL";
