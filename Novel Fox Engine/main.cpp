@@ -82,18 +82,17 @@ int main()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded.", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Event event;
 	while (kernel.window->isOpen())
 	{
-		while (kernel.window->pollEvent(event))
+		while (kernel.window->pollEvent(kernel.event))
 		{
-			if (event.isKeyboardKey(event.keyboard.Escape) ||
-				event.isWinClosed()) kernel.window->close();
-			if (event.isMouseClickKey(sf::Mouse::Left)) sound->play();
+			if (kernel.event.isKeyboardKey(kernel.event.keyboard.Escape) ||
+				kernel.event.isWinClosed()) kernel.window->close();
+			if (kernel.event.isMouseClickKey(sf::Mouse::Left)) sound->play();
 		}
-		if (event.isMouseKey(sf::Mouse::Right)) music->setStop();
+		if (kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
-		if (event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
+		if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
 		{ 
 			music->setPause();
 			sound->stop();
@@ -105,9 +104,9 @@ int main()
 		if (kernel.window->hasFocus())
 		{
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
-				if (!event.isVideoPlay(*(it->second)))
+				if (!kernel.event.isVideoPlay(*(it->second)))
 					it->second->play();
-			if (!event.isMusicPlay(*music)) music->play();
+			if (!kernel.event.isMusicPlay(*music)) music->play();
 		}
 
 		startDisplay();

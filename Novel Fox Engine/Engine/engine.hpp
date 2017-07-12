@@ -156,6 +156,7 @@ namespace ng
 			tinyxml2::XMLDocument *doc;               // XML-документ сценария
 			sf::RenderWindow *window;                 // SFML-окно
 			std::string version;
+			ng::Event event;
 			std::map<std::string, Font*> fonts;
 
 			static Kernel & init();                   // Instance-метод
