@@ -13,9 +13,9 @@
   <GIF id="gif1" layer="1" smooth="true" x="50" y="300" scale="1" width="256" height="256" delay="40" src="scenario/gifFile1.png"/>
   <GIF id="gif2" layer="1" smooth="true" x="50" y="500" scale="1" width="256" height="256" delay="40" src="scenario/gifFile2.png"/>
 
-  <MUSIC volume="100" loop="true" src="scenario/music.ogg" cmd="start"/>
+  <MUSIC id="music1" volume="100" loop="true" src="scenario/music.ogg" cmd="start"/>
   
-  <SOUND volume="100" src="scenario/sound.ogg"/>
+  <SOUND id="sound1" volume="100" src="scenario/sound.ogg"/>
 
   <TEXT id="txt1" name="Майа" layer="1" font="standart" color="blue"  size="30" x="360" y="320">- Привет, Tolya!</TEXT>
   <TEXT id="txt2" name="Толя" layer="1" font="classic"  color="red"   size="30" x="360" y="360">- Привет, Maya!</TEXT>

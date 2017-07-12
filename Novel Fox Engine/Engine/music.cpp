@@ -14,9 +14,9 @@ Music::Music(std::string src, float volume, bool loop)
 Music::Music(ResData rd)
 {
 	if (!setMusic(rd.src, rd.volume, rd.loop))
-		kernel.print("Failed load music " + rd.src, WARN);
+		kernel.print("Failed load music «" + rd.id + "»", WARN);
 	else
-		kernel.print("Created music " + rd.src, INFO);
+		kernel.print("Created music «" + rd.id + "»", INFO);
 }
 //-----------------------------------------------------------------------------
 bool Music::setMusic(std::string src, float volume, bool loop)

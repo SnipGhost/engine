@@ -168,8 +168,9 @@ ResData ng::getResData(XMLNode node)
 	const char *height = node->Attribute("height");
 	const char *volume = node->Attribute("volume");
 	const char *namePerson = node->Attribute("name");
-	/*const char *text = node->GetText();*/ //TODO
-	const char *text = "";
+	const char *text = NULL;
+	if (!strcmp(node->Name(), "TEXT")) 
+		text = node->GetText();
 
 	ResData res;
 
@@ -190,7 +191,7 @@ ResData ng::getResData(XMLNode node)
 	(id) ? res.id = id : res.id = "NULL";
 	(cmd) ? res.cmd = cmd : res.cmd = "play";
 	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
-	(src) ? res.text = text : res.text = "NO TEXT";
+	(text) ? res.text = text : res.text = "NO TEXT";
 	(color) ? res.color = color : res.color = "black";
 	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
 

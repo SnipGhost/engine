@@ -14,9 +14,9 @@ Video::Video(std::string src, float width, float height, float x, float y, float
 Video::Video(ResData rd)
 {
 	if (!setVideo(rd.src, rd.width, rd.height, rd.x, rd.y, rd.volume, rd.loop))
-		kernel.print("Failed load video " + rd.id, WARN);
+		kernel.print("Failed load video «" + rd.id + "»", WARN);
 	else
-		kernel.print("Created video " + rd.id, INFO);
+		kernel.print("Created video «" + rd.id + "»", INFO);
 	id = rd.id;
 	layer = rd.layer;
 }
@@ -58,9 +58,9 @@ std::ostream &ng::operator << (std::ostream& os, const Video &s)
 	sf::Vector2f pos = s.getPosition();
 	sf::Vector2f scl = s.getScale();
 	os << s.id << " [ng::Video]" << std::endl;
-	os << "\tLayer: " << s.layer << std::endl;
-	os << "\tPosition: (" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale: (" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tLayer:  \t" << s.layer << std::endl;
+	os << "\tPosition: \t(" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale:  \t(" << scl.x << "; " << scl.y << ")" << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

@@ -5,13 +5,13 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-AnimateSprite::AnimateSprite(std::string src, bool smooth): Sprite(src, smooth)
+AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Sprite(id, src, smooth)
 {
 	lastTime = 0;
 	numFrame = 1;
 }
 //-----------------------------------------------------------------------------
-AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd.src, rd.smooth)
+AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 {
 	lastTime = 0;
 	numFrame = 1;

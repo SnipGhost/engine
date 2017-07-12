@@ -256,7 +256,7 @@ namespace ng
 			sf::Texture texture;
 		public:
 			Sprite() {}
-			Sprite(std::string src, bool smooth = true);
+			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
 			void change(ResData rd);
@@ -273,7 +273,7 @@ namespace ng
 			unsigned int sideHeight; // Высота кадра
 			int delay;               // Время между кадрами в миллисекундах
 		public:
-			AnimateSprite(std::string src, bool smooth = true);
+			AnimateSprite(std::string id, std::string src, bool smooth = true);
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();

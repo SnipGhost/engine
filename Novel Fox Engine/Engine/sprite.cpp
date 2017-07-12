@@ -5,20 +5,20 @@
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
-Sprite::Sprite(std::string src, bool smooth)
+Sprite::Sprite(std::string id, std::string src, bool smooth)
 {
 	if (!setStrTexture(src, smooth))
-		kernel.print("Failed to load texture " + src, WARN);
+		kernel.print("Failed to load texture " + id, WARN);
 	else
-		kernel.print("Load texture " + src, INFO);
+		kernel.print("Load texture " + id, INFO);
 }
 //-----------------------------------------------------------------------------
 Sprite::Sprite(ResData rd)
 {
 	if (!setStrTexture(rd.src, rd.smooth))
-		kernel.print("Failed to create sprite " + rd.id, WARN);
+		kernel.print("Failed to create sprite «" + rd.id + "»", WARN);
 	else
-		kernel.print("Sprite created " + rd.id, INFO);
+		kernel.print("Sprite created «" + rd.id + "»", INFO);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
 	id = rd.id;
@@ -37,9 +37,9 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 void Sprite::change(ResData rd)
 {
 	if (!setStrTexture(rd.src, rd.smooth))
-		kernel.print("Failed to change sprite " + rd.id, WARN);
+		kernel.print("Failed to change sprite «" + rd.id + "»", WARN);
 	else
-		kernel.print("Sprite changed: " + rd.id, INFO);
+		kernel.print("Sprite changed: «" + rd.id + "»", INFO);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
 }
