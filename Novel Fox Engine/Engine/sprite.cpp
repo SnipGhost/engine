@@ -8,9 +8,9 @@ using namespace ng;
 Sprite::Sprite(std::string id, std::string src, bool smooth)
 {
 	if (!setStrTexture(src, smooth))
-		kernel.print("Failed to load texture " + id, WARN);
+		kernel.print("Failed to create sprite «" + id + "»", WARN);
 	else
-		kernel.print("Load texture " + id, INFO);
+		kernel.print("Sprite created «" + id + "»", INFO);
 }
 //-----------------------------------------------------------------------------
 Sprite::Sprite(ResData rd)
@@ -23,6 +23,7 @@ Sprite::Sprite(ResData rd)
 	setScale(rd.scale, rd.scale);
 	id = rd.id;
 	layer = rd.layer;
+	setResize();
 }
 //-----------------------------------------------------------------------------
 bool Sprite::setStrTexture(std::string src, bool smooth)
@@ -32,6 +33,24 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 	texture.setSmooth(smooth);
 	setTexture(texture);
 	return 1;
+}
+//-----------------------------------------------------------------------------
+void Sprite::setResize()
+{
+	float x = 1280;
+	float y = 720;
+	float k = x / y;
+
+	if (WS_X*(1/k) <= WS_Y)
+	{
+		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
+		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
+	}
+	else
+	{
+		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
+		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
+	}
 }
 //-----------------------------------------------------------------------------
 void Sprite::change(ResData rd)

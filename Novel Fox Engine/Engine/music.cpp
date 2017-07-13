@@ -57,7 +57,7 @@ std::ostream &ng::operator << (std::ostream &os, const Music &m)
 	os << "\tDuration (sec):\t" << m.getDuration().asSeconds() << std::endl;
 	os << "\tChannel count: \t" << m.getChannelCount() << std::endl;
 	os << "\tVolume level:  \t" << m.getVolume() << std::endl;
-	os << "\tLooping value: \t" << m.getLoop() << std::endl;
+	os << "\tLooping:     \t" << ((m.getLoop()) ? "true" : "false") << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

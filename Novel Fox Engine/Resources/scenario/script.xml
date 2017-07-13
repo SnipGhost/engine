@@ -11,9 +11,9 @@
     <SPRITE id="maya2"      layer="1" smooth="true" x="1040" y="50"  scale="1"   src="scenario/maya1.png"/>
 
     <CHANGE-SPRITE id="maya2" scale="0.6" />
-
-    <GIF id="gif1" layer="1" smooth="true" x="50" y="300" scale="1" width="256" height="256" delay="40" src="scenario/gifFile1.png"/>
-    <GIF id="gif2" layer="1" smooth="true" x="50" y="500" scale="1" width="256" height="256" delay="40" src="scenario/gifFile2.png"/>
+	
+    <ANIMATION id="gif1" layer="1" smooth="true" x="50" y="300" scale="1" width="256" height="256" delay="40" src="scenario/gifFile1.png"/>
+    <ANIMATION id="gif2" layer="1" smooth="true" x="50" y="500" scale="1" width="256" height="256" delay="40" src="scenario/gifFile2.png"/>
 
     <MUSIC id="music1" volume="100" loop="true" src="scenario/music.ogg" cmd="start"/>
   

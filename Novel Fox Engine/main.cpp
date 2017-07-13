@@ -26,7 +26,7 @@ int main()
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	const size_t COUNT = 6;
-	const char *TAGS[COUNT] = {"TEXT", "GIF", "SPRITE", "VIDEO", "MUSIC", "SOUND"};
+	const char *TAGS[COUNT] = {"TEXT", "SPRITE", "ANIMATION", "VIDEO", "MUSIC", "SOUND"};
 	for (int i = 0; i < COUNT; ++i)
 	{
 		node = parseXML(TAGS[i]);
@@ -43,14 +43,14 @@ int main()
 				}
 				case 1:
 				{
-					objects[data.id] = new AnimateSprite(data);
-					kernel.print((AnimateSprite*)objects[data.id], INFO);
+					objects[data.id] = new Sprite(data);
+					kernel.print((Sprite*)objects[data.id], INFO);
 					break;
 				}
 				case 2:
 				{
-					objects[data.id] = new Sprite(data);
-					kernel.print((Sprite*)objects[data.id], INFO);
+					objects[data.id] = new AnimateSprite(data);
+					kernel.print((AnimateSprite*)objects[data.id], INFO);
 					break;
 				}
 				case 3:

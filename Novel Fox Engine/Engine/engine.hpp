@@ -47,6 +47,11 @@
 #define SHOW_ALL_TAG 31          // 0b11111 - маска отображения всех сообщений
 #define PARAMS_COUNT 9           // Количество настроек считываемых из конфига
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
+#define WS_X ((float)kernel.window->getSize().x)
+#define WS_Y ((float)kernel.window->getSize().y)
+
+#define KWS_X ((float)kernel.window->getSize().x/1280)
+#define KWS_Y ((float)kernel.window->getSize().y/720)
 //-----------------------------------------------------------------------------
 typedef tinyxml2::XMLElement* XMLNode;
 //-----------------------------------------------------------------------------
@@ -112,21 +117,21 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
 	{
-	 public:
-		int getMilliSecond();
+		 public:
+			int getMilliSecond();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Event: public sf::Event
 	{
-	 public:
-		sf::Keyboard keyboard;
-		sf::Mouse mouse;
-		bool isKeyboardKey(sf::Keyboard::Key keyboard);
-		bool isWinClosed();
-		bool isMouseClickKey(sf::Mouse::Button mouse);
-		bool isMouseKey(sf::Mouse::Button mouse);
-		bool isMusicPlay(sf::Music &music);
-		bool isVideoPlay(sfe::Movie &video);
+		 public:
+			sf::Keyboard keyboard;
+			sf::Mouse mouse;
+			bool isKeyboardKey(sf::Keyboard::Key keyboard);
+			bool isWinClosed();
+			bool isMouseClickKey(sf::Mouse::Button mouse);
+			bool isMouseKey(sf::Mouse::Button mouse);
+			bool isMusicPlay(sf::Music &music);
+			bool isVideoPlay(sfe::Movie &video);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct FontData
@@ -137,10 +142,10 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Font : public sf::Font
 	{
-	public:
-		std::string id;
-		Font(std::string src);
-		Font(FontData fd);
+		public:
+			std::string id;
+			Font(std::string src);
+			Font(FontData fd);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
@@ -234,7 +239,7 @@ namespace ng
 	extern void startDisplay();
 	extern void endDisplay();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Displayable // Абстрактный класс
+	class Displayable
 	{
 		protected:
 			int layer;
@@ -246,6 +251,7 @@ namespace ng
 			}
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
+			//TODO: setResize();
 			/*virtual void change(ResData rd){}*/
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,6 +264,7 @@ namespace ng
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
+			void setResize();
 			void change(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Sprite &s);
@@ -275,6 +282,7 @@ namespace ng
 			AnimateSprite(std::string id, std::string src, bool smooth = true);
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
+			void setResize();
 			void update();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
@@ -287,6 +295,7 @@ namespace ng
 		public:
 			Text(ResData rd);
 			bool setText(ResData &rd);
+			void setResize();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Text &t);
 	};
@@ -301,6 +310,7 @@ namespace ng
 			Video(ResData rd);
 			bool setVideo(std::string src, int width, int height,
 				float x, float y, float volume, bool loop);
+			void setResize();
 			void setLoop(bool loop);
 			void setPause();
 			void display(sf::RenderWindow *win = kernel.window);
