@@ -49,7 +49,6 @@
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
-
 #define KWS_X ((float)kernel.window->getSize().x/1280)
 #define KWS_Y ((float)kernel.window->getSize().y/720)
 //-----------------------------------------------------------------------------
@@ -236,8 +235,10 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, const Sound &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern void startDisplay();
-	extern void endDisplay();
+	extern bool hasFocus();		//Фокус на приложении
+	extern bool lostFocus();	//Фокус на приложении потерян
+	extern void startDisplay(); //Начало Display
+	extern void endDisplay();	//Конец Display
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Displayable
 	{

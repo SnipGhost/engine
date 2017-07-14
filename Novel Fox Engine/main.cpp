@@ -8,12 +8,12 @@ using namespace ng;
 int main()
 {
 	XMLNode node = NULL;
-	std::map<std::string, ng::Video*> videos;
-	std::map<std::string, ng::Displayable*> objects;
-	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
-	typedef std::map<std::string, ng::Video*>::iterator VidIt;
-	Music *music = NULL;
-	Sound *sound = NULL;
+	std::map<std::string, ng::Video*> videos; //[!]
+	std::map<std::string, ng::Displayable*> objects; //[!]
+	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt; //[!]
+	typedef std::map<std::string, ng::Video*>::iterator VidIt; //[!]
+	Music *music = NULL; //[!]
+	Sound *sound = NULL; //[!]
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ШРИФТЫ]
 	node = parseXML("FONT");
 	while (node != NULL)
@@ -95,7 +95,7 @@ int main()
 		}
 		if (kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
-		if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
+		if (lostFocus())
 		{
 			music->setPause();
 			sound->stop();
@@ -104,7 +104,7 @@ int main()
 			delay(FOCUS_DELAY);
 			continue;
 		}
-		if (kernel.window->hasFocus())
+		if (hasFocus())
 		{
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				if (!kernel.event.isVideoPlay(*(it->second)))

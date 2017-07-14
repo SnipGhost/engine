@@ -207,6 +207,20 @@ FontData ng::getFontData(XMLNode node)
 	return res;
 }
 //-----------------------------------------------------------------------------
+bool ng::hasFocus()
+{
+	if (kernel.window->hasFocus())
+		return 1;
+	return 0;
+}
+//-----------------------------------------------------------------------------
+bool ng::lostFocus()
+{
+	if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
+		return 1;
+	return 0;
+}
+//-----------------------------------------------------------------------------
 void ng::startDisplay()
 {
 	kernel.window->pushGLStates();
