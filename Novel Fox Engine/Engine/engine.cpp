@@ -219,7 +219,7 @@ void ng::endDisplay()
 	kernel.window->display();
 }
 //-----------------------------------------------------------------------------
-void setResize(sf::Transformable *obj)
+void ng::setResize(sf::Transformable *obj)
 {
     float x = 1280;
     float y = 720;
