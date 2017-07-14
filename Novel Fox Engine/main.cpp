@@ -37,25 +37,25 @@ int main()
 			{
 				case 0:
 				{
-                    Text *text = new Text(data);
-                    objects[data.id] = text;
-                    setResize((sf::Transformable*)text);
+					Text *text = new Text(data);
+					objects[data.id] = text;
+					setResize((sf::Transformable*)text);
 					kernel.print(text, INFO);
 					break;
 				}
 				case 1:
 				{
-                    Sprite *sprite = new Sprite(data);
+					Sprite *sprite = new Sprite(data);
 					objects[data.id] = sprite;
-                    setResize((sf::Transformable*)sprite);
+					setResize((sf::Transformable*)sprite);
 					kernel.print(sprite, INFO);
 					break;
 				}
 				case 2:
 				{
-                    AnimateSprite *a =new AnimateSprite(data);
+					AnimateSprite *a =new AnimateSprite(data);
 					objects[data.id] = a;
-                    setResize((sf::Transformable*)a);
+					setResize((sf::Transformable*)a);
 					kernel.print(a, INFO);
 					break;
 				}
@@ -65,7 +65,7 @@ int main()
 					video->play();
 					videos[data.id] = video;
 					objects[data.id] = video;
-                    setResize(video);
+					setResize(video);
 					kernel.print(video, INFO);
 					break;
 				}

@@ -14,9 +14,9 @@ Sound::Sound(std::string src, float volume)
 Sound::Sound(ResData rd)
 {
 	if (!setSound(rd.src, rd.volume))
-		kernel.print("Failed load sound «" + rd.id + "»", WARN);
+		kernel.print("Failed load sound " + rd.id, WARN);
 	else
-		kernel.print("Load sound «" + rd.id + "»", INFO);
+		kernel.print("Load sound " + rd.id, INFO);
 }
 //-----------------------------------------------------------------------------
 bool Sound::setSound(std::string src, float volume)

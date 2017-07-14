@@ -251,7 +251,6 @@ namespace ng
 			}
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
-			//TODO: setResize();
 			/*virtual void change(ResData rd){}*/
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,7 +265,6 @@ namespace ng
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
-			// void setResize();
 			void change(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Sprite &s);
@@ -284,7 +282,6 @@ namespace ng
 			AnimateSprite(std::string id, std::string src, bool smooth = true);
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
-			// void setResize();
 			void update();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
@@ -297,7 +294,6 @@ namespace ng
 		public:
 			Text(ResData rd);
 			bool setText(ResData &rd);
-			// void setResize();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Text &t);
 	};
@@ -312,7 +308,6 @@ namespace ng
 			Video(ResData rd);
 			bool setVideo(std::string src, int width, int height,
 				float x, float y, float volume, bool loop);
-			// void setResize();
 			void setLoop(bool loop);
 			void setPause();
 			void display(sf::RenderWindow *win = kernel.window);

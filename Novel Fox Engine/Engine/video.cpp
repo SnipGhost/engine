@@ -9,18 +9,16 @@ Video::Video(std::string src, int width, int height, float x, float y, float vol
 		kernel.print("Failed load video " + src, WARN);
 	else
 		kernel.print("Created video " + src, INFO);
-	// setResize(); //[!]
 }
 //-----------------------------------------------------------------------------
 Video::Video(ResData rd)
 {
 	if (!setVideo(rd.src, rd.width, rd.height, rd.x, rd.y, rd.volume, rd.loop))
-		kernel.print("Failed load video «" + rd.id + "»", WARN);
+		kernel.print("Failed load video " + rd.id, WARN);
 	else
-		kernel.print("Created video «" + rd.id + "»", INFO);
+		kernel.print("Created video " + rd.id, INFO);
 	id = rd.id;
 	layer = rd.layer;
-	// setResize(); //[!]
 }
 //-----------------------------------------------------------------------------
 bool Video::setVideo(std::string src, int width, int height, float x, float y, float volume, bool loop)
@@ -32,24 +30,6 @@ bool Video::setVideo(std::string src, int width, int height, float x, float y, f
 	loopVideo = loop;
 	return 1;
 }
-//-----------------------------------------------------------------------------
-// void Video::setResize()
-// {
-// 	float x = 1280;
-// 	float y = 720;
-// 	float k = x / y;
-
-// 	if (WS_X*(1 / k) <= WS_Y)
-// 	{
-// 		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
-// 		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
-// 	}
-// 	else
-// 	{
-// 		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
-// 		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
-// 	}
-// }
 //-----------------------------------------------------------------------------
 void Video::setLoop(bool loop)
 {
