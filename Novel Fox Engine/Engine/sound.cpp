@@ -28,11 +28,11 @@ bool Sound::setSound(std::string src, float volume)
 	return 1;
 }
 //-----------------------------------------------------------------------------
-std::ostream &ng::operator << (std::ostream &os, const Sound &s)
+std::ostream &ng::operator << (std::ostream &os, const Sound *s)
 {
 	os << "[ng::Sound]" << std::endl;
-	os << "\tVolume level: \t" << s.getVolume() << std::endl;
-	os << "\tLooping:     \t" << ((s.getLoop()) ? "true" : "false") << std::endl;
+	os << "\tVolume level: \t" << s->getVolume() << std::endl;
+	os << "\tLooping:     \t" << ((s->getLoop()) ? "true" : "false") << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

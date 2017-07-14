@@ -48,15 +48,8 @@ void AnimateSprite::display(sf::RenderWindow *win)
 	win->draw(*this);
 }
 //-----------------------------------------------------------------------------
-std::ostream &ng::operator << (std::ostream& os, const AnimateSprite &s)
+std::ostream &ng::operator << (std::ostream& os, AnimateSprite &s)
 {
-	sf::Vector2f pos = s.getPosition();
-	sf::Vector2f scl = s.getScale();
-	os << s.id << " [ng::AnimateSprite]" << std::endl;
-	os << "\tLayer:   \t" << s.layer << std::endl;
-	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:   \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-	return os;
+	return s.print(os);
 }
 //-----------------------------------------------------------------------------

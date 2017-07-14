@@ -233,9 +233,14 @@ void ng::endDisplay()
 	kernel.window->display();
 }
 //-----------------------------------------------------------------------------
-void ng::setResize(sf::Transformable *obj)
+std::ostream & ng::operator << (std::ostream & os, Displayable * s)
 {
-	float k = (float)16 / (float)9;
+	return s->print(os);
+}
+//-----------------------------------------------------------------------------
+sf::Vector2f ng::setResize(sf::Transformable *obj)
+{
+	float k = (float)16 / 9;
 
 	if (WS_X * (1 / k) <= WS_Y)
 	{
@@ -247,18 +252,6 @@ void ng::setResize(sf::Transformable *obj)
 		obj->setPosition(obj->getPosition().x * KWS_Y + ((WS_X - WS_Y * k) / 2), obj->getPosition().y * KWS_Y);
 		obj->setScale(obj->getScale().x * KWS_Y, obj->getScale().y * KWS_Y);
 	}
-}
-//-----------------------------------------------------------------------------
-void ng::setLayerMotion(int layer, sf::Transformable *obj)
-{
-	sf::Vector2f mouse = kernel.window->mapPixelToCoords(sf::Mouse::getPosition(*kernel.window));
-
-	//if (layer == 1) obj->setPosition((mouse.x - WS_X*KWS_X) / 40, (mouse.y - WS_Y*KWS_X) / 100);
-	//if (layer == 2) obj->setPosition((mouse.x - WS_X*KWS_X) / 20, (mouse.y - WS_Y*KWS_X) / 50);
-	//if (layer == 3) obj->setPosition((mouse.x - WS_X*KWS_X) / 10, (mouse.y - WS_Y*KWS_X) / 25);
-
-	//if (layer == 1) obj->move((mouse.x - WS_X*KWS_X) / 40, (mouse.y - WS_Y*KWS_X) / 100);
-	//if (layer == 2) obj->setPosition((mouse.x - WS_X*KWS_X) / 20, (mouse.y - WS_Y*KWS_X) / 50);
-	//if (layer == 3) obj->setPosition((mouse.x - WS_X*KWS_X) / 10, (mouse.y - WS_Y*KWS_X) / 25);
+	return obj->getPosition();
 }
 //-----------------------------------------------------------------------------

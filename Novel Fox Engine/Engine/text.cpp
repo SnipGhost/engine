@@ -16,6 +16,7 @@ bool Text::setText(ResData &rd)
 	setFont(*kernel.fonts[rd.fontId]);
 
 	id = rd.id;
+	layer = rd.layer;
 
 	mapping["red"] = 1;
 	mapping["green"] = 2;
@@ -45,16 +46,8 @@ void Text::display(sf::RenderWindow *win)
 	win->draw(*this);
 }
 //-----------------------------------------------------------------------------
-std::ostream &ng::operator << (std::ostream& os, const Text &t)
+std::ostream &ng::operator << (std::ostream& os, Text &t)
 {
-	sf::Vector2f pos = t.getPosition();
-	sf::Vector2f scl = t.getScale();
-	os << t.id << " [ng::Text]" << std::endl;
-	os << "\tColor:   \t" << t.getFillColor().toInteger() << std::endl;
-	os << "\tLayer:   \t" << t.layer << std::endl;
-	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:   \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-	return os;
+	return t.print(os);
 }
 //-----------------------------------------------------------------------------

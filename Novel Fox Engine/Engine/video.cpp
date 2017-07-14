@@ -53,15 +53,8 @@ void Video::display(sf::RenderWindow *win)
 	}
 }
 //-----------------------------------------------------------------------------
-std::ostream &ng::operator << (std::ostream& os, const Video &s)
+std::ostream &ng::operator << (std::ostream& os, Video &v)
 {
-	sf::Vector2f pos = s.getPosition();
-	sf::Vector2f scl = s.getScale();
-	os << s.id << " [ng::Video]" << std::endl;
-	os << "\tLayer:  \t" << s.layer << std::endl;
-	os << "\tPosition: \t(" << pos.x << "; " << pos.y << ")" << std::endl;
-	os << "\tScale:  \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:   \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-	return os;
+	return v.print(os);
 }
 //-----------------------------------------------------------------------------

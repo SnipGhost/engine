@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <math.h>
 #include <type_traits>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -67,14 +68,6 @@ namespace ng
 		std::ostream *log;
 		bool isExtOS;
 		unsigned int tag_mask;
-		static const size_t TAG_COUNT = 5;
-		const char *TAGM[TAG_COUNT] = {
-			"[ ] ", // [0 NONE]
-			"[!] ", // [1 CRIT]
-			"[-] ", // [2 WARN]
-			"[+] ", // [3 NORM]
-			"[i] "  // [4 INFO]
-		};
 	 public:
 		LogStream(unsigned int mask = SHOW_ALL_TAG);
 		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
@@ -85,6 +78,14 @@ namespace ng
 		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
 		template<typename T> void print(T msg, size_t tag = NONE)
 		{
+			static const size_t TAG_COUNT = 5;
+			const char *TAGM[TAG_COUNT] = {
+				"[ ] ", // [0 NONE]
+				"[!] ", // [1 CRIT]
+				"[-] ", // [2 WARN]
+				"[+] ", // [3 NORM]
+				"[i] "  // [4 INFO]
+			};
 			check();
 			if (tag >= TAG_COUNT)
 			{
@@ -95,22 +96,6 @@ namespace ng
 			if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
 				return;
 			*log << TAGM[tag] << msg << std::endl;
-		}
-		template<typename T> void print(T *msg, size_t tag = NONE)
-		{
-			check();
-			if (tag >= TAG_COUNT)
-			{
-				print("Unknown tag", 2);
-				print(msg, 0);
-				return;
-			}
-			if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
-				return;
-			if (std::is_same<T, const char>::value)
-				*log << TAGM[tag] << msg << std::endl;
-			else
-				*log << TAGM[tag] << *msg << std::endl;
 		}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +206,7 @@ namespace ng
 			void setPause();
 			void setStop();
 			//void change(); //TODO: Изменение volume
-			friend std::ostream & operator << (std::ostream &os, const Music &m);
+			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound: public sf::Sound
@@ -232,7 +217,7 @@ namespace ng
 			Sound(std::string src, float volume = 100);
 			Sound(ResData rd); //TODO: Показатель volume одинаков для всех звуков
 			bool setSound(std::string src, float volume);
-			friend std::ostream & operator << (std::ostream &os, const Sound &s);
+			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern bool hasFocus();		//Фокус на приложении
@@ -244,6 +229,7 @@ namespace ng
 	{
 		protected:
 			int layer;
+			sf::Vector2f pos;
 			std::string id;
 		public:
 			virtual ~Displayable() 
@@ -251,14 +237,25 @@ namespace ng
 				kernel.print("Deleted displayble object: " + id, INFO); 
 			}
 			unsigned int getLayer() { return layer; }
-			virtual void setLayerMotion(int layer) {}
+			void doLayerMotion(sf::Transformable *obj)
+			{
+				sf::Vector2f mouse = kernel.window->mapPixelToCoords(sf::Mouse::getPosition(*kernel.window));
+				const float centerX = WS_X / 2;
+				const float centerY = WS_Y / 2;
+				float mouseXC = centerX - mouse.x; //Отклонение мыши по X
+				float mouseYC = centerY - mouse.y; //Отклонение мыши по Y
+				if (layer > 0)
+					obj->setPosition(pos.x + mouseXC / (40 / std::pow(2, layer-1)), pos.y + mouseYC / (100 / std::pow(2, layer-1)));
+			}
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
 			/*virtual void change(ResData rd){}*/
 			virtual void setResize() {}
+			virtual void setLayerMotion() {}
+			virtual std::ostream & print(std::ostream &os) = 0;
+			friend std::ostream & operator << (std::ostream &os, Displayable *s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	void setResize(sf::Transformable *obj);
-	void setLayerMotion(int layer, sf::Transformable *obj);
+	sf::Vector2f setResize(sf::Transformable *obj);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{
@@ -271,9 +268,21 @@ namespace ng
 			bool setStrTexture(std::string src, bool smooth);
 			void change(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
-			friend std::ostream &operator<<(std::ostream &os, const Sprite &s);
-			void setResize() { ng::setResize(this); }
-			void setLayerMotion(int layer) { ng::setLayerMotion(layer, this); }
+			
+			void setResize() { pos = ng::setResize(this); }
+			void setLayerMotion() { doLayerMotion(this); }
+			std::ostream & print(std::ostream &os)
+			{
+				sf::Vector2f pos = getPosition();
+				sf::Vector2f scl = getScale();
+				os << id << " [ng::Sprite]" << std::endl;
+				os << "\tLayer:   \t" << layer << std::endl;
+				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+				return os;
+			}
+			friend std::ostream & operator << (std::ostream &os, Sprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class AnimateSprite: public ng::Sprite
@@ -290,8 +299,18 @@ namespace ng
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
 			void display(sf::RenderWindow *win = kernel.window);
-			friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
-			void setResize() { ng::setResize(this); }
+			std::ostream & print(std::ostream &os)
+			{
+				sf::Vector2f pos = getPosition();
+				sf::Vector2f scl = getScale();
+				os << id << " [ng::AnimateSprite]" << std::endl;
+				os << "\tLayer:   \t" << layer << std::endl;
+				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+				return os;
+			}
+			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Text: public sf::Text, public ng::Displayable
@@ -302,8 +321,21 @@ namespace ng
 			Text(ResData rd);
 			bool setText(ResData &rd);
 			void display(sf::RenderWindow *win = kernel.window);
-			friend std::ostream &operator<<(std::ostream &os, const Text &t);
-			void setResize() { ng::setResize(this); }
+			void setResize() { pos = ng::setResize(this); }
+			void setLayerMotion() { doLayerMotion(this); }
+			std::ostream & print(std::ostream &os)
+			{
+				sf::Vector2f pos = getPosition();
+				sf::Vector2f scl = getScale();
+				os << id << " [ng::Text]" << std::endl;
+				os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
+				os << "\tLayer:   \t" << layer << std::endl;
+				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+				return os;
+			}
+			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Video: public sfe::Movie, public ng::Displayable
@@ -319,8 +351,20 @@ namespace ng
 			void setLoop(bool loop);
 			void setPause();
 			void display(sf::RenderWindow *win = kernel.window);
-			friend std::ostream & operator << (std::ostream &os, const Video &v);
-			void setResize() { ng::setResize(this); }
+			void setResize() { pos = ng::setResize(this); }
+			void setLayerMotion() { doLayerMotion(this); }
+			std::ostream & print(std::ostream &os)
+			{
+				sf::Vector2f pos = getPosition();
+				sf::Vector2f scl = getScale();
+				os << id << " [ng::Video]" << std::endl;
+				os << "\tLayer:   \t" << layer << std::endl;
+				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+				return os;
+			}
+			friend std::ostream & operator << (std::ostream &os, Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Scene

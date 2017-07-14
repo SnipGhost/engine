@@ -51,13 +51,13 @@ void Music::setPause()
 //
 //}
 //-----------------------------------------------------------------------------
-std::ostream &ng::operator << (std::ostream &os, const Music &m)
+std::ostream &ng::operator << (std::ostream &os, const Music *m)
 {
 	os << "[ng::Music]" << std::endl;
-	os << "\tDuration (sec):\t" << m.getDuration().asSeconds() << std::endl;
-	os << "\tChannel count: \t" << m.getChannelCount() << std::endl;
-	os << "\tVolume level:  \t" << m.getVolume() << std::endl;
-	os << "\tLooping:     \t" << ((m.getLoop()) ? "true" : "false") << std::endl;
+	os << "\tDuration (sec):\t" << m->getDuration().asSeconds() << std::endl;
+	os << "\tChannel count: \t" << m->getChannelCount() << std::endl;
+	os << "\tVolume level:  \t" << m->getVolume() << std::endl;
+	os << "\tLooping:     \t" << ((m->getLoop()) ? "true" : "false") << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 // main.cpp														 DEMO-Программа
 //-----------------------------------------------------------------------------
 #include "Engine/engine.hpp"
+#include <time.h> 
 //-----------------------------------------------------------------------------
 using namespace ng;
 //-----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ int main()
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	const size_t COUNT = 6;
-	const char *TAGS[COUNT] = {"TEXT", "SPRITE", "ANIMATION", "VIDEO", "MUSIC", "SOUND"};
+	const char *TAGS[COUNT] = { "TEXT", "SPRITE", "ANIMATION", "VIDEO", "MUSIC", "SOUND" };
 	for (int i = 0; i < COUNT; ++i)
 	{
 		node = parseXML(TAGS[i]);
@@ -38,19 +39,19 @@ int main()
 				case 0:
 				{
 					objects[data.id] = new Text(data);
-					kernel.print((Text*)objects[data.id], INFO);
+					kernel.print(objects[data.id], INFO);
 					break;
 				}
 				case 1:
 				{
 					objects[data.id] = new Sprite(data);
-					kernel.print((Sprite*)objects[data.id], INFO);
+					kernel.print(objects[data.id], INFO);
 					break;
 				}
 				case 2:
 				{
 					objects[data.id] = new AnimateSprite(data);
-					kernel.print((AnimateSprite*)objects[data.id], INFO);
+					kernel.print(objects[data.id], INFO);
 					break;
 				}
 				case 3:
@@ -91,14 +92,14 @@ int main()
 		{
 			if (kernel.event.isKeyboardKey(kernel.event.keyboard.Escape) ||
 				kernel.event.isWinClosed()) kernel.window->close();
-			if (kernel.event.isMouseClickKey(sf::Mouse::Left)) sound->play();
+			if (sound && kernel.event.isMouseClickKey(sf::Mouse::Left)) sound->play();
 		}
-		if (kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
+		if (music && kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
 		if (lostFocus())
 		{
-			music->setPause();
-			sound->stop();
+			if (music) music->setPause();
+			if (sound) sound->stop();
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				it->second->setPause();
 			delay(FOCUS_DELAY);
@@ -109,14 +110,14 @@ int main()
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				if (!kernel.event.isVideoPlay(*(it->second)))
 					it->second->play();
-			if (!kernel.event.isMusicPlay(*music)) music->play();
+			if (music && !kernel.event.isMusicPlay(*music)) music->play();
 		}
 
 		startDisplay();
 
 		for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 		{
-			it->second->setLayerMotion(it->second->getLayer()); //UPDATE движения
+			it->second->setLayerMotion(); //UPDATE движения
 			it->second->display();
 		}
 
