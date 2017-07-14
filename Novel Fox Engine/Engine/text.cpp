@@ -54,6 +54,7 @@ std::ostream &ng::operator << (std::ostream& os, const Text &t)
 	os << "\tLayer:   \t" << t.layer << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tReSize:   \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

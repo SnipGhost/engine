@@ -61,6 +61,7 @@ std::ostream &ng::operator << (std::ostream& os, const Video &s)
 	os << "\tLayer:  \t" << s.layer << std::endl;
 	os << "\tPosition: \t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:  \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tReSize:   \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
 	return os;
 }
 //-----------------------------------------------------------------------------

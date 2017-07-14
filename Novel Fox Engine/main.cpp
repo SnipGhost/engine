@@ -80,9 +80,9 @@ int main()
 		}
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    for (ObjIt it = objects.begin(); it != objects.end(); ++it)
-        it->second->setResize();
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+		it->second->setResize();
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	while (kernel.window->isOpen())
@@ -96,7 +96,7 @@ int main()
 		if (kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
 		if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
-		{ 
+		{
 			music->setPause();
 			sound->stop();
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
@@ -115,7 +115,10 @@ int main()
 		startDisplay();
 
 		for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+		{
+			it->second->setLayerMotion(it->second->getLayer()); //UPDATE движения
 			it->second->display();
+		}
 
 		endDisplay();
 	}
