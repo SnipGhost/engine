@@ -37,26 +37,20 @@ int main()
 			{
 				case 0:
 				{
-					Text *text = new Text(data);
-					objects[data.id] = text;
-					setResize((sf::Transformable*)text);
-					kernel.print(text, INFO);
+					objects[data.id] = new Text(data);
+					kernel.print((Text*)objects[data.id], INFO);
 					break;
 				}
 				case 1:
 				{
-					Sprite *sprite = new Sprite(data);
-					objects[data.id] = sprite;
-					setResize((sf::Transformable*)sprite);
-					kernel.print(sprite, INFO);
+					objects[data.id] = new Sprite(data);
+					kernel.print((Sprite*)objects[data.id], INFO);
 					break;
 				}
 				case 2:
 				{
-					AnimateSprite *a =new AnimateSprite(data);
-					objects[data.id] = a;
-					setResize((sf::Transformable*)a);
-					kernel.print(a, INFO);
+					objects[data.id] = new AnimateSprite(data);
+					kernel.print((AnimateSprite*)objects[data.id], INFO);
 					break;
 				}
 				case 3:
@@ -65,7 +59,6 @@ int main()
 					video->play();
 					videos[data.id] = video;
 					objects[data.id] = video;
-					setResize(video);
 					kernel.print(video, INFO);
 					break;
 				}
@@ -87,7 +80,10 @@ int main()
 		}
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	kernel.print("Resources loaded.", NORM);
+    for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+        it->second->setResize();
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	kernel.print("Resources loaded", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	while (kernel.window->isOpen())
 	{

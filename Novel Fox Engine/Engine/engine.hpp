@@ -252,6 +252,7 @@ namespace ng
 			unsigned int getLayer() { return layer; }
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
 			/*virtual void change(ResData rd){}*/
+            virtual void setResize() {}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	void setResize(sf::Transformable *obj);
@@ -268,6 +269,7 @@ namespace ng
 			void change(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Sprite &s);
+            void setResize() { ng::setResize(this); }
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class AnimateSprite: public ng::Sprite
@@ -285,6 +287,7 @@ namespace ng
 			void update();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream & operator << (std::ostream &os, const AnimateSprite &s);
+            void setResize() { ng::setResize(this); }
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Text: public sf::Text, public ng::Displayable
@@ -296,6 +299,7 @@ namespace ng
 			bool setText(ResData &rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream &operator<<(std::ostream &os, const Text &t);
+            void setResize() { ng::setResize(this); }
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Video: public sfe::Movie, public ng::Displayable
@@ -312,6 +316,7 @@ namespace ng
 			void setPause();
 			void display(sf::RenderWindow *win = kernel.window);
 			friend std::ostream & operator << (std::ostream &os, const Video &v);
+            void setResize() { ng::setResize(this); }
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Scene
