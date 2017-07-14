@@ -219,3 +219,21 @@ void ng::endDisplay()
 	kernel.window->display();
 }
 //-----------------------------------------------------------------------------
+void setResize(sf::Transformable *obj)
+{
+    float x = 1280;
+    float y = 720;
+    float k = x / y;
+
+    if (WS_X*(1/k) <= WS_Y)
+    {
+        obj->setPosition(obj->getPosition().x*KWS_X, obj->getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
+        obj->setScale(obj->getScale().x*KWS_X, obj->getScale().y*KWS_X);
+    }
+    else
+    {
+        obj->setPosition(obj->getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), obj->getPosition().y*KWS_Y);
+        obj->setScale(obj->getScale().x*KWS_Y, obj->getScale().y*KWS_Y);
+    }
+}
+//-----------------------------------------------------------------------------

@@ -9,7 +9,7 @@ AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Spri
 {
 	lastTime = 0;
 	numFrame = 1;
-	setResize(); //[!]
+	// setResize(); //[!]
 }
 //-----------------------------------------------------------------------------
 AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
@@ -19,7 +19,7 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 	setAnimation(rd.height, rd.width, rd.ms);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
-	setResize(); //[!]
+	// setResize(); //[!]
 	id = rd.id;
 	layer = rd.layer;
 }
@@ -32,23 +32,23 @@ void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms)
 	delay = ms;
 }
 //-----------------------------------------------------------------------------
-void AnimateSprite::setResize()
-{
-	float x = 1280;
-	float y = 720;
-	float k = x / y;
+// void AnimateSprite::setResize()
+// {
+// 	float x = 1280;
+// 	float y = 720;
+// 	float k = x / y;
 
-	if (WS_X*(1 / k) <= WS_Y)
-	{
-		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
-		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
-	}
-	else
-	{
-		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
-		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
-	}
-}
+// 	if (WS_X*(1 / k) <= WS_Y)
+// 	{
+// 		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
+// 		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
+// 	}
+// 	else
+// 	{
+// 		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
+// 		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
+// 	}
+// }
 //-----------------------------------------------------------------------------
 void AnimateSprite::update() 
 {

@@ -7,7 +7,7 @@ using namespace ng;
 Text::Text(ResData rd)
 {
 	setText(rd);
-	setResize();
+	// setResize();
 }
 //-----------------------------------------------------------------------------
 bool Text::setText(ResData &rd)
@@ -41,23 +41,23 @@ bool Text::setText(ResData &rd)
 	return 1;
 }
 //-----------------------------------------------------------------------------
-void Text::setResize()
-{
-	float x = 1280;
-	float y = 720;
-	float k = x / y;
+// void Text::setResize()
+// {
+// 	float x = 1280;
+// 	float y = 720;
+// 	float k = x / y;
 
-	if (WS_X*(1 / k) <= WS_Y)
-	{
-		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
-		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
-	}
-	else
-	{
-		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
-		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
-	}
-}
+// 	if (WS_X*(1 / k) <= WS_Y)
+// 	{
+// 		setPosition(getPosition().x*KWS_X, getPosition().y*KWS_X + (WS_Y - WS_X * (1.0 / k)) / 2);
+// 		setScale(getScale().x*KWS_X, getScale().y*KWS_X);
+// 	}
+// 	else
+// 	{
+// 		setPosition(getPosition().x*KWS_Y + ((WS_X - WS_Y * k) / 2), getPosition().y*KWS_Y);
+// 		setScale(getScale().x*KWS_Y, getScale().y*KWS_Y);
+// 	}
+// }
 //-----------------------------------------------------------------------------
 void Text::display(sf::RenderWindow *win)
 {
