@@ -29,7 +29,7 @@ OUTFILE     := game
 #--------------------------------------------------------------------------------------------------
 # Специализация для Linux
 ifeq ($(UNAME), Linux)
-    PR := /home/snipghost/Documents/Frameworks
+    PR := ./Libs
     CF += -I$(PR)/include
     LF := -L$(PR)/lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
     LF += -lsfeMovie-d
@@ -80,9 +80,9 @@ $(BUILD)/%.o: %.mm
 include $(wildcard *.d) 
 #--------------------------------------------------------------------------------------------------
 clean_debug:
-	rm -rf $(addprefix debug/,*.o *.d $(OF))
+	rm -rf $(addprefix debug/,*.o *.d $(OUTFILE))
 clean_release:
-	rm -rf $(addprefix release/,*.o *.d $(OF))
+	rm -rf $(addprefix release/,*.o *.d $(OUTFILE))
 clean: clean_debug clean_release
 #--------------------------------------------------------------------------------------------------
 # Запустить исполняемый файл debug-сборки
