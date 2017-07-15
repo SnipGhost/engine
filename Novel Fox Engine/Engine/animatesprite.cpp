@@ -53,3 +53,15 @@ std::ostream &ng::operator << (std::ostream& os, AnimateSprite &s)
 	return s.print(os);
 }
 //-----------------------------------------------------------------------------
+std::ostream & AnimateSprite::print(std::ostream &os)
+{
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f scl = getScale();
+	os << id << " [ng::AnimateSprite]" << std::endl;
+	os << "\tLayer:   \t" << layer << std::endl;
+	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+	return os;
+}
+//-----------------------------------------------------------------------------

@@ -124,6 +124,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\animatesprite.cpp" />
     <ClCompile Include="Engine\clock.cpp" />
+    <ClCompile Include="Engine\displayable.cpp" />
     <ClCompile Include="Engine\engine.cpp" />
     <ClCompile Include="Engine\event.cpp" />
     <ClCompile Include="Engine\font.cpp" />

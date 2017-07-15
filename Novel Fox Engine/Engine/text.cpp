@@ -51,3 +51,26 @@ std::ostream &ng::operator << (std::ostream& os, Text &t)
 	return t.print(os);
 }
 //-----------------------------------------------------------------------------
+std::ostream & Text::print(std::ostream &os)
+{
+	sf::Vector2f pos = getPosition();
+	sf::Vector2f scl = getScale();
+	os << id << " [ng::Text]" << std::endl;
+	os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
+	os << "\tLayer:   \t" << layer << std::endl;
+	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
+	os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+	return os;
+}
+//-----------------------------------------------------------------------------
+void Text::setResize()
+{
+	pos = ng::setResize(this);
+}
+//-----------------------------------------------------------------------------
+void Text::setLayerMotion()
+{
+	doLayerMotion(this);
+}
+//-----------------------------------------------------------------------------

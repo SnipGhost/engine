@@ -60,6 +60,9 @@
     <ClCompile Include="Modules\tinyxml2.cpp">
       <Filter>TinyXML</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\displayable.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\engine.hpp">

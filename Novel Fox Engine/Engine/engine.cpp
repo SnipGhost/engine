@@ -133,6 +133,11 @@ bool Kernel::parseConfig(std::string file)
 	return 1;
 }
 //-----------------------------------------------------------------------------
+sf::Vector2f Kernel::mouse()
+{
+	return kernel.window->mapPixelToCoords(sf::Mouse::getPosition(*kernel.window));
+}
+//-----------------------------------------------------------------------------
 std::string Kernel::operator [] (std::string key)
 {
 	return conf[key];
@@ -244,13 +249,23 @@ sf::Vector2f ng::setResize(sf::Transformable *obj)
 
 	if (WS_X * (1 / k) <= WS_Y)
 	{
-		obj->setPosition(obj->getPosition().x * KWS_X, obj->getPosition().y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2);
-		obj->setScale(obj->getScale().x * KWS_X, obj->getScale().y * KWS_X);
+		float posX = obj->getPosition().x * KWS_X;
+		float pozY = obj->getPosition().y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
+		obj->setPosition(posX, pozY);
+
+		float scaleX = obj->getScale().x * KWS_X;
+		float scaleY = obj->getScale().y * KWS_X;
+		obj->setScale(scaleX, scaleY);
 	}
 	else
 	{
-		obj->setPosition(obj->getPosition().x * KWS_Y + ((WS_X - WS_Y * k) / 2), obj->getPosition().y * KWS_Y);
-		obj->setScale(obj->getScale().x * KWS_Y, obj->getScale().y * KWS_Y);
+		float posX = obj->getPosition().x * KWS_Y + ((WS_X - WS_Y * k) / 2);
+		float pozY = obj->getPosition().y * KWS_Y;
+		obj->setPosition(posX, pozY);
+
+		float scaleX = obj->getScale().x * KWS_Y;
+		float scaleY = obj->getScale().y * KWS_Y;
+		obj->setScale(scaleX, scaleY);
 	}
 	return obj->getPosition();
 }

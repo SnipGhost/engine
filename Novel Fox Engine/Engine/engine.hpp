@@ -151,6 +151,7 @@ namespace ng
 			static Kernel & init();                   // Instance-метод
 			~Kernel();
 			bool parseConfig(std::string file);       // Загрузить конфигурацию
+			sf::Vector2f mouse();					  // Координаты мыши
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
@@ -236,19 +237,9 @@ namespace ng
 			{ 
 				kernel.print("Deleted displayble object: " + id, INFO); 
 			}
-			unsigned int getLayer() { return layer; }
-			void doLayerMotion(sf::Transformable *obj)
-			{
-				sf::Vector2f mouse = kernel.window->mapPixelToCoords(sf::Mouse::getPosition(*kernel.window));
-				const float centerX = WS_X / 2;
-				const float centerY = WS_Y / 2;
-				float mouseXC = centerX - mouse.x; //Отклонение мыши по X
-				float mouseYC = centerY - mouse.y; //Отклонение мыши по Y
-				if (layer > 0)
-					obj->setPosition(pos.x + mouseXC / (40 / std::pow(2, layer-1)), pos.y + mouseYC / (100 / std::pow(2, layer-1)));
-			}
+			unsigned int getLayer();
+			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
-			/*virtual void change(ResData rd){}*/
 			virtual void setResize() {}
 			virtual void setLayerMotion() {}
 			virtual std::ostream & print(std::ostream &os) = 0;
@@ -266,22 +257,11 @@ namespace ng
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
-			void change(ResData rd);
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
-			
-			void setResize() { pos = ng::setResize(this); }
-			void setLayerMotion() { doLayerMotion(this); }
-			std::ostream & print(std::ostream &os)
-			{
-				sf::Vector2f pos = getPosition();
-				sf::Vector2f scl = getScale();
-				os << id << " [ng::Sprite]" << std::endl;
-				os << "\tLayer:   \t" << layer << std::endl;
-				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-				return os;
-			}
+			void setResize();
+			void setLayerMotion();
+			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Sprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -298,18 +278,9 @@ namespace ng
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
-			std::ostream & print(std::ostream &os)
-			{
-				sf::Vector2f pos = getPosition();
-				sf::Vector2f scl = getScale();
-				os << id << " [ng::AnimateSprite]" << std::endl;
-				os << "\tLayer:   \t" << layer << std::endl;
-				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-				return os;
-			}
+			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -320,21 +291,11 @@ namespace ng
 		public:
 			Text(ResData rd);
 			bool setText(ResData &rd);
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
-			void setResize() { pos = ng::setResize(this); }
-			void setLayerMotion() { doLayerMotion(this); }
-			std::ostream & print(std::ostream &os)
-			{
-				sf::Vector2f pos = getPosition();
-				sf::Vector2f scl = getScale();
-				os << id << " [ng::Text]" << std::endl;
-				os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
-				os << "\tLayer:   \t" << layer << std::endl;
-				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-				return os;
-			}
+			void setResize();
+			void setLayerMotion();
+			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -350,20 +311,11 @@ namespace ng
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
-			void setResize() { pos = ng::setResize(this); }
-			void setLayerMotion() { doLayerMotion(this); }
-			std::ostream & print(std::ostream &os)
-			{
-				sf::Vector2f pos = getPosition();
-				sf::Vector2f scl = getScale();
-				os << id << " [ng::Video]" << std::endl;
-				os << "\tLayer:   \t" << layer << std::endl;
-				os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
-				os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-				os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
-				return os;
-			}
+			void setResize();
+			void setLayerMotion();
+			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

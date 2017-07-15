@@ -85,6 +85,10 @@ int main()
 		it->second->setResize();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded", NORM);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ОГРАНИЧИВАЮЩИЕ ПОЛОСЫ]
+	sf::RectangleShape rectangle(sf::Vector2f(120, 50));
+	rectangle.setFillColor(sf::Color::Black);
+	rectangle.setPosition(100, 100);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	while (kernel.window->isOpen())
 	{
@@ -120,6 +124,8 @@ int main()
 			it->second->setLayerMotion(); //UPDATE движения
 			it->second->display();
 		}
+
+		kernel.window->draw(rectangle); //Ограничивающая полоса
 
 		endDisplay();
 	}
