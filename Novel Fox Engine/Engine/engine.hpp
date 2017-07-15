@@ -14,7 +14,6 @@
 #include <fstream>
 #include <string>
 #include <map>
-#include <math.h>
 #include <type_traits>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
