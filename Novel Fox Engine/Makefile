@@ -17,10 +17,10 @@
 UNAME := $(shell uname)
 #--------------------------------------------------------------------------------------------------
 # Компиляторы:
-CC = g++ -std=c++11
-OC = gcc
+CC := g++ -std=c++11
+OC := gcc
 # Флаги компиляции:
-CF = -c -MD -Wall
+CF := -c -MD -Wall
 #--------------------------------------------------------------------------------------------------
 # Директории с исходным кодом:
 SOURCE_DIRS := . Modules Engine
@@ -29,7 +29,10 @@ OUTFILE     := game
 #--------------------------------------------------------------------------------------------------
 # Специализация для Linux
 ifeq ($(UNAME), Linux)
-    # ...
+    PR := /home/snipghost/Documents/Frameworks
+    CF += -I$(PR)/include
+    LF := -L$(PR)/lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+    LF += -lsfeMovie-d
 endif
 #--------------------------------------------------------------------------------------------------
 # Специализация для OS X
@@ -38,6 +41,7 @@ ifeq ($(UNAME), Darwin)
     LF := $(PR) sfml-window $(PR) sfml-graphics $(PR) sfml-system $(PR) sfml-audio
     LF += $(PR) sfeMovie
     LF += $(PR) Foundation
+    PATHFINDER := pathfinder.o
 endif
 #--------------------------------------------------------------------------------------------------
 # Проверяем в какой вариации хотим собрать проект
@@ -49,7 +53,7 @@ endif
 MAKEDIR     := $(shell mkdir -p $(BUILD))
 EXE         := $(BUILD)/$(OUTFILE)
 WILDCARDS   := $(addsuffix /*.cpp,$(SOURCE_DIRS)) 
-DEPENDENTS  := $(notdir $(patsubst %.cpp,%.o,$(wildcard $(WILDCARDS)))) pathfinder.o
+DEPENDENTS  := $(notdir $(patsubst %.cpp,%.o,$(wildcard $(WILDCARDS)))) $(PATHFINDER)
 DEPENDENTS  := $(addprefix $(BUILD)/,$(DEPENDENTS))
 #--------------------------------------------------------------------------------------------------
 all: $(EXE)
@@ -61,7 +65,7 @@ release debug:
 #--------------------------------------------------------------------------------------------------
 # Линковка модулей
 $(EXE): $(DEPENDENTS)
-	$(CC) $(LF) $^ -o $@
+	$(CC) $^ $(LF) -o $@
 #--------------------------------------------------------------------------------------------------
 # Устанавливаем переменную для осуществления поиска зависимостей
 VPATH := $(SOURCE_DIRS)
