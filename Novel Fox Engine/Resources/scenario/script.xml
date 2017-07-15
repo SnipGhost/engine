@@ -4,9 +4,9 @@
 	<!--<SCENE id="scene1">-->
 	
 		<SPRITE id="background" layer="0" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/background.png"/>
-		<SPRITE id="object1"    layer="1" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object1.png"/>
-		<SPRITE id="object2"    layer="2" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object2.png"/>
-		<SPRITE id="object3"    layer="3" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object3.png"/>
+		<SPRITE id="object1"    layer="1" smooth="true" x="0"    y="-20" scale="0.70"   src="scenario/scene_0/object1.png"/>
+		<SPRITE id="object2"    layer="2" smooth="true" x="0"    y="24"  scale="0.68"   src="scenario/scene_0/object2.png"/>
+		<SPRITE id="object3"    layer="3" smooth="true" x="0"    y="0"   scale="0.80"   src="scenario/scene_0/object3.png"/>
 		
 		<MUSIC id="music1" volume="100" loop="true" src="scenario/music.ogg" cmd="start"/>
 	
