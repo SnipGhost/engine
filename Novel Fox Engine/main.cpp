@@ -10,10 +10,12 @@ int main()
 	XMLNode node = NULL;
 	std::map<std::string, ng::Video*> videos;
 	std::map<std::string, ng::Displayable*> objects;
+	std::map<std::string, ng::Music*> music;
+	std::map<std::string, ng::Sound*> sounds;
 	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
 	typedef std::map<std::string, ng::Video*>::iterator VidIt;
-	Music *music = NULL;
-	Sound *sound = NULL;
+	typedef std::map<std::string, ng::Music*>::iterator MusIt;
+	typedef std::map<std::string, ng::Sound*>::iterator SouIt;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ШРИФТЫ]
 	node = parseXML("FONT");
 	while (node != NULL)
@@ -67,15 +69,16 @@ int main()
 				}
 				case 4:
 				{
-					music = new Music(data);
-					music->play();
-					kernel.print(music, INFO);
+					Music *mus = new Music(data);
+					mus->play();
+					music[data.id] = mus;
+					kernel.print(mus, INFO);
 					break;
 				}
 				case 5:
 				{
-					sound = new Sound(data);
-					kernel.print(sound, INFO);
+					sounds[data.id] = new Sound(data);
+					kernel.print(sounds[data.id], INFO);
 					break;
 				}
 			}
@@ -83,28 +86,27 @@ int main()
 		}
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	/*for (ObjIt it = objects.begin(); it != objects.end(); ++it)
-		it->second->setResize();*/
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ОГРАНИЧИВАЮЩИЕ ПОЛОСЫ]
-	Shape band_top(sf::Color::Black, "top");
-	Shape band_bottom(sf::Color::Black, "bottom");
+	Shape band1(sf::Color::Black, "top-left");
+	Shape band2(sf::Color::Black, "bottom-right");
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ГЛАВНЫЙ ЦИКЛ]
 	while (kernel.window->isOpen())
 	{
 		while (kernel.window->pollEvent(kernel.event))
 		{
-			if (kernel.event.isKeyboardKey(kernel.event.keyboard.Escape) ||
-				kernel.event.isWinClosed()) kernel.window->close();
-			if (sound && kernel.event.isMouseClickKey(sf::Mouse::Left)) sound->play();
+			if (kernel.event.isKeyboardKey(kernel.event.keyboard.Escape) || kernel.event.isWinClosed()) 
+				kernel.window->close();
+			if (sounds.count("click") > 0 && kernel.event.isMouseClickKey(sf::Mouse::Left)) 
+				sounds["click"]->play();
 		}
-		if (music && kernel.event.isMouseKey(sf::Mouse::Right)) music->setStop();
 
 		if (lostFocus())
 		{
-			if (music) music->setPause();
-			if (sound) sound->stop();
+			if (sounds.count("click") > 0) 
+				sounds["click"]->stop();
+			for (MusIt it = music.begin(); it != music.end(); ++it)
+				it->second->setPause();
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				it->second->setPause();
 			delay(FOCUS_DELAY);
@@ -115,23 +117,25 @@ int main()
 			for (VidIt it = videos.begin(); it != videos.end(); ++it)
 				if (!kernel.event.isVideoPlay(*(it->second)))
 					it->second->play();
-			if (music && !kernel.event.isMusicPlay(*music)) music->play();
+			for (MusIt it = music.begin(); it != music.end(); ++it)
+				if (!kernel.event.isMusicPlay(*it->second)) 
+					it->second->play();
 		}
 
 		startDisplay();
 
 		for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 		{
-			it->second->setLayerMotion(); //UPDATE движения
+			it->second->setLayerMotion();
 			it->second->display();
 		}
 
-		band_top.display();
-		band_bottom.display();
+		band1.display();
+		band2.display();
 
 		endDisplay();
 	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЦИКЛ ОТРИСОВКИ]~~~~~[ЧЁЁЁЁЁ?]
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 	{
 		kernel.print("Deleting objects: " + it->first, INFO);

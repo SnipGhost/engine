@@ -26,6 +26,7 @@ Sprite::Sprite(ResData rd)
 	layer = rd.layer;
 	posScale = ng::setResize(this);
 	computeLayerScale();
+	setPosition(posScale.pos);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sprite::setStrTexture(std::string src, bool smooth)

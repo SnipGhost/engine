@@ -39,6 +39,9 @@ bool Text::setText(ResData &rd)
 
 	setPosition(rd.x, rd.y);
 	setCharacterSize(rd.size);
+	setScale(rd.scale, rd.scale);
+
+	posScale = ng::setResize(this);
 
 	return 1;
 }

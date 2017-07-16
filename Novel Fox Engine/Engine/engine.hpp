@@ -8,7 +8,7 @@
 #include "../Modules/macros.h"
 #define _CRT_SECURE_NO_WARNINGS
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define VERSION "0.07.9"
+#define VERSION "0.08"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include <iostream>
 #include <fstream>
@@ -311,6 +311,7 @@ namespace ng
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
+			//void computeLayerScale();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
@@ -335,13 +336,13 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Scene
+	/*class Scene
 	{
 		protected:
 
 		public:
 
-	};
+	};*/
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
