@@ -26,9 +26,11 @@ int main()
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	const size_t COUNT = 6;
-	const char *TAGS[COUNT] = { "TEXT", "SPRITE", "ANIMATION", 
-								"VIDEO", "MUSIC", "SOUND" };
-	for (int i = 0; i < COUNT; ++i)
+	const char *TAGS[COUNT] = { 
+		"TEXT", "SPRITE", "ANIMATION", "VIDEO", "MUSIC", "SOUND" 
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	for (size_t i = 0; i < COUNT; ++i)
 	{
 		node = parseXML(TAGS[i]);
 		while (node != NULL)
