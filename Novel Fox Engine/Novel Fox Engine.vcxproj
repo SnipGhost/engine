@@ -131,6 +131,7 @@
     <ClCompile Include="Engine\icon.cpp" />
     <ClCompile Include="Engine\logstream.cpp" />
     <ClCompile Include="Engine\music.cpp" />
+    <ClCompile Include="Engine\shape.cpp" />
     <ClCompile Include="Engine\sound.cpp" />
     <ClCompile Include="Engine\sprite.cpp" />
     <ClCompile Include="Engine\text.cpp" />
