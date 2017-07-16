@@ -24,6 +24,8 @@ Sprite::Sprite(ResData rd)
 	setColor(sf::Color(255, 255, 255, rd.alpha));
 	id = rd.id;
 	layer = rd.layer;
+	posScale = ng::setResize(this);
+	computeLayerScale();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sprite::setStrTexture(std::string src, bool smooth)
@@ -32,7 +34,6 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 		return 0;
 	texture.setSmooth(smooth);
 	setTexture(texture);
-
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,5 +77,20 @@ void Sprite::setResize()
 void Sprite::setLayerMotion() 
 { 
 	doLayerMotion(this); 
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Sprite::computeLayerScale()
+{
+	int w = this->getTextureRect().width;        // Получаем ширину и высоту
+	int h = this->getTextureRect().height;
+	// ВНИМАНИЕ: константа выведена эмпирически, значит это лишь частный случай
+	// Рассчитываем scale в зависимости от слоя (квадратичная зависимость)
+	float sx = posScale.scale.x + 0.03 * (2 << (layer-1));
+	float sy = posScale.scale.y + 0.03 * (2 << (layer-1));
+	// Теперь выставляем новые координаты за вычетом увеличения пополам
+	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
+	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
+	// Ну и потом можно увеличить (теперь уже в зависимости от Layer)
+	setScale(sx, sy);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

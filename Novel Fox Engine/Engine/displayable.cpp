@@ -31,9 +31,6 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
 			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));
 			obj->setPosition(posX, posY);
-
-			obj->setScale(posScale.scale.x * (float)1.11, posScale.scale.y * (float)1.11); // Найти зависимость +scele -> +origin
-			obj->setOrigin(63, (float)35.4); //16:9 [!]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

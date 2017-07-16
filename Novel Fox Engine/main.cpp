@@ -8,12 +8,12 @@ using namespace ng;
 int main()
 {
 	XMLNode node = NULL;
-	std::map<std::string, ng::Video*> videos; //[!]
-	std::map<std::string, ng::Displayable*> objects; //[!]
-	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt; //[!]
-	typedef std::map<std::string, ng::Video*>::iterator VidIt; //[!]
-	Music *music = NULL; //[!]
-	Sound *sound = NULL; //[!]
+	std::map<std::string, ng::Video*> videos;
+	std::map<std::string, ng::Displayable*> objects;
+	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
+	typedef std::map<std::string, ng::Video*>::iterator VidIt;
+	Music *music = NULL;
+	Sound *sound = NULL;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ШРИФТЫ]
 	node = parseXML("FONT");
 	while (node != NULL)
@@ -83,8 +83,8 @@ int main()
 		}
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
-		it->second->setResize();
+	/*for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+		it->second->setResize();*/
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ОГРАНИЧИВАЮЩИЕ ПОЛОСЫ]
@@ -131,7 +131,7 @@ int main()
 
 		endDisplay();
 	}
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЦИКЛ ОТРИСОВКИ]
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЦИКЛ ОТРИСОВКИ]~~~~~[ЧЁЁЁЁЁ?]
 	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
 	{
 		kernel.print("Deleting objects: " + it->first, INFO);

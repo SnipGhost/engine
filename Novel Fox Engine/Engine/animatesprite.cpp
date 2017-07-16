@@ -20,14 +20,17 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 	setScale(rd.scale, rd.scale);
 	id = rd.id;
 	layer = rd.layer;
+	posScale = ng::setResize(this);
+	computeLayerScale();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
 {
 	sideHeight = frameHeight;
 	if (frameWidth == 0) frameWidth = frameHeight;
-	sideWidth = frameWidth;
+	else sideWidth = frameWidth;
 	delay = ms;
+	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::update() 
