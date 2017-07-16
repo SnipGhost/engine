@@ -18,10 +18,15 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 	size.x = (kernel.window->getSize().x - kernel.window->getSize().y * 
 		kernel.devScreen.x / kernel.devScreen.y) / 2;
 
-	if (kernel.mouse().x > size.x && 
+
+	float k = (float)16 / 9;
+
+	if (WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
 		kernel.mouse().x < kernel.window->getSize().x - size.x && 
-		kernel.mouse().y > size.y && 
-		kernel.mouse().y < kernel.window->getSize().y - size.y)
+		kernel.mouse().y > 0 && kernel.mouse().y < WS_Y || 
+		WS_X * (1 / k) <= WS_Y  && kernel.mouse().y > size.y &&
+		kernel.mouse().y < kernel.window->getSize().y - size.y &&
+		kernel.mouse().x > 0 && kernel.mouse().x < WS_X)
 		if (layer > 0)
 		{
 			float posX = posScale.pos.x + mouseXC / (40 / std::pow((float)2, layer - 1));
@@ -29,7 +34,7 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 			obj->setPosition(posX, posY);
 
 			obj->setScale(posScale.scale.x * (float)1.11, posScale.scale.y * (float)1.11); // Найти зависимость +scele -> +origin
-			obj->setOrigin(63, 36);
+			obj->setOrigin(63, 35.4); //16:9 [!]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
