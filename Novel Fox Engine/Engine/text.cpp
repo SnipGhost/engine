@@ -66,7 +66,7 @@ std::ostream & Text::print(std::ostream &os)
 //-----------------------------------------------------------------------------
 void Text::setResize()
 {
-	pos = ng::setResize(this);
+	posScale = ng::setResize(this);
 }
 //-----------------------------------------------------------------------------
 void Text::setLayerMotion()

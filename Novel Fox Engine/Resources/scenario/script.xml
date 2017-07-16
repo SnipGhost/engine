@@ -3,12 +3,14 @@
 
 	<!--<SCENE id="scene1">-->
 	
-		<SPRITE id="background" layer="0" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/background.png"/>
-		<SPRITE id="object1"    layer="1" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object1.png"/>
-		<SPRITE id="object2"    layer="2" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object2.png"/>
-		<SPRITE id="object3"    layer="3" smooth="true" x="0"    y="0"   scale="0.68"   src="scenario/scene_0/object3.png"/>
+		<SPRITE id="aackground" layer="0"            smooth="true" x="0" y="0" scale="1" src="scenario/scene_0/background.png"/>
+		<SPRITE id="bbject1"    layer="1" alpha="50" smooth="true" x="0" y="0" scale="1" src="scenario/scene_0/object1.png"/>
+	  <SPRITE id="cbject2"    layer="2"            smooth="true" x="0" y="0" scale="1" src="scenario/scene_0/object2.png"/>
+		<SPRITE id="dbject3"    layer="3"            smooth="true" x="0" y="0" scale="1" src="scenario/scene_0/object3.png"/>
+
+		<ANIMATION id="eif2" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/gifRain.png"/>
 		
-		<MUSIC id="music1" volume="100" loop="true" src="scenario/music.ogg" cmd="start"/>
+		<MUSIC id="music1" volume="0" loop="true" src="scenario/music.ogg" cmd="start"/>
 	
 	<!--</SCENE>-->
 

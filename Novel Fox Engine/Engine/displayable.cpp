@@ -15,9 +15,14 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 	if (kernel.mouse().x > 0 && kernel.mouse().x < WS_X && kernel.mouse().y > 0 && kernel.mouse().y < WS_Y)
 		if (layer > 0)
 		{
-			float posX = pos.x + mouseXC / (40 / std::pow((float)2, layer - 1));
-			float posY = pos.y + mouseYC / (40 / std::pow((float)2, layer - 1));
+			float posX = posScale.pos.x + mouseXC / (40 / std::pow((float)2, layer - 1));
+			float posY = posScale.pos.y + mouseYC / (40 / std::pow((float)2, layer - 1));
 			obj->setPosition(posX, posY);
+
+			obj->setScale(posScale.scale.x * 1.11, posScale.scale.y * 1.11); // Найти зависимость +scele -> +origin
+			obj->setOrigin(63, 36);
+
+			std::cout << mouseXC << " " << mouseYC << std::endl;
 		}
 }
 //-----------------------------------------------------------------------------

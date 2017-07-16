@@ -83,7 +83,10 @@ int main()
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+	{
 		it->second->setResize();
+		std::cout << it->second->getLayer() << std::endl; //[!]
+	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	kernel.print("Resources loaded", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ОГРАНИЧИВАЮЩИЕ ПОЛОСЫ]
@@ -126,7 +129,7 @@ int main()
 			it->second->display();
 		}
 
-		kernel.window->draw(rectangle); //Ограничивающая полоса
+		//kernel.window->draw(rectangle); //Ограничивающая полоса
 
 		endDisplay();
 	}

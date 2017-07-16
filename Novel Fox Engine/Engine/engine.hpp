@@ -8,7 +8,7 @@
 #include "../Modules/macros.h"
 #define _CRT_SECURE_NO_WARNINGS
 //-----------------------------------------------------------------------------
-#define VERSION "0.07"
+#define VERSION "0.07.9"
 //-----------------------------------------------------------------------------
 #include <iostream>
 #include <fstream>
@@ -50,8 +50,8 @@
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
-#define KWS_X ((float)kernel.window->getSize().x/1280)
-#define KWS_Y ((float)kernel.window->getSize().y/720)
+#define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
+#define KWS_Y ((float)kernel.window->getSize().y / kernel.devScreen.y)
 //-----------------------------------------------------------------------------
 typedef tinyxml2::XMLElement* XMLNode;
 //-----------------------------------------------------------------------------
@@ -135,23 +135,24 @@ namespace ng
 	class Kernel
 	{
 		private:       
-			std::map<std::string, std::string> conf;  // Конфигурация
-			Kernel();                                 // Конструктор синглтона
+			std::map<std::string, std::string> conf; // Конфигурация
+			Kernel();                                // Конструктор синглтона
 			Kernel(const Kernel& root) = delete;
 			Kernel & operator=(const Kernel&) = delete;
 		public:
-			LogStream *log;                           // Логи программы
-			Clock globalClock;                        // Счетчик времени
-			tinyxml2::XMLDocument *doc;               // XML-документ сценария
-			sf::RenderWindow *window;                 // SFML-окно
+			LogStream *log;                          // Логи программы
+			Clock globalClock;                       // Счетчик времени
+			tinyxml2::XMLDocument *doc;              // XML-документ сценария
+			sf::RenderWindow *window;                // SFML-окно
 			std::string version;
 			ng::Event event;
 			std::map<std::string, Font*> fonts;
 
-			static Kernel & init();                   // Instance-метод
+			static Kernel & init();                  // Instance-метод
 			~Kernel();
-			bool parseConfig(std::string file);       // Загрузить конфигурацию
-			sf::Vector2f mouse();					  // Координаты мыши
+			bool parseConfig(std::string file);      // Загрузить конфигурацию
+			sf::Vector2f mouse();					 // Координаты мыши
+			sf::Vector2f devScreen;				     // Размеры среды разработки
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
@@ -165,6 +166,7 @@ namespace ng
 		int layer;
 		int width;
 		int height;
+		int alpha;
 		unsigned int size;
 		float x;
 		float y;
@@ -230,9 +232,13 @@ namespace ng
 	{
 		protected:
 			int layer;
-			sf::Vector2f pos;
 			std::string id;
 		public:
+			struct PosScale
+			{
+				sf::Vector2f scale;
+				sf::Vector2f pos;
+			} posScale;
 			virtual ~Displayable() 
 			{ 
 				kernel.print("Deleted displayble object: " + id, INFO); 
@@ -246,7 +252,7 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Displayable *s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	sf::Vector2f setResize(sf::Transformable *obj);
+	Displayable::PosScale setResize(sf::Transformable *obj);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{

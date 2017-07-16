@@ -21,6 +21,7 @@ Sprite::Sprite(ResData rd)
 		kernel.print("Sprite created " + rd.id, INFO);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
+	setColor(sf::Color(255, 255, 255, rd.alpha));
 	id = rd.id;
 	layer = rd.layer;
 }
@@ -31,6 +32,11 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 		return 0;
 	texture.setSmooth(smooth);
 	setTexture(texture);
+
+	//float originY = getTextureRect().height/2;
+	//float originX = getTextureRect().width / 2;
+	//setOrigin(originX, originY);
+
 	return 1;
 }
 //-----------------------------------------------------------------------------
@@ -68,7 +74,7 @@ std::ostream & Sprite::print(std::ostream &os)
 //-----------------------------------------------------------------------------
 void Sprite::setResize() 
 { 
-	pos = ng::setResize(this); 
+	posScale = ng::setResize(this);
 }
 //-----------------------------------------------------------------------------
 void Sprite::setLayerMotion() 

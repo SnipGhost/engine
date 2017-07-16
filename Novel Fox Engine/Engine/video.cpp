@@ -72,7 +72,7 @@ std::ostream & Video::print(std::ostream &os)
 //-----------------------------------------------------------------------------
 void Video::setResize()
 {
-	pos = ng::setResize(this);
+	posScale = ng::setResize(this);
 }
 //-----------------------------------------------------------------------------
 void Video::setLayerMotion()

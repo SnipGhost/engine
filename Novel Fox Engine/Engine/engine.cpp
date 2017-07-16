@@ -37,11 +37,13 @@ Kernel::Kernel()
 	log->print("Novel fox engine v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
-	int screen_x = atoi(conf["screen_x"].c_str());
-	int screen_y = atoi(conf["screen_y"].c_str());
-	int screen_mode = atoi(conf["screen_mode"].c_str());
-	int anti_aliasing = atoi(conf["anti_aliasing"].c_str());
-	int frame_limit = atoi(conf["frame_limit"].c_str());
+	int screen_x = std::atoi(conf["screen_x"].c_str());
+	int screen_y = std::atoi(conf["screen_y"].c_str());
+	devScreen.x = std::stof(conf["devScreen_x"].c_str());
+	devScreen.y = std::stof(conf["devScreen_y"].c_str());
+	int screen_mode = std::atoi(conf["screen_mode"].c_str());
+	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
+	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
 	setting.antialiasingLevel = anti_aliasing;
@@ -162,8 +164,9 @@ ResData ng::getResData(XMLNode node)
 	const char *src = node->Attribute("src");
 	const char *cmd = node->Attribute("cmd");
 	const char *size = node->Attribute("size");
-	const char *fontId = node->Attribute("font");
 	const char *loop = node->Attribute("loop");
+	const char *fontId = node->Attribute("font");
+	const char *alpha = node->Attribute("alpha");
 	const char *color = node->Attribute("color");
 	const char *scale = node->Attribute("scale");
 	const char *layer = node->Attribute("layer");
@@ -188,6 +191,7 @@ ResData ng::getResData(XMLNode node)
 	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
 	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
 	(width) ? res.width = std::atoi(width) : res.width = 256;
+	(alpha) ? res.alpha = 255*std::atoi(alpha)/100 : res.alpha = 255;
 	(height) ? res.height = std::atoi(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
 	(size) ? res.size = std::atoi(size) : res.size = 1;
@@ -243,8 +247,10 @@ std::ostream & ng::operator << (std::ostream & os, Displayable * s)
 	return s->print(os);
 }
 //-----------------------------------------------------------------------------
-sf::Vector2f ng::setResize(sf::Transformable *obj)
+Displayable::PosScale ng::setResize(sf::Transformable *obj)
 {
+	Displayable::PosScale ps;
+
 	float k = (float)16 / 9;
 
 	if (WS_X * (1 / k) <= WS_Y)
@@ -267,6 +273,12 @@ sf::Vector2f ng::setResize(sf::Transformable *obj)
 		float scaleY = obj->getScale().y * KWS_Y;
 		obj->setScale(scaleX, scaleY);
 	}
-	return obj->getPosition();
+
+	ps.pos.x = obj->getPosition().x;
+	ps.pos.y = obj->getPosition().y;
+
+	ps.scale.x = obj->getScale().x;
+	ps.scale.y = obj->getScale().y;
+	return ps;
 }
 //-----------------------------------------------------------------------------
