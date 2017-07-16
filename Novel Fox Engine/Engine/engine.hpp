@@ -47,6 +47,7 @@
 #define SHOW_ALL_TAG 31          // 0b11111 - маска отображения всех сообщений
 #define PARAMS_COUNT 9           // Количество настроек считываемых из конфига
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
+#define NVIDIA_DRIVER 1          // Использовать в компиляции NVIDIA библиотеку
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
 #define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)

@@ -33,7 +33,7 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 			obj->setPosition(posX, posY);
 
 			obj->setScale(posScale.scale.x * (float)1.11, posScale.scale.y * (float)1.11); // Найти зависимость +scele -> +origin
-			obj->setOrigin(63, 35.4); //16:9 [!]
+			obj->setOrigin(63, (float)35.4); //16:9 [!]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

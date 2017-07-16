@@ -8,7 +8,7 @@
 		<SPRITE id="2bject2"     layer="2"            smooth="true" x="0" y="0" scale="1" src="scenario/textures/scene_0_test/object2.png"/>
 		<SPRITE id="3bject3"     layer="3"            smooth="true" x="0" y="0" scale="1" src="scenario/textures/scene_0_test/object3.png"/>
 
-	  <ANIMATION id="eif2" layer="3" alpha="25" smooth="true" x="0" y="0" scale="2" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
+	  <ANIMATION id="eif2" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
 		
 		<MUSIC id="music1" volume="50" loop="true" src="scenario/music/music1.ogg" cmd="start"/>
 		<MUSIC id="music2" volume="25" loop="true" src="scenario/sounds/wind.ogg" cmd="start"/>
