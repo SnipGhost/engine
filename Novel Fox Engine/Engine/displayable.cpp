@@ -1,5 +1,5 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// displayable.cpp                    Ğåàëèçàöèÿ êëàññà îòğèñîâûâàåìûõ îáúåêòîâ
+// displayable.cpp                    Ğ ĞµĞ°Ğ»Ğ¸Ğ·Ğ°Ñ†Ğ¸Ñ ĞºĞ»Ğ°ÑÑĞ° Ğ¾Ñ‚Ñ€Ğ¸ÑĞ¾Ğ²Ñ‹Ğ²Ğ°ĞµĞ¼Ñ‹Ñ… Ğ¾Ğ±ÑŠĞµĞºÑ‚Ğ¾Ğ²
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -9,8 +9,8 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 {
 	const float centerX = WS_X / 2;
 	const float centerY = WS_Y / 2;
-	float mouseXC = centerX - kernel.mouse().x; //Îòêëîíåíèå ìûøè ïî X
-	float mouseYC = centerY - kernel.mouse().y; //Îòêëîíåíèå ìûøè ïî Y
+	float mouseXC = centerX - kernel.mouse().x; //ĞÑ‚ĞºĞ»Ğ¾Ğ½ĞµĞ½Ğ¸Ğµ Ğ¼Ñ‹ÑˆĞ¸ Ğ¿Ğ¾ X
+	float mouseYC = centerY - kernel.mouse().y; //ĞÑ‚ĞºĞ»Ğ¾Ğ½ĞµĞ½Ğ¸Ğµ Ğ¼Ñ‹ÑˆĞ¸ Ğ¿Ğ¾ Y
 
 	sf::Vector2f size;
 	size.y = (kernel.window->getSize().y - kernel.window->getSize().x * 
@@ -21,12 +21,12 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 
 	float k = (float)16 / 9;
 
-	if (layer > 0 && (WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
+	if (layer > 0 && ((WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
 		kernel.mouse().x < kernel.window->getSize().x - size.x && 
-		kernel.mouse().y > 0 && kernel.mouse().y < WS_Y || 
-		WS_X * (1 / k) <= WS_Y  && kernel.mouse().y > size.y &&
+		kernel.mouse().y > 0 && kernel.mouse().y < WS_Y) || 
+		(WS_X * (1 / k) <= WS_Y  && kernel.mouse().y > size.y &&
 		kernel.mouse().y < kernel.window->getSize().y - size.y &&
-		kernel.mouse().x > 0 && kernel.mouse().x < WS_X))
+		kernel.mouse().x > 0 && kernel.mouse().x < WS_X)))
 		{
 			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
 			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));
