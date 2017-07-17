@@ -50,7 +50,7 @@
 #define NVIDIA_DRIVER 1          // Использовать в компиляции NVIDIA библиотеку
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
 #define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
-
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // КОСЯЧНО!
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
