@@ -9,8 +9,8 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 {
 	const float centerX = WS_X / 2;
 	const float centerY = WS_Y / 2;
-	float mouseXC = centerX - kernel.mouse().x; //Отклонение мыши по X
-	float mouseYC = centerY - kernel.mouse().y; //Отклонение мыши по Y
+	float mouseXC = centerX - kernel.mouse().x;
+	float mouseYC = centerY - kernel.mouse().y;
 
 	sf::Vector2f size;
 	size.y = (kernel.window->getSize().y - kernel.window->getSize().x * 

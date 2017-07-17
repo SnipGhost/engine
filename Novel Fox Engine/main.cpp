@@ -21,8 +21,7 @@ int main()
 	while (node != NULL)
 	{
 		FontData data = getFontData(node);
-		Font *font = new Font(data);
-		kernel.fonts[data.id] = font;
+		kernel.fonts[data.id] = new Font(data);
 		kernel.print("Loaded font: " + data.src, INFO);
 		node = getNextXMLNode(node, "FONT");
 	}

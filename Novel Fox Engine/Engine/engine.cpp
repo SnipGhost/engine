@@ -54,6 +54,8 @@ Kernel::Kernel()
 	sf::VideoMode videoMode(screen_x, screen_y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
+	window->clear(sf::Color::White);   //FIX ПРОЗРАЧНОГО ЭКРАНА | МИХА ПРОВЕРЬ!
+	window->display(); //РАЗОК DISPLAY | FIX ПРОЗРАЧНОГО ЭКРАНА | МИХА ПРОВЕРЬ!
 	if (window->isOpen()) 
 		log->print("Window open", INFO);
 	else
@@ -159,7 +161,7 @@ XMLNode ng::getNextXMLNode(XMLNode node, const char *tag)
 {
 	return node->NextSiblingElement(tag);
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ПОЛУЧЕНИЕ И ВОЗВРАТ ИНФОРМАЦИИ ПО РЕСУРСАМ]
 ResData ng::getResData(XMLNode node)
 {
 	const char *x = node->Attribute("x");
@@ -173,6 +175,7 @@ ResData ng::getResData(XMLNode node)
 	const char *alpha = node->Attribute("alpha");
 	const char *color = node->Attribute("color");
 	const char *scale = node->Attribute("scale");
+	const char *style = node->Attribute("style");
 	const char *layer = node->Attribute("layer");
 	const char *width = node->Attribute("width");
 	const char *delay = node->Attribute("delay");
@@ -186,29 +189,30 @@ ResData ng::getResData(XMLNode node)
 
 	ResData res;
 
-	(fontId) ? res.fontId = fontId : res.fontId = "standart";
-	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
+	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
-	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
-	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
-	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
-	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
-	(width) ? res.width = std::atoi(width) : res.width = 256;
-	(alpha) ? res.alpha = 255*std::atoi(alpha)/100 : res.alpha = 255;
-	(height) ? res.height = std::atoi(height) : res.height = 256;
-	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
-	(size) ? res.size = std::atoi(size) : res.size = 1;
-	(id) ? res.id = id : res.id = "NULL";
 	(cmd) ? res.cmd = cmd : res.cmd = "play";
-	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
+	(style) ? res.style = style : res.style = "NULL";
 	(text) ? res.text = text : res.text = "NO TEXT";
 	(color) ? res.color = color : res.color = "black";
+	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
+	(size) ? res.size = std::atoi(size) : res.size = 1;
+	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
+	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
+	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
+	(fontId) ? res.fontId = fontId : res.fontId = "standart";
+	(width) ? res.width = std::atoi(width) : res.width = 256;
+	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
+	(height) ? res.height = std::atoi(height) : res.height = 256;
+	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
+	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
 	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
+	(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
 
 	return res;
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ПОЛУЧЕНИЕ И ВОЗВРАТ ИНФОРМАЦИИ ПО ШРИФТАМ]
 FontData ng::getFontData(XMLNode node)
 {
 	const char *src = node->Attribute("src");
@@ -219,27 +223,27 @@ FontData ng::getFontData(XMLNode node)
 	res.src = RES_PATH + src;
 	return res;
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЕСЛИ ОКНО ИМЕЕТ НА СЕБЕ ФОКУС]
 bool ng::hasFocus()
 {
 	if (kernel.window->hasFocus())
 		return 1;
 	return 0;
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЕСЛИ ОКНО ПОТЕРЯЛО ФОКУС]
 bool ng::lostFocus()
 {
 	if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
 		return 1;
 	return 0;
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: НАЧАЛО ОТОБРАЖЕНИЯ]
 void ng::startDisplay()
 {
 	kernel.window->pushGLStates();
 	kernel.window->clear();
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: КОНЕЦ ОТОБРАЖЕНИЯ]
 void ng::endDisplay()
 {
 	kernel.window->popGLStates();
@@ -250,7 +254,7 @@ std::ostream & ng::operator << (std::ostream & os, Displayable * s)
 {
 	return s->print(os);
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[УСТАНОВКА НОВЫХ ЗНАЧЕНИЙ РАЗМЕРА]
 Displayable::PosScale ng::setResize(sf::Transformable *obj)
 {
 	Displayable::PosScale ps;

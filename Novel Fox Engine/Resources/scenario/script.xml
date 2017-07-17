@@ -3,7 +3,7 @@
 
 	<!--<SCENE id="scene1">-->
 
-		<FONT id="std" src="scenario/fonts/CyrilicOld.TTF"/>
+		<FONT id="classic" src="scenario/fonts/font.TTF"/>
 	
 		<SPRITE id="0_bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
 		<SPRITE id="1_back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
@@ -12,13 +12,13 @@
 
 		<ANIMATION id="4_rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
 		
-		<MUSIC id="music1" volume="5" loop="true" src="scenario/music/music1.ogg" cmd="start"/>
-		<MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"  cmd="start"/>
-		<MUSIC id="music3" volume="5" loop="true" src="scenario/sounds/rain.ogg"  cmd="start"/>
+		<MUSIC id="music1" volume="50" loop="true" src="scenario/music/music1.ogg" cmd="start"/>
+		<MUSIC id="music2" volume="25" loop="true" src="scenario/sounds/wind.ogg"  cmd="start"/>
+		<MUSIC id="music3" volume="25" loop="true" src="scenario/sounds/rain.ogg"  cmd="start"/>
 
-		<TEXT id="txt-1" font="std" layer="2" x="730" y="400" color="white" scale="1.0" size="60">Тестовый пример</TEXT>
+		<TEXT id="txt-1" font="classic" style="italic" layer="2" x="730" y="400" color="white" scale="1.0" size="60">Тестовый пример</TEXT>
 		
-		<SOUND id="click" volume="5" src="scenario/sounds/click.ogg"/>
+		<SOUND id="click" volume="25" src="scenario/sounds/click.ogg"/>
 	
 	<!--</SCENE>-->
 

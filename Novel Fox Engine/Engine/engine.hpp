@@ -178,6 +178,7 @@ namespace ng
 		std::string cmd;
 		std::string src;
 		std::string text;
+		std::string style;
 		std::string color;
 		std::string fontId;
 		std::string namePerson;
@@ -202,13 +203,13 @@ namespace ng
 		private:
 			float volume;
 		public:
-			Music(const Music &copy) {}; // TODO: констурктор копий
+			Music(const Music &copy) {}; // TODO: конструктор копий
 			Music(std::string src, float volume = 100, bool loop = true);
-			Music(ResData rd); //TODO: Показатель volume одинаков для всей музыки
+			Music(ResData rd);
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
 			void setStop();
-			//void change(); //TODO: Изменение volume
+			//void change();
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,7 +219,7 @@ namespace ng
 			sf::SoundBuffer buffer;
 		public:
 			Sound(std::string src, float volume = 100);
-			Sound(ResData rd); //TODO: Показатель volume одинаков для всех звуков
+			Sound(ResData rd);
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
@@ -307,6 +308,7 @@ namespace ng
 		public:
 			Text(ResData rd);
 			bool setText(ResData &rd);
+			void setStyleText(ResData &rd);
 			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
