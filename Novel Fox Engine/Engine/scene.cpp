@@ -23,7 +23,6 @@ void ng::Scene::loadScene()
 			{
 			case 0:
 			{
-				kernel.print(data.layer + MAX_LAYER);
 				objects[data.id] = new Text(data);
 				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 				kernel.print(objects[data.id], INFO);
@@ -31,7 +30,6 @@ void ng::Scene::loadScene()
 			}
 			case 1:
 			{
-				kernel.print(data.layer + MAX_LAYER);
 				objects[data.id] = new Sprite(data);
 				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 				kernel.print(objects[data.id], INFO);

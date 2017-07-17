@@ -84,6 +84,10 @@ Kernel::Kernel()
 		exit(EXIT_FAILURE);	
 	}
 	else log->print("Script loaded", NORM);
+	sf::Vector2f winsize(window->getSize());
+	band1 = new Shape(sf::Color::Black, "top-left", winsize, devScreen);
+	band2 = new Shape(sf::Color::Black, "bottom-right", winsize, devScreen);
+	log->print("Bands created", NORM);
 	loadSpecData();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,6 +100,7 @@ Kernel & Kernel::init()
 Kernel::~Kernel()
 {
 	log->print("Unloading the kernel", INFO);
+	delete band1, band2;
 	if (doc != NULL) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window != NULL) delete window;

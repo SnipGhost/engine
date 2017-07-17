@@ -50,6 +50,8 @@
 #define NVIDIA_DRIVER 1          // Использовать в компиляции NVIDIA библиотеку
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
 #define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
+
+// КОСЯЧНО!
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
 #define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
@@ -135,6 +137,7 @@ namespace ng
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound;
+	class Shape;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
@@ -153,12 +156,13 @@ namespace ng
 			ng::Event event;
 			std::map<std::string, Font*> fonts;
 			ng::Sound *click;
+			sf::Vector2f mouse;				     // Координаты мыши
+			sf::Vector2f devScreen;				 // Размеры среды разработки
+			ng::Shape *band1, *band2;
 
 			static Kernel & init();                  // Instance-метод
 			~Kernel();
 			bool parseConfig(std::string file);      // Загрузить конфигурацию
-			sf::Vector2f mouse();					 // Координаты мыши
-			sf::Vector2f devScreen;				     // Размеры среды разработки
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
@@ -197,8 +201,6 @@ namespace ng
 		std::string fontId;
 		std::string namePerson;
 	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode);
 	ResData getResData(XMLNode node);
@@ -264,12 +266,13 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Displayable::PosScale setResize(sf::Transformable *obj);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Shape : public sf::RectangleShape
+	class Shape: public sf::RectangleShape
 	{
 	protected:
 		sf::Vector2f size;
 	public:
-		Shape(sf::Color color, std::string pos);	 //Конструктор огран. полос
+		Shape(sf::Color color, std::string pos, 
+			  sf::Vector2f size, sf::Vector2f devSize);
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

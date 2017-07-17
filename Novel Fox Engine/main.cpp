@@ -3,17 +3,12 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "Engine/engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-using namespace ng;
+ng::Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссылб
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
-	Scene scene;
+	ng::Scene scene;
 	scene.loadScene();
-
-	ng::Shape *band1, *band2;
-	band1 = new Shape(sf::Color::Black, "top-left");
-	band2 = new Shape(sf::Color::Black, "bottom-right");
-	kernel.print("Shapes created", NORM);
 	
 	while (kernel.window->isOpen())
 	{
@@ -35,15 +30,13 @@ int main()
 
 		scene.displayAll();
 
-		band1->display();
-		band2->display();
+		kernel.band1->display();
+		kernel.band2->display();
 
 		kernel.endDisplay();
 	}
 
 	scene.clear();
-
-	delete band1, band2;
 
 	return EXIT_SUCCESS;
 }
