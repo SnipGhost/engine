@@ -195,8 +195,15 @@ void Kernel::startDisplay()
 // Стандарт: конец отображения
 void Kernel::endDisplay()
 {
+	displayUI();
 	window->popGLStates();
 	window->display();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void ng::Kernel::displayUI()
+{
+	band1->display();
+	band2->display();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Kernel::loadSpecData()

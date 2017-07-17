@@ -172,6 +172,7 @@ namespace ng
 			bool lostFocus();            // Фокус на приложении потерян
 			void startDisplay();         // Начало отрисовки
 			void endDisplay();	         // Конец отрисовки
+			void displayUI();            // Отрисовать интерфейс
 			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
 			//-----------------------------------------------------------------
 			XMLNode parseXML(const char *tag);      // Получить первую ноду tag

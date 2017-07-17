@@ -6,23 +6,23 @@
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Shape::Shape(sf::Color color, std::string pos, 
-	         sf::Vector2f size, sf::Vector2f devSize)
+	         sf::Vector2f winSize, sf::Vector2f devSize)
 {
-	const float k = (float) 16 / 9;
+	const float k = (float)16 / 9;
 
-	if (size.x * (1 / k) <= size.y)
+	if (winSize.x * (1 / k) <= winSize.y)
 	{
-		size.y = (size.y - size.x * devSize.y / devSize.x) / 2;
-		size.x = (float)size.x;
-		if (pos == "bottom-right") setPosition(0, size.y - size.y);
+		size.y = (winSize.y - winSize.x * devSize.y / devSize.x) / 2;
+		size.x = (float)winSize.x;
+		if (pos == "bottom-right") setPosition(0, winSize.y - size.y);
 	}
 	else
 	{
-		size.x = (size.x - size.y * devSize.x / devSize.y) / 2;
-		size.y = (float)size.y;
-		if (pos == "bottom-right") setPosition(size.x - size.x, 0);
+		size.x = (winSize.x - winSize.y * devSize.x / devSize.y) / 2;
+		size.y = (float)winSize.y;
+		if (pos == "bottom-right") setPosition(winSize.x - size.x, 0);
 	}
-	setSize(size);
+	setSize(sf::Vector2f(size.x, size.y));
 	setFillColor(color);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

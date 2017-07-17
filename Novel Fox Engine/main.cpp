@@ -54,9 +54,6 @@ int main()
 
 		scene.displayAll();
 
-		kernel.band1->display();
-		kernel.band2->display();
-
 		kernel.endDisplay();
 	}
 
