@@ -25,12 +25,18 @@ bool Text::setText(ResData &rd)
 	id = rd.id;
 	layer = rd.layer;
 
-	if (rd.color == "red") setFillColor(sf::Color::Red);
-	if (rd.color == "green") setFillColor(sf::Color::Green);
-	if (rd.color == "blue") setFillColor(sf::Color::Blue);
-	if (rd.color == "yellow") setFillColor(sf::Color::Yellow);
-	if (rd.color == "white") setFillColor(sf::Color::White); 
-	if (rd.color == "black") setFillColor(sf::Color::Black);
+	if (rd.color == "red") 
+		setFillColor(sf::Color::Red);
+	if (rd.color == "green") 
+		setFillColor(sf::Color::Green);
+	if (rd.color == "blue") 
+		setFillColor(sf::Color::Blue);
+	if (rd.color == "yellow") 
+		setFillColor(sf::Color::Yellow);
+	if (rd.color == "white") 
+		setFillColor(sf::Color::White); 
+	if (rd.color == "black") 
+		setFillColor(sf::Color::Black);
 
 	if (rd.style != "NULL") setStyleText(rd);
 
@@ -44,30 +50,24 @@ bool Text::setText(ResData &rd)
 }
 void Text::setStyleText(ResData &rd)
 {
-	//char *Ptr = strtok((char*)rd.style.c_str() , " ");
+	char *Ptr = strtok((char*)rd.style.c_str() , " ");
 
-	//std::string styleNum = "";
+	unsigned int styleNum = NULL;
 
-	//while (Ptr)
-	//{
-	//	if (!strcmp(Ptr, "bold"))
-	//		styleNum += BOLD;
-	//	if (!strcmp(Ptr, "strikethrough"))
-	//		styleNum += "2";
-	//	if (!strcmp(Ptr, "italic"))
-	//		styleNum += "3";
-	//	if (!strcmp(Ptr, "underlined")) 
-	//		styleNum += "4";
+	while (Ptr)
+	{
+		if (!strcmp(Ptr, "bold"))
+			styleNum += BOLD;
+		if (!strcmp(Ptr, "strikethrough"))
+			styleNum += STRIKETHROUGH;
+		if (!strcmp(Ptr, "italic"))
+			styleNum += ITALIC;
+		if (!strcmp(Ptr, "underlined")) 
+			styleNum += UNDERLINED;
+		Ptr = strtok(0, " ");
+	}
 
-	//	setStyle(styleNum);
-
-	//	Ptr = strtok(0, " ");
-	//}
-
-	if (rd.style == "bold") setStyle(BOLD);
-	if (rd.style == "strikethrough") setStyle(STRIKETHROUGH);
-	if (rd.style == "italic") setStyle(ITALIC);
-	if (rd.style == "underlined") setStyle(UNDERLINED);
+	setStyle(styleNum);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::display(sf::RenderWindow *win)
