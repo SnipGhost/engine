@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Novel Fox Engine", "Novel Fox Engine\Novel Fox Engine.vcxproj", "{EB25737B-7CBB-4169-BBEF-A8DBFDC18DD2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C009E6E-BF36-4546-8146-C5DF861F98F7}"
+	ProjectSection(SolutionItems) = preProject
+		Novel Fox Engine\Resources\scenario\scriptDemo.xml = Novel Fox Engine\Resources\scenario\scriptDemo.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

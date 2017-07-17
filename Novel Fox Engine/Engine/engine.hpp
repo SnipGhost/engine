@@ -48,6 +48,8 @@
 #define PARAMS_COUNT 9           // Количество настроек считываемых из конфига
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
 #define NVIDIA_DRIVER 1          // Использовать в компиляции NVIDIA библиотеку
+#define MAX_LAYER 10             // Максимальное допустимое значение слоя
+#define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
 #define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
@@ -244,6 +246,7 @@ namespace ng
 			{ 
 				kernel.print("Deleted displayble object: " + id, INFO); 
 			}
+			std::string getId() { return id; }
 			unsigned int getLayer();
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;

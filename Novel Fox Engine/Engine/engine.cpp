@@ -54,8 +54,8 @@ Kernel::Kernel()
 	sf::VideoMode videoMode(screen_x, screen_y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
-	window->clear(sf::Color::White);   //FIX ПРОЗРАЧНОГО ЭКРАНА | МИХА ПРОВЕРЬ!
-	window->display(); //РАЗОК DISPLAY | FIX ПРОЗРАЧНОГО ЭКРАНА | МИХА ПРОВЕРЬ!
+	window->clear(sf::Color::Black);   // FIX ПРОЗРАЧНОГО ЭКРАНА
+	window->display();
 	if (window->isOpen()) 
 		log->print("Window open", INFO);
 	else

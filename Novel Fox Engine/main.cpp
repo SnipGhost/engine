@@ -8,14 +8,14 @@ using namespace ng;
 int main()
 {
 	XMLNode node = NULL;
-	std::map<std::string, ng::Video*> videos;
+	std::vector<Displayable*> layers[C_LAYERS];
 	std::map<std::string, ng::Displayable*> objects;
+	std::map<std::string, ng::Video*> videos;
 	std::map<std::string, ng::Music*> music;
 	std::map<std::string, ng::Sound*> sounds;
-	typedef std::map<std::string, ng::Displayable*>::iterator ObjIt;
 	typedef std::map<std::string, ng::Video*>::iterator VidIt;
 	typedef std::map<std::string, ng::Music*>::iterator MusIt;
-	typedef std::map<std::string, ng::Sound*>::iterator SouIt;
+	//typedef std::map<std::string, ng::Sound*>::iterator SouIt;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ШРИФТЫ]
 	node = parseXML("FONT");
 	while (node != NULL)
@@ -41,19 +41,24 @@ int main()
 			{
 				case 0:
 				{
+					kernel.print(data.layer + MAX_LAYER);
 					objects[data.id] = new Text(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 					kernel.print(objects[data.id], INFO);
 					break;
 				}
 				case 1:
 				{
+					kernel.print(data.layer + MAX_LAYER);
 					objects[data.id] = new Sprite(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 					kernel.print(objects[data.id], INFO);
 					break;
 				}
 				case 2:
 				{
 					objects[data.id] = new AnimateSprite(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 					kernel.print(objects[data.id], INFO);
 					break;
 				}
@@ -63,6 +68,7 @@ int main()
 					video->play();
 					videos[data.id] = video;
 					objects[data.id] = video;
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 					kernel.print(video, INFO);
 					break;
 				}
@@ -123,23 +129,36 @@ int main()
 
 		startDisplay();
 
-		for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+		//for (auto it = objects.begin(); it != objects.end(); ++it)
+		//{
+		//	it->second->setLayerMotion();
+		//	it->second->display();
+		//}
+
+		for (auto &layer : layers)
 		{
-			it->second->setLayerMotion();
-			it->second->display();
+			for (auto &obj : layer)
+			{
+				obj->setLayerMotion();
+				obj->display();
+			}
 		}
 
 		band1.display();
 		band2.display();
 
 		endDisplay();
+		//delay(1);
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	for (ObjIt it = objects.begin(); it != objects.end(); ++it)
+	for (auto &layer : layers)
 	{
-		kernel.print("Deleting objects: " + it->first, INFO);
-		delete it->second;
-		it->second = NULL;
+		for (auto &obj : layer)
+		{
+			kernel.print("Deleting objects: " + obj->getId(), INFO);
+			delete obj;
+			obj = NULL;
+		}
 	}
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	return EXIT_SUCCESS;

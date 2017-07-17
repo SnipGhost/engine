@@ -22,6 +22,8 @@ Video::Video(ResData rd)
 		kernel.print("Created video " + rd.id, INFO);
 	id = rd.id;
 	layer = rd.layer;
+	posScale = ng::setResize(this);
+	setPosition(posScale.pos);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Video::setVideo(std::string src, int width, int height, float x, float y, 

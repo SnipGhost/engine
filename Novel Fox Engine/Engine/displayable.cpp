@@ -7,6 +7,8 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Displayable::doLayerMotion(sf::Transformable *obj)
 {
+	if (layer <= 0) return;
+
 	const float centerX = WS_X / 2;
 	const float centerY = WS_Y / 2;
 	float mouseXC = centerX - kernel.mouse().x;
@@ -21,12 +23,12 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 
 	float k = (float)16 / 9;
 
-	if (layer > 0 && ((WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
+	if ((WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
 		kernel.mouse().x < kernel.window->getSize().x - size.x && 
 		kernel.mouse().y > 0 && kernel.mouse().y < WS_Y) || 
 		(WS_X * (1 / k) <= WS_Y  && kernel.mouse().y > size.y &&
 		kernel.mouse().y < kernel.window->getSize().y - size.y &&
-		kernel.mouse().x > 0 && kernel.mouse().x < WS_X)))
+		kernel.mouse().x > 0 && kernel.mouse().x < WS_X))
 		{
 			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
 			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));

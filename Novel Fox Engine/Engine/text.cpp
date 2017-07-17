@@ -48,6 +48,7 @@ bool Text::setText(ResData &rd)
 
 	return 1;
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setStyleText(ResData &rd)
 {
 	char *Ptr = strtok((char*)rd.style.c_str() , " ");
