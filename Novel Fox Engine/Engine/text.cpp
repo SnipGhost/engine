@@ -24,6 +24,7 @@ bool Text::setText(ResData &rd)
 
 	id = rd.id;
 	layer = rd.layer;
+	visible = rd.visible;
 
 	if (rd.color == "red") 
 		setFillColor(sf::Color::Red);

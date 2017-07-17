@@ -24,6 +24,7 @@ Sprite::Sprite(ResData rd)
 	setColor(sf::Color(255, 255, 255, rd.alpha));
 	id = rd.id;
 	layer = rd.layer;
+	visible = rd.visible;
 	posScale = ng::setResize(this);
 	computeLayerScale();
 	setPosition(posScale.pos);

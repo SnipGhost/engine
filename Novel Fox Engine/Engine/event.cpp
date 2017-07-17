@@ -51,7 +51,7 @@ bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 // Если нажата кнопка мыши
 bool Event::isMouseKey(sf::Mouse::Button mouse)
 {
-	if(type == MouseButtonPressed && mouseButton.button == mouse) 
+	if (type == MouseButtonPressed && mouseButton.button == mouse) 
 		return true;
 	return false;
 }
@@ -59,7 +59,7 @@ bool Event::isMouseKey(sf::Mouse::Button mouse)
 // Если данная музыка играет
 bool Event::isMusicPlay(sf::Music &music)
 {
-	if(music.getStatus() == sf::Music::Playing) 
+	if (music.getStatus() == sf::Music::Playing) 
 		return true;
 	return false;
 }

@@ -10,7 +10,7 @@ Displayable::~Displayable()
 	kernel.print("Deleted displayble object: " + id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Displayable::doLayerMotion(sf::Transformable *obj)
+void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 {
 	if (layer <= 0) return;
 
@@ -24,7 +24,6 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 		kernel.devScreen.y / kernel.devScreen.x) / 2;
 	size.x = (kernel.window->getSize().x - kernel.window->getSize().y * 
 		kernel.devScreen.x / kernel.devScreen.y) / 2;
-
 
 	float k = (float)16 / 9;
 

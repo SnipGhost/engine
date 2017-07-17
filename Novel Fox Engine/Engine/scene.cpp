@@ -100,7 +100,7 @@ void ng::Scene::displayAll()
 		for (auto &obj : layer)
 		{
 			obj->setLayerMotion();
-			obj->display();
+			if (obj->visible) obj->display();
 		}
 	}
 }

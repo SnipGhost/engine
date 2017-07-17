@@ -12,7 +12,26 @@ int main()
 	
 	while (kernel.window->isOpen())
 	{
-		kernel.checkEvents();
+		if (kernel.checkEvents()) // Пример события: прошел дождь
+		{
+			if (scene.objects.count("rain") > 0)
+				scene.objects["rain"]->visible = false;
+
+			// На самом деле, музыка почему-то не стопится
+			// Поэтому я её тупо удалил ... TODO: FIX! [?]
+
+			if (scene.music.count("music3") > 0)
+			{
+				delete scene.music["music3"];
+				scene.music.erase("music3");
+			}
+
+			if (scene.music.count("music2") > 0)
+			{
+				delete scene.music["music2"];
+				scene.music.erase("music2");
+			}
+		}
 
 		if (kernel.lostFocus())
 		{

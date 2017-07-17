@@ -22,6 +22,7 @@ Video::Video(ResData rd)
 		kernel.print("Created video " + rd.id, INFO);
 	id = rd.id;
 	layer = rd.layer;
+	visible = rd.visible;
 	posScale = ng::setResize(this);
 	setPosition(posScale.pos);
 }

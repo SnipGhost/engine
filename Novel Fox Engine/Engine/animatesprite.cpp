@@ -18,8 +18,6 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 	setAnimation(rd.height, rd.width, rd.ms);
 	setPosition(rd.x, rd.y);
 	setScale(rd.scale, rd.scale);
-	id = rd.id;
-	layer = rd.layer;
 	posScale = ng::setResize(this);
 	computeLayerScale();
 }

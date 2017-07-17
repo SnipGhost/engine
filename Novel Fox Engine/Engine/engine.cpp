@@ -54,7 +54,7 @@ Kernel::Kernel()
 	sf::VideoMode videoMode(screen_x, screen_y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
-	window->clear(sf::Color::Black);   // FIX ПРОЗРАЧНОГО ЭКРАНА
+	window->clear(sf::Color::Black);   // Fix прозрачного экрана
 	window->display();
 	if (window->isOpen()) 
 		log->print("Window open", INFO);
@@ -157,15 +157,20 @@ std::string Kernel::operator [] (std::string key)
 	return conf[key];
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Kernel::checkEvents()
+bool Kernel::checkEvents()
 {
+	bool flag = false;
 	while (window->pollEvent(event))
 	{
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
 		if (event.isMouseClickKey(sf::Mouse::Left))
+		{
 			click->play();
+			flag = true;
+		}
 	}
+	return flag;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если окно потеряло фокус
@@ -252,6 +257,8 @@ ResData ng::getResData(XMLNode node)
 
 	ResData res;
 
+	res.visible = true; // [?]
+
 	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
@@ -294,7 +301,7 @@ std::ostream & ng::operator << (std::ostream & os, Displayable * s)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Установка новых значений размера
-Displayable::PosScale ng::setResize(sf::Transformable *obj)
+Displayable::PosScale ng::setResize(sf::Transformable *obj) // TODO: FIX! [?]
 {
 	Displayable::PosScale ps;
 

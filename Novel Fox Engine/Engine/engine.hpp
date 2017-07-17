@@ -167,7 +167,7 @@ namespace ng
 			std::string operator[] (std::string key); // Выдает конфигурацию
 			sf::Vector2f getMouse();				  // Координаты мыши
 			//-----------------------------------------------------------------
-			void checkEvents();          // Отследить обычные события
+			bool checkEvents();          // Отследить обычные события
 			bool hasFocus();             // Фокус на приложении
 			bool lostFocus();            // Фокус на приложении потерян
 			void startDisplay();         // Начало отрисовки
@@ -199,6 +199,7 @@ namespace ng
 		float volume;            // Громкость
 		bool loop;               // Зацикливание
 		bool smooth;             // Размытие
+		bool visible;            // Видимость
 		std::string id;          // Идентификатор объекта
 		std::string cmd;         // Команда/Статус [?]
 		std::string src;         // Путь до ресурса
@@ -257,6 +258,8 @@ namespace ng
 				sf::Vector2f scale;
 				sf::Vector2f pos;
 			} posScale;
+			bool visible;
+
 			virtual ~Displayable();
 			unsigned int getLayer();
 			std::string getId();
@@ -359,15 +362,15 @@ namespace ng
 		protected:
 			friend ng::Event;
 			std::vector<Displayable*> layers[C_LAYERS];
-			std::map<std::string, ng::Displayable*> objects;
-			std::map<std::string, ng::Video*> videos;
-			std::map<std::string, ng::Music*> music;
-			std::map<std::string, ng::Sound*> sounds;
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
 			typedef std::map<std::string, ng::Music*>::iterator MusIt;
 			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
 
 		public:
+			std::map<std::string, ng::Displayable*> objects;
+			std::map<std::string, ng::Video*> videos;
+			std::map<std::string, ng::Music*> music;
+			std::map<std::string, ng::Sound*> sounds;
 			void loadScene();
 			void startMedia();
 			void stopMedia();
