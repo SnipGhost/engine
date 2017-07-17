@@ -134,6 +134,8 @@ namespace ng
 			Font(FontData fd);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	class Sound;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
 		private:       
@@ -141,6 +143,7 @@ namespace ng
 			Kernel();                                // Конструктор синглтона
 			Kernel(const Kernel& root) = delete;
 			Kernel & operator=(const Kernel&) = delete;
+
 		public:
 			LogStream *log;                          // Логи программы
 			Clock globalClock;                       // Счетчик времени
@@ -149,6 +152,7 @@ namespace ng
 			std::string version;
 			ng::Event event;
 			std::map<std::string, Font*> fonts;
+			ng::Sound *click;
 
 			static Kernel & init();                  // Instance-метод
 			~Kernel();
@@ -158,6 +162,14 @@ namespace ng
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{ log->print(msg, tag); }
 			std::string operator[] (std::string key); // Выдает конфигурацию
+			void checkEvents();
+			bool hasFocus();      // Фокус на приложении
+			bool lostFocus();     // Фокус на приложении потерян
+			void startDisplay();  // Начало отрисовки
+			void endDisplay();	  // Конец отрисовки
+			void loadSpecData();  // Загрузить шрифты, звук клика и т.д.
+			XMLNode parseXML(const char *tag);
+			XMLNode getNextXMLNode(XMLNode node, const char *tag);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
@@ -186,8 +198,7 @@ namespace ng
 		std::string namePerson;
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	XMLNode parseXML(const char *tag);
-	XMLNode getNextXMLNode(XMLNode node, const char *tag);
+	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode);
 	ResData getResData(XMLNode node);
@@ -220,16 +231,11 @@ namespace ng
 		protected:
 			sf::SoundBuffer buffer;
 		public:
-			Sound(std::string src, float volume = 100);
+			Sound(std::string _id, std::string src, float volume = 100);
 			Sound(ResData rd);
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	extern bool hasFocus();		//Фокус на приложении
-	extern bool lostFocus();	//Фокус на приложении потерян
-	extern void startDisplay(); //Начало Display
-	extern void endDisplay();	//Конец Display
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Displayable
 	{
@@ -341,13 +347,25 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	/*class Scene
+	class Scene
 	{
 		protected:
-
+			friend ng::Event;
+			std::vector<Displayable*> layers[C_LAYERS];
+			std::map<std::string, ng::Displayable*> objects;
+			std::map<std::string, ng::Video*> videos;
+			std::map<std::string, ng::Music*> music;
+			std::map<std::string, ng::Sound*> sounds;
+			typedef std::map<std::string, ng::Video*>::iterator VidIt;
+			typedef std::map<std::string, ng::Music*>::iterator MusIt;
+			//typedef std::map<std::string, ng::Sound*>::iterator SouIt;
 		public:
-
-	};*/
+			void loadScene();
+			void startMedia();
+			void stopMedia();
+			void displayAll();
+			void clear();
+	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

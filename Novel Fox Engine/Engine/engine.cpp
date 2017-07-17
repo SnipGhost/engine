@@ -84,6 +84,7 @@ Kernel::Kernel()
 		exit(EXIT_FAILURE);	
 	}
 	else log->print("Script loaded", NORM);
+	loadSpecData();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Kernel & Kernel::init()
@@ -151,13 +152,66 @@ std::string Kernel::operator [] (std::string key)
 	return conf[key];
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-XMLNode ng::parseXML(const char *tag)
-{	
-	std::string b = kernel["xml_body"];
-	return kernel.doc->FirstChildElement(b.c_str())->FirstChildElement(tag);
+void Kernel::checkEvents()
+{
+	while (window->pollEvent(event))
+	{
+		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
+			window->close();
+		if (event.isMouseClickKey(sf::Mouse::Left))
+			click->play();
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-XMLNode ng::getNextXMLNode(XMLNode node, const char *tag)
+// Если окно потеряло фокус
+bool Kernel::hasFocus()
+{
+	return window->hasFocus();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЕСЛИ ОКНО ПОТЕРЯЛО ФОКУС]
+bool Kernel::lostFocus()
+{
+	return (event.type == sf::Event::LostFocus || !window->hasFocus());
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: НАЧАЛО ОТОБРАЖЕНИЯ]
+void Kernel::startDisplay()
+{
+	window->pushGLStates();
+	window->clear();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: КОНЕЦ ОТОБРАЖЕНИЯ]
+void Kernel::endDisplay()
+{
+	window->popGLStates();
+	window->display();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Kernel::loadSpecData()
+{
+	XMLNode node = parseXML("FONT");
+	while (node != NULL)
+	{
+		FontData data = getFontData(node);
+		fonts[data.id] = new Font(data);
+		log->print("Loaded font: " + data.src, INFO);
+		node = getNextXMLNode(node, "FONT");
+	}
+	node = parseXML("CLICK");
+	if (node != NULL)
+	{
+		ResData data = getResData(node);
+		click = new Sound(data.id, data.src, data.volume);
+		log->print("Loaded click sound: " + data.src, INFO);
+	}
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+XMLNode Kernel::parseXML(const char *tag)
+{	
+	std::string b = conf["xml_body"];
+	return doc->FirstChildElement(b.c_str())->FirstChildElement(tag);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag)
 {
 	return node->NextSiblingElement(tag);
 }
@@ -222,32 +276,6 @@ FontData ng::getFontData(XMLNode node)
 	res.id = id;
 	res.src = RES_PATH + src;
 	return res;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЕСЛИ ОКНО ИМЕЕТ НА СЕБЕ ФОКУС]
-bool ng::hasFocus()
-{
-	if (kernel.window->hasFocus())
-		return 1;
-	return 0;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ЕСЛИ ОКНО ПОТЕРЯЛО ФОКУС]
-bool ng::lostFocus()
-{
-	if (kernel.event.type == sf::Event::LostFocus || !kernel.window->hasFocus())
-		return 1;
-	return 0;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: НАЧАЛО ОТОБРАЖЕНИЯ]
-void ng::startDisplay()
-{
-	kernel.window->pushGLStates();
-	kernel.window->clear();
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[СТАНДАРТ: КОНЕЦ ОТОБРАЖЕНИЯ]
-void ng::endDisplay()
-{
-	kernel.window->popGLStates();
-	kernel.window->display();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream & ng::operator << (std::ostream & os, Displayable * s)

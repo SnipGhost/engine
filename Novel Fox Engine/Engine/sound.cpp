@@ -5,12 +5,9 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sound::Sound(std::string src, float volume)
+Sound::Sound(std::string _id, std::string src, float volume)
 {
-	if (!setSound(src, volume))
-		kernel.print("Failed load sound " + src, WARN);
-	else
-		kernel.print("Created sound " + src, INFO);
+	setSound(src, volume);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sound::Sound(ResData rd)
