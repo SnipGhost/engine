@@ -68,44 +68,46 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
-	 protected:
-		std::ostream *log;
-		bool isExtOS;
-		unsigned int tag_mask;
-	 public:
-		LogStream(unsigned int mask = SHOW_ALL_TAG);
-		LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
-		LogStream(std::string file, unsigned int mask = SHOW_ALL_TAG);
-		~LogStream();
-
-		bool check();
-		void setTagMask(unsigned int mask = SHOW_ALL_TAG);
-		template<typename T> void print(T msg, size_t tag = NONE)
-		{
-			static const size_t TAG_COUNT = 5;
-			const char *TAGM[TAG_COUNT] = {
-				"[ ] ", // [0 NONE]
-				"[!] ", // [1 CRIT]
-				"[-] ", // [2 WARN]
-				"[+] ", // [3 NORM]
-				"[i] "  // [4 INFO]
-			};
-			check();
-			if (tag >= TAG_COUNT)
+		protected:
+			std::ostream *log;     // Поток вывода лога
+			bool isExtOS;          // Поток открыт вовне?
+			unsigned int tag_mask; // Маска вывода сообщений
+			//-----------------------------------------------------------------
+		public:
+			LogStream(unsigned int mask = SHOW_ALL_TAG);
+			LogStream(std::ostream &os, unsigned int mask = SHOW_ALL_TAG);
+			LogStream(std::string file, unsigned int mask = SHOW_ALL_TAG);
+			~LogStream();
+			//-----------------------------------------------------------------
+			bool check();             // Проверка на успешность открытия потока
+			void setTagMask(unsigned int mask = SHOW_ALL_TAG);
+			//-----------------------------------------------------------------
+			template<typename T> void print(T msg, size_t tag = NONE)
 			{
-				print("Unknown tag", 2);
-				print(msg, 0);
-				return;
+				static const size_t TAG_COUNT = 5;
+				const char *TAGM[TAG_COUNT] = {
+					"[ ] ", // [0 NONE]
+					"[!] ", // [1 CRIT]
+					"[-] ", // [2 WARN]
+					"[+] ", // [3 NORM]
+					"[i] "  // [4 INFO]
+				};
+				check();
+				if (tag >= TAG_COUNT)
+				{
+					print("Unknown tag", 2);
+					print(msg, 0);
+					return;
+				}
+				if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
+					return;
+				*log << TAGM[tag] << msg << std::endl;
 			}
-			if (GETBIT(tag_mask, TAG_COUNT - tag - 1) == 0)
-				return;
-			*log << TAGM[tag] << msg << std::endl;
-		}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Clock: public sf::Clock
 	{
-		 public:
+		public:
 			int getMilliSecond();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,8 +126,8 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct FontData
 	{
-		std::string src;
-		std::string id;
+		std::string src; // Путь до ресурса
+		std::string id;  // Идентификатор шрифта
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Font : public sf::Font
@@ -146,69 +148,74 @@ namespace ng
 			Kernel();                                // Конструктор синглтона
 			Kernel(const Kernel& root) = delete;
 			Kernel & operator=(const Kernel&) = delete;
-
+			//-----------------------------------------------------------------
 		public:
-			LogStream *log;                          // Логи программы
-			Clock globalClock;                       // Счетчик времени
-			tinyxml2::XMLDocument *doc;              // XML-документ сценария
-			sf::RenderWindow *window;                // SFML-окно
-			std::string version;
-			ng::Event event;
-			std::map<std::string, Font*> fonts;
-			ng::Sound *click;
-			sf::Vector2f mouse;				     // Координаты мыши
-			sf::Vector2f devScreen;				 // Размеры среды разработки
-			ng::Shape *band1, *band2;
-
-			static Kernel & init();                  // Instance-метод
-			~Kernel();
-			bool parseConfig(std::string file);      // Загрузить конфигурацию
-			template<typename T> void print(T msg, size_t tag = NONE)
-			{ log->print(msg, tag); }
+			std::string version;                 // Версия [?]
+			LogStream *log;                      // Логи программы
+			Clock globalClock;                   // Счетчик времени
+			tinyxml2::XMLDocument *doc;          // XML-документ сценария
+			sf::RenderWindow *window;            // SFML-окно
+			ng::Event event;                     // Ловец событий
+			std::map<std::string, Font*> fonts;  // Набор шрифтов
+			ng::Sound *click;                    // Звук для клика
+			sf::Vector2f devScreen;              // Размеры среды разработки
+			ng::Shape *band1, *band2;            // Полосы сокрытия
+			//-----------------------------------------------------------------
+			static Kernel & init();                   // Instance-метод
+			~Kernel();                                // Обязателен деструктор
+			bool parseConfig(std::string file);       // Загрузить конфигурацию
 			std::string operator[] (std::string key); // Выдает конфигурацию
-			void checkEvents();
-			bool hasFocus();      // Фокус на приложении
-			bool lostFocus();     // Фокус на приложении потерян
-			void startDisplay();  // Начало отрисовки
-			void endDisplay();	  // Конец отрисовки
-			void loadSpecData();  // Загрузить шрифты, звук клика и т.д.
-			XMLNode parseXML(const char *tag);
-			XMLNode getNextXMLNode(XMLNode node, const char *tag);
+			sf::Vector2f getMouse();				  // Координаты мыши
+			//-----------------------------------------------------------------
+			void checkEvents();          // Отследить обычные события
+			bool hasFocus();             // Фокус на приложении
+			bool lostFocus();            // Фокус на приложении потерян
+			void startDisplay();         // Начало отрисовки
+			void endDisplay();	         // Конец отрисовки
+			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
+			//-----------------------------------------------------------------
+			XMLNode parseXML(const char *tag);      // Получить первую ноду tag
+			XMLNode getNextXMLNode(XMLNode node, const char *tag); // Следующую
+			//-----------------------------------------------------------------
+			template<typename T> void print(T msg, size_t tag = NONE)
+			{
+				log->print(msg, tag);
+			}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct ResData
 	{
-		int ms;
-		int layer;
-		int width;
-		int height;
-		int alpha;
-		unsigned int size;
-		float x;
-		float y;
-		float scale;
-		float volume;
-		bool loop;
-		bool smooth;
-		std::string id;
-		std::string cmd;
-		std::string src;
-		std::string text;
-		std::string style;
-		std::string color;
-		std::string fontId;
-		std::string namePerson;
+		int ms;                  // Параметр задержки
+		int layer;               // Слой отображения
+		int width;               // Ширина объекта
+		int height;              // Высота объекта
+		int alpha;               // Прозрачность
+		unsigned int size;       // Размер текста
+		float x;                 // Позиция по X
+		float y;                 // Позиция по Y
+		float scale;             // Масштаб (sX = sY)
+		float volume;            // Громкость
+		bool loop;               // Зацикливание
+		bool smooth;             // Размытие
+		std::string id;          // Идентификатор объекта
+		std::string cmd;         // Команда/Статус [?]
+		std::string src;         // Путь до ресурса
+		std::string text;        // Содержание текста
+		std::string style;       // Стиль текста [?]
+		std::string color;       // Цвет текста
+		std::string fontId;      // Идентификатор шрифта
+		std::string namePerson;  // Подпись говорившего
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	FontData getFontData(XMLNode tNode);
-	ResData getResData(XMLNode node);
+	FontData getFontData(XMLNode tNode); // Распарсить FONT-ноду
+	ResData getResData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
 		public:
-			Icon(){}
+			Icon() {}
 			Icon(std::string src);
 			bool setIcon(std::string src);
 	};
@@ -218,7 +225,7 @@ namespace ng
 		private:
 			float volume;
 		public:
-			Music(const Music &copy) {}; // TODO: конструктор копий
+			Music(const Music &copy) {};
 			Music(std::string src, float volume = 100, bool loop = true);
 			Music(ResData rd);
 			bool setMusic(std::string src, float volume, bool loop);
@@ -250,12 +257,9 @@ namespace ng
 				sf::Vector2f scale;
 				sf::Vector2f pos;
 			} posScale;
-			virtual ~Displayable() 
-			{ 
-				kernel.print("Deleted displayble object: " + id, INFO); 
-			}
-			std::string getId() { return id; }
+			virtual ~Displayable();
 			unsigned int getLayer();
+			std::string getId();
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
 			virtual void setResize() {}
@@ -361,7 +365,8 @@ namespace ng
 			std::map<std::string, ng::Sound*> sounds;
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
 			typedef std::map<std::string, ng::Music*>::iterator MusIt;
-			//typedef std::map<std::string, ng::Sound*>::iterator SouIt;
+			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
+
 		public:
 			void loadScene();
 			void startMedia();
@@ -369,7 +374,6 @@ namespace ng
 			void displayAll();
 			void clear();
 	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #endif /* ENGINE_HPP */

@@ -5,14 +5,19 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Displayable::~Displayable()
+{
+	kernel.print("Deleted displayble object: " + id, INFO);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Displayable::doLayerMotion(sf::Transformable *obj)
 {
 	if (layer <= 0) return;
 
 	const float centerX = WS_X / 2;
 	const float centerY = WS_Y / 2;
-	float mouseXC = centerX - kernel.mouse().x;
-	float mouseYC = centerY - kernel.mouse().y;
+	float mouseXC = centerX - kernel.getMouse().x;
+	float mouseYC = centerY - kernel.getMouse().y;
 
 	sf::Vector2f size;
 	size.y = (kernel.window->getSize().y - kernel.window->getSize().x * 
@@ -23,12 +28,12 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 
 	float k = (float)16 / 9;
 
-	if ((WS_X * (1 / k) > WS_Y && kernel.mouse().x > size.x &&
-		kernel.mouse().x < kernel.window->getSize().x - size.x && 
-		kernel.mouse().y > 0 && kernel.mouse().y < WS_Y) || 
-		(WS_X * (1 / k) <= WS_Y  && kernel.mouse().y > size.y &&
-		kernel.mouse().y < kernel.window->getSize().y - size.y &&
-		kernel.mouse().x > 0 && kernel.mouse().x < WS_X))
+	if ((WS_X * (1 / k) > WS_Y && kernel.getMouse().x > size.x &&
+		kernel.getMouse().x < kernel.window->getSize().x - size.x && 
+		kernel.getMouse().y > 0 && kernel.getMouse().y < WS_Y) || 
+		(WS_X * (1 / k) <= WS_Y  && kernel.getMouse().y > size.y &&
+		kernel.getMouse().y < kernel.window->getSize().y - size.y &&
+		kernel.getMouse().x > 0 && kernel.getMouse().x < WS_X))
 		{
 			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
 			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));
@@ -39,5 +44,10 @@ void Displayable::doLayerMotion(sf::Transformable *obj)
 unsigned int Displayable::getLayer() 
 { 
 	return layer; 
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+std::string Displayable::getId()
+{
+	return id;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

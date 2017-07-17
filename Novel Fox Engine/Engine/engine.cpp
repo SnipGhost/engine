@@ -147,9 +147,9 @@ bool Kernel::parseConfig(std::string file)
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sf::Vector2f Kernel::mouse()
+sf::Vector2f Kernel::getMouse()
 {
-	return kernel.window->mapPixelToCoords(sf::Mouse::getPosition(*kernel.window));
+	return window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::string Kernel::operator [] (std::string key)
