@@ -100,7 +100,8 @@ Kernel & Kernel::init()
 Kernel::~Kernel()
 {
 	log->print("Unloading the kernel", INFO);
-	delete band1, band2;
+	delete band1;
+    delete band2;
 	if (doc != NULL) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window != NULL) delete window;

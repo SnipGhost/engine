@@ -54,7 +54,7 @@ void Text::setStyleText(ResData &rd)
 {
 	char *Ptr = strtok((char*)rd.style.c_str() , " ");
 
-	unsigned int styleNum = NULL;
+	unsigned int styleNum = 0;
 
 	while (Ptr)
 	{
