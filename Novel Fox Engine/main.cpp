@@ -28,6 +28,8 @@ void example(ng::Scene &scene)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
+    //kernel.loadSpecData();
+
 	ng::Scene scene;
 	scene.loadScene();
 	
@@ -58,6 +60,8 @@ int main()
 	}
 
 	scene.clear();
+
+    kernel.clear();
 
 	return EXIT_SUCCESS;
 }

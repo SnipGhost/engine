@@ -18,6 +18,11 @@ Sound::Sound(ResData rd)
 		kernel.print("Load sound " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sound::~Sound() // TODO: проверить [!]
+{
+    kernel.print("SOUND DELETED");
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sound::setSound(std::string src, float volume)
 {
 	if (!buffer.loadFromFile(src)) 

@@ -76,23 +76,26 @@ void ng::Scene::loadScene()
 //Включение любых проигрывающихся ресурсов
 void ng::Scene::startMedia()
 {
-	for (VidIt it = videos.begin(); it != videos.end(); ++it)
-		if (!kernel.event.isVideoPlay(*(it->second)))
-			it->second->play();
-	for (MusIt it = music.begin(); it != music.end(); ++it)
-		if (!kernel.event.isMusicPlay(*it->second))
-			it->second->play();
+	for (auto &video : videos)
+		if (!kernel.event.isVideoPlay(*video.second))
+			video.second->play();
+	for (auto &tempo : music)
+		if (!kernel.event.isMusicPlay(*tempo.second))
+			tempo.second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Остановка любых проигрывающихся ресурсов
 void ng::Scene::stopMedia()
 {
-	if (sounds.count("click") > 0)
-		sounds["click"]->stop();
-	for (MusIt it = music.begin(); it != music.end(); ++it)
-		it->second->setPause();
-	for (VidIt it = videos.begin(); it != videos.end(); ++it)
-		it->second->setPause();
+	for (auto &sound : sounds)
+        if (sound.second)
+            sound.second->stop();
+	for (auto &video : videos)
+        if (video.second)
+            video.second->setPause();
+    for (auto &tempo : music)
+        if (tempo.second)
+            tempo.second->setPause();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Отрисовка всех объектов
@@ -120,5 +123,11 @@ void ng::Scene::clear()
 			obj = NULL;
 		}
 	}
+    for (auto &sound : sounds) 
+        if (sound.second)
+            delete sound.second;
+    for (auto &tempo : music) 
+        if (tempo.second)
+            delete tempo.second;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
