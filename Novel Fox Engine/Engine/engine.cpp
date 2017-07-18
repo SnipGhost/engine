@@ -101,7 +101,7 @@ Kernel::~Kernel()
 {
 	log->print("Unloading the kernel", INFO);
 	delete band1;
-    delete band2;
+	delete band2;
 	if (doc != NULL) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window != NULL) delete window;
@@ -244,7 +244,6 @@ ResData ng::getResData(XMLNode node)
 	const char *y = node->Attribute("y");
 	const char *id = node->Attribute("id");
 	const char *src = node->Attribute("src");
-	const char *cmd = node->Attribute("cmd");
 	const char *size = node->Attribute("size");
 	const char *loop = node->Attribute("loop");
 	const char *fontId = node->Attribute("font");
@@ -269,7 +268,6 @@ ResData ng::getResData(XMLNode node)
 	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
-	(cmd) ? res.cmd = cmd : res.cmd = "play";
 	(text) ? res.text = text : res.text = "NO TEXT";
 	(style) ? res.style = style : res.style = "NULL";
 	(color) ? res.color = color : res.color = "black";

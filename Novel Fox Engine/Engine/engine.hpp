@@ -70,7 +70,7 @@ namespace ng
 	{
 		protected:
 			std::ostream *log;     // Поток вывода лога
-			bool isExtOS;          // Поток открыт вовне?
+			bool isExtOS;          // Открыт ли поток вовне?
 			unsigned int tag_mask; // Маска вывода сообщений
 			//-----------------------------------------------------------------
 		public:
@@ -150,7 +150,7 @@ namespace ng
 			Kernel & operator=(const Kernel&) = delete;
 			//-----------------------------------------------------------------
 		public:
-			std::string version;                 // Версия [?]
+			std::string version;                 // Версия движка
 			LogStream *log;                      // Логи программы
 			Clock globalClock;                   // Счетчик времени
 			tinyxml2::XMLDocument *doc;          // XML-документ сценария
@@ -202,7 +202,6 @@ namespace ng
 		bool smooth;             // Размытие
 		bool visible;            // Видимость
 		std::string id;          // Идентификатор объекта
-		std::string cmd;         // Команда/Статус [?]
 		std::string src;         // Путь до ресурса
 		std::string text;        // Содержание текста
 		std::string style;       // Стиль текста [?]
