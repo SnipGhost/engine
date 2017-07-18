@@ -73,6 +73,7 @@ void ng::Scene::loadScene()
 	kernel.print("Resources loaded", NORM);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Включение любых проигрывающихся ресурсов
 void ng::Scene::startMedia()
 {
 	for (VidIt it = videos.begin(); it != videos.end(); ++it)
@@ -83,6 +84,7 @@ void ng::Scene::startMedia()
 			it->second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Остановка любых проигрывающихся ресурсов
 void ng::Scene::stopMedia()
 {
 	if (sounds.count("click") > 0)
@@ -93,6 +95,7 @@ void ng::Scene::stopMedia()
 		it->second->setPause();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Отрисовка всех объектов
 void ng::Scene::displayAll()
 {
 	for (auto &layer : layers)
@@ -105,6 +108,7 @@ void ng::Scene::displayAll()
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Удаление всех отрисованных объектов
 void ng::Scene::clear()
 {
 	for (auto &layer : layers)

@@ -257,6 +257,7 @@ ResData ng::getResData(XMLNode node)
 	const char *smooth = node->Attribute("smooth");
 	const char *height = node->Attribute("height");
 	const char *volume = node->Attribute("volume");
+	const char *visible = node->Attribute("visible");
 	const char *namePerson = node->Attribute("name");
 	const char *text = NULL;
 	if (!strcmp(node->Name(), "TEXT")) 
@@ -264,14 +265,12 @@ ResData ng::getResData(XMLNode node)
 
 	ResData res;
 
-	res.visible = true; // [?]
-
 	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
 	(cmd) ? res.cmd = cmd : res.cmd = "play";
-	(style) ? res.style = style : res.style = "NULL";
 	(text) ? res.text = text : res.text = "NO TEXT";
+	(style) ? res.style = style : res.style = "NULL";
 	(color) ? res.color = color : res.color = "black";
 	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
 	(size) ? res.size = std::atoi(size) : res.size = 1;
@@ -283,6 +282,7 @@ ResData ng::getResData(XMLNode node)
 	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
 	(height) ? res.height = std::atoi(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
+	(visible) ? res.visible = CONVTRUE(visible) : res.visible = true;
 	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
 	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
 	(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
