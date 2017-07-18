@@ -140,7 +140,7 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound;
 	class Shape;
-    class Scene;
+	class Scene;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
@@ -175,7 +175,7 @@ namespace ng
 			void endDisplay();	         // Конец отрисовки
 			void displayUI();            // Отрисовать интерфейс
 			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
-            void clear();                // Очистка особых объеков ядра
+			void clear();                // Очистка особых объеков ядра
 			//-----------------------------------------------------------------
 			XMLNode parseXML(const char *tag);      // Получить первую ноду tag
 			XMLNode getNextXMLNode(XMLNode node, const char *tag); // Следующую
@@ -206,7 +206,7 @@ namespace ng
 		std::string id;          // Идентификатор объекта
 		std::string src;         // Путь до ресурса
 		std::string text;        // Содержание текста
-		std::string style;       // Стиль текста [?]
+		std::string style;       // Стиль текста
 		std::string color;       // Цвет текста
 		std::string fontId;      // Идентификатор шрифта
 		std::string namePerson;  // Подпись говорившего
@@ -228,6 +228,7 @@ namespace ng
 		private:
 			float volume;
 		public:
+			bool playable;
 			Music(const Music &copy) {};
 			Music(std::string src, float volume = 100, bool loop = true);
 			Music(ResData rd);
@@ -243,9 +244,10 @@ namespace ng
 		protected:
 			sf::SoundBuffer buffer;
 		public:
+			bool playable;
 			Sound(std::string _id, std::string src, float volume = 100);
 			Sound(ResData rd);
-            ~Sound();
+			~Sound();
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};

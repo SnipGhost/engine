@@ -10,26 +10,21 @@ void example(ng::Scene &scene)
 	if (scene.objects.count("rain"))
 		scene.objects["rain"]->visible = false;
 
-	// На самом деле, музыка почему-то не стопится
-	// Поэтому я её тупо удалил ... TODO: FIX! [?]
-
 	if (scene.music.count("music3"))
 	{
-		delete scene.music["music3"];
-		scene.music.erase("music3");
+		scene.music["music3"]->stop();
+		scene.music["music3"]->playable = false;
 	}
 
 	if (scene.music.count("music2"))
 	{
-		delete scene.music["music2"];
-		scene.music.erase("music2");
+		scene.music["music2"]->stop();
+		scene.music["music2"]->playable = false;
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
-    //kernel.loadSpecData();
-
 	ng::Scene scene;
 	scene.loadScene();
 	
@@ -61,7 +56,7 @@ int main()
 
 	scene.clear();
 
-    kernel.clear();
+	kernel.clear();
 
 	return EXIT_SUCCESS;
 }

@@ -15,6 +15,7 @@ Music::Music(std::string src, float volume, bool loop)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Music::Music(ResData rd)
 {
+	playable = rd.visible;
 	if (!setMusic(rd.src, rd.volume, rd.loop))
 		kernel.print("Failed load music " + rd.id, WARN);
 	else

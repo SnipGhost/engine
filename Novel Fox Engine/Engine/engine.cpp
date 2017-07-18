@@ -50,8 +50,8 @@ Kernel::Kernel()
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
-    setting.majorVersion = 2;
-    setting.minorVersion = 1;
+	setting.majorVersion = 2;
+	setting.minorVersion = 1;
 	setting.antialiasingLevel = anti_aliasing;
 	sf::VideoMode videoMode(screen_x, screen_y);
 	const char *winName = conf["window_name"].c_str();
@@ -103,8 +103,8 @@ Kernel::~Kernel()
 {
 	log->print("Unloading the kernel", INFO);
 	if (band1) delete band1;
-    if (band2) delete band2;
-    log->print("Deleting bands is complete", NORM);
+	if (band2) delete band2;
+	log->print("Deleting bands is complete", NORM);
 	if (doc) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window) delete window;
@@ -168,6 +168,7 @@ bool Kernel::checkEvents()
 	{
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
+
 		if (event.isMouseClickKey(sf::Mouse::Left))
 		{
 			if (click) click->play();
@@ -231,11 +232,11 @@ void Kernel::loadSpecData()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Kernel::clear()
 {
-    for (auto &font : fonts) 
-        if (font.second) delete font.second;
-    log->print("Deleting fonts is complete", NORM);
-    if (kernel.click) delete kernel.click;
-    log->print("Deleting click sound is complete", NORM);
+	for (auto &font : fonts) 
+		if (font.second) delete font.second;
+	log->print("Deleting fonts is complete", NORM);
+	if (kernel.click) delete kernel.click;
+	log->print("Deleting click sound is complete", NORM);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::parseXML(const char *tag)

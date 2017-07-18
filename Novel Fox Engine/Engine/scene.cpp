@@ -80,7 +80,7 @@ void ng::Scene::startMedia()
 		if (!kernel.event.isVideoPlay(*video.second))
 			video.second->play();
 	for (auto &tempo : music)
-		if (!kernel.event.isMusicPlay(*tempo.second))
+		if (!kernel.event.isMusicPlay(*tempo.second) && tempo.second->playable)
 			tempo.second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,14 +88,14 @@ void ng::Scene::startMedia()
 void ng::Scene::stopMedia()
 {
 	for (auto &sound : sounds)
-        if (sound.second)
-            sound.second->stop();
+		if (sound.second)
+			sound.second->stop();
 	for (auto &video : videos)
-        if (video.second)
-            video.second->setPause();
-    for (auto &tempo : music)
-        if (tempo.second)
-            tempo.second->setPause();
+		if (video.second)
+			video.second->setPause();
+	for (auto &tempo : music)
+		if (tempo.second)
+			tempo.second->setPause();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Отрисовка всех объектов
@@ -107,7 +107,7 @@ void ng::Scene::displayAll()
 		{
 			if (obj->visible)
 			{
-				obj->setLayerMotion(); // ЧТОБЫ НЕ НАГРУЖАЛА! [?]
+				obj->setLayerMotion();
 				obj->display();
 			}
 		}
@@ -126,11 +126,11 @@ void ng::Scene::clear()
 			obj = NULL;
 		}
 	}
-    for (auto &sound : sounds) 
-        if (sound.second)
-            delete sound.second;
-    for (auto &tempo : music) 
-        if (tempo.second)
-            delete tempo.second;
+	for (auto &sound : sounds) 
+		if (sound.second)
+			delete sound.second;
+	for (auto &tempo : music) 
+		if (tempo.second)
+			delete tempo.second;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
