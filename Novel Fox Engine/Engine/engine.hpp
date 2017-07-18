@@ -140,6 +140,7 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Sound;
 	class Shape;
+    class Scene;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Kernel
 	{
@@ -174,6 +175,7 @@ namespace ng
 			void endDisplay();	         // Конец отрисовки
 			void displayUI();            // Отрисовать интерфейс
 			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
+            void clear();                // Очистка особых объеков ядра
 			//-----------------------------------------------------------------
 			XMLNode parseXML(const char *tag);      // Получить первую ноду tag
 			XMLNode getNextXMLNode(XMLNode node, const char *tag); // Следующую
@@ -243,6 +245,7 @@ namespace ng
 		public:
 			Sound(std::string _id, std::string src, float volume = 100);
 			Sound(ResData rd);
+            ~Sound();
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
