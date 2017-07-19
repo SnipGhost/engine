@@ -38,6 +38,11 @@ int main()
 			scene = NULL;
 			if (node) node = kernel.getNextXMLNode(node, "SCENE");
 			if (node) scene = new Scene(node);
+			else
+			{
+				node = kernel.parseXML(kernel.doc->FirstChildElement("SCRIPT"), "SCENE");
+				if (node) scene = new Scene(node);
+			}
 		}
 
 		if (kernel.lostFocus())

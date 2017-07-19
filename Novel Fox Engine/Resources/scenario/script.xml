@@ -2,7 +2,7 @@
 <SCRIPT>
 
   <CLICK id="click" volume="5" src="scenario/sounds/click.ogg"/>
-  <FONT id="std" src="scenario/fonts/Consolas.ttf"/>
+  <FONT id="std" src="scenario/fonts/font.ttf"/>
   <FONT id="rus" src="scenario/fonts/CyrilicOld.ttf"/>
 
   <SCENE id="scene1">
@@ -36,7 +36,7 @@
     <TEXT id="txt1" name="Майа" layer="0" font="std" color="blue"  size="30" x="360" y="320">- Привет, Tolya!</TEXT>
     <TEXT id="txt2" name="Толя" layer="0" font="rus"  color="red"   size="30" x="360" y="360">- Привет, Maya!</TEXT>
     <TEXT id="txt3" name="Майа" layer="0" font="std" color="blue"  size="30" x="360" y="400">- Как дела, малыш?</TEXT>
-    <TEXT id="txt4"             layer="0" font="rus"  color="black" size="24" x="360" y="440">END</TEXT>
+    <TEXT id="txt4"             layer="0" font="rus"  color="black" size="24" x="360" y="440">Конец диалога</TEXT>
 
     <VIDEO id="video1" layer="0" volume="0" loop="true" x="10" y="20" width="750" height="300" src="scenario/videos/video.ogv"/>
 
