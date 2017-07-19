@@ -2,6 +2,7 @@
 // engine.cpp                         Реализации ядра и вспомогательных функций
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
+#include "../Data/loading.h"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,7 +61,8 @@ Kernel::Kernel()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Окно закрузки [Исправление прозрачного окна]
 	sf::Texture texture;
-	texture.loadFromFile(RES_PATH + loadingT);
+	//texture.loadFromFile(RES_PATH + loadingT);
+	texture.loadFromMemory(loadingTexture, sizeof(loadingTexture));
 	texture.setSmooth(true);
 	sf::Sprite loading(texture);
 	float sizeTX = (float)loading.getTextureRect().width;
@@ -68,7 +70,8 @@ Kernel::Kernel()
 	float indentX = 0;
 	float indentY = 0;
 
-	if (window->getSize().x * (9 / 16) <= window->getSize().y) //Проверка на соотношение [!] TO DO: В зависимости от среды разработки
+	// Проверка на соотношение [!] TO DO: В зависимости от среды разработки
+	if (window->getSize().x * (9 / 16) <= window->getSize().y)
 	{
 		float sizeX = window->getSize().x / devScreen.x;
 		if (window->getSize().y > sizeTY)
