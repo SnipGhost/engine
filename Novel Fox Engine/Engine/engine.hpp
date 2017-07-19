@@ -59,10 +59,10 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define ABS(x) (((x) < 0) ? (-(x)) : (x)) // Абсолютное значение
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-typedef tinyxml2::XMLElement* XMLNode;
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 namespace ng
 {
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	typedef tinyxml2::XMLElement* XMLNode;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
@@ -179,8 +179,8 @@ namespace ng
 			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
 			void clear();                // Очистка особых объеков ядра
 			//-----------------------------------------------------------------
-			XMLNode parseXML(const char *tag);      // Получить первую ноду tag
-			XMLNode getNextXMLNode(XMLNode node, const char *tag); // Следующую
+			XMLNode parseXML(XMLNode node, const char *tag);
+			XMLNode getNextXMLNode(XMLNode node, const char *tag);
 			//-----------------------------------------------------------------
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{
@@ -366,18 +366,24 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Scene
 	{
+		friend ng::Event;
+
 		protected:
-			friend ng::Event;
+			std::string id;
 			std::vector<Displayable*> layers[C_LAYERS];
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
 			typedef std::map<std::string, ng::Music*>::iterator MusIt;
 			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
+
 		public:
 			std::map<std::string, ng::Displayable*> objects;
 			std::map<std::string, ng::Video*> videos;
 			std::map<std::string, ng::Music*> music;
 			std::map<std::string, ng::Sound*> sounds;
-			void loadScene();
+
+			Scene(XMLNode node);
+			~Scene();
+			void loadScene(XMLNode scene);
 			void startMedia();
 			void stopMedia();
 			void displayAll();

@@ -5,17 +5,27 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void ng::Scene::loadScene()
+ng::Scene::Scene(XMLNode scene)
+{
+	loadScene(scene);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ng::Scene::~Scene()
+{
+	clear();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void ng::Scene::loadScene(XMLNode scene)
 {
 	const size_t COUNT = 6;
 	const char *TAGS[COUNT] = {
-		"TEXT", "SPRITE", "ANIMATION", "VIDEO", "MUSIC", "SOUND"
+		"SPRITE", "ANIMATION", "VIDEO", "TEXT", "MUSIC", "SOUND"
 	};
 	XMLNode node = NULL;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	for (size_t i = 0; i < COUNT; ++i)
 	{
-		node = kernel.parseXML(TAGS[i]);
+		node = kernel.parseXML(scene, TAGS[i]);
 		while (node != NULL)
 		{
 			ResData data = getResData(node);
@@ -23,26 +33,19 @@ void ng::Scene::loadScene()
 			{
 			case 0:
 			{
-				objects[data.id] = new Text(data);
+				objects[data.id] = new Sprite(data);
 				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 				kernel.print(objects[data.id], INFO);
 				break;
 			}
 			case 1:
 			{
-				objects[data.id] = new Sprite(data);
-				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
-				kernel.print(objects[data.id], INFO);
-				break;
-			}
-			case 2:
-			{
 				objects[data.id] = new AnimateSprite(data);
 				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 				kernel.print(objects[data.id], INFO);
 				break;
 			}
-			case 3:
+			case 2:
 			{
 				Video *video = new Video(data);
 				video->play();
@@ -50,6 +53,13 @@ void ng::Scene::loadScene()
 				objects[data.id] = video;
 				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 				kernel.print(video, INFO);
+				break;
+			}
+			case 3:
+			{
+				objects[data.id] = new Text(data);
+				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
+				kernel.print(objects[data.id], INFO);
 				break;
 			}
 			case 4:

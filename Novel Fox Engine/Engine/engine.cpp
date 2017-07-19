@@ -226,7 +226,7 @@ void ng::Kernel::displayUI()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Kernel::loadSpecData()
 {
-	XMLNode node = parseXML("FONT");
+	XMLNode node = parseXML(doc->FirstChildElement("SCRIPT"), "FONT");
 	while (node != NULL)
 	{
 		FontData data = getFontData(node);
@@ -234,7 +234,7 @@ void Kernel::loadSpecData()
 		log->print("Loaded font: " + data.src, INFO);
 		node = getNextXMLNode(node, "FONT");
 	}
-	node = parseXML("CLICK");
+	node = parseXML(doc->FirstChildElement("SCRIPT"), "CLICK");
 	if (node != NULL)
 	{
 		ResData data = getResData(node);
@@ -252,15 +252,17 @@ void Kernel::clear()
 	log->print("Deleting click sound is complete", NORM);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-XMLNode Kernel::parseXML(const char *tag)
+XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 {	
-	std::string b = conf["xml_body"];
-	return doc->FirstChildElement(b.c_str())->FirstChildElement(tag);
+	return node->FirstChildElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag)
 {
-	return node->NextSiblingElement(tag);
+	XMLNode n = node->NextSiblingElement(tag);
+	if (n != NULL) log->print("NOT NULL next " + std::string(tag));
+	else log->print("NULL next " + std::string(tag));
+	return n;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по ресурсам

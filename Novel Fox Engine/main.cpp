@@ -3,58 +3,63 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "Engine/engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ng::Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссыль
+using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void example(ng::Scene &scene)
+//Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссыль
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void example(ng::Scene *scene)
 {
-	if (scene.objects.count("rain"))
-		scene.objects["rain"]->visible = false;
+	if (scene->objects.count("rain"))
+		scene->objects["rain"]->visible = false;
 
-	if (scene.music.count("music3"))
+	if (scene->music.count("music3"))
 	{
-		scene.music["music3"]->stop();
-		scene.music["music3"]->playable = false;
+		scene->music["music3"]->stop();
+		scene->music["music3"]->playable = false;
 	}
 
-	if (scene.music.count("music2"))
+	if (scene->music.count("music2"))
 	{
-		scene.music["music2"]->stop();
-		scene.music["music2"]->playable = false;
+		scene->music["music2"]->stop();
+		scene->music["music2"]->playable = false;
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
-	ng::Scene scene;
-	scene.loadScene();
+	XMLNode node = kernel.parseXML(kernel.doc->FirstChildElement("SCRIPT"), "SCENE");
+	Scene *scene = new Scene(node);
 	
 	while (kernel.window->isOpen())
 	{
 		if (kernel.checkEvents()) // TODO: Возвращать не bool, а enum
 		{
-			example(scene);       // Пример события: прошел дождь
+			delete scene;
+			scene = NULL;
+			if (node) node = kernel.getNextXMLNode(node, "SCENE");
+			if (node) scene = new Scene(node);
 		}
 
 		if (kernel.lostFocus())
 		{
-			scene.stopMedia();
+			if (scene) scene->stopMedia();
 			delay(FOCUS_DELAY);
 			continue;
 		}
 
 		if (kernel.hasFocus())
 		{
-			scene.startMedia();
+			if (scene) scene->startMedia();
 		}
 
 		kernel.startDisplay();
 
-		scene.displayAll();
+		if (scene) scene->displayAll();
 
 		kernel.endDisplay();
 	}
 
-	scene.clear();
+	if (scene) delete scene;
 
 	kernel.clear();
 

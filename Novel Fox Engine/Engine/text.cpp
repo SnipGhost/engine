@@ -14,7 +14,7 @@ using namespace ng;
 Text::Text(ResData rd)
 {
 	setText(rd);
-	computeLayerScale(); //Можно получить размер текста
+	getTextRect(); //Можно получить размер текста
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Text::setText(ResData &rd)
