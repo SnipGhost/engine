@@ -95,16 +95,8 @@ void Sprite::computeLayerScale()
 	// Теперь выставляем новые координаты за вычетом увеличения пополам
 	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
 	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
-	// Ну и потом можно увеличить (теперь уже в зависимости от Layer)
-
+	// Ну и потом можно увеличить (теперь уже в зависимости от Layer
 	posScale.scale.x = sx;
 	posScale.scale.y = sy;
-
-	//setScale(sx, sy);
-
-	//float xScale = this->getScale().x;
-	//float yScale = this->getScale().y;
-
-	//setScale(xScale*KWS_X, yScale*KWS_Y);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
