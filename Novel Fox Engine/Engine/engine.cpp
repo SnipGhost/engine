@@ -2,7 +2,7 @@
 // engine.cpp                         Реализации ядра и вспомогательных функций
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
-#include "../Data/loading.h"
+#include "../Data/loading.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,10 +65,8 @@ Kernel::Kernel()
 	sf::Sprite loading(texture);
 	float sizeTX = (float)loading.getTextureRect().width;
 	float sizeTY = (float)loading.getTextureRect().height;
-
 	float indentX = window->getSize().x / 2 - sizeTX / 2;
 	float indentY = window->getSize().y / 2 - sizeTY / 2;
-
 	loading.setPosition(indentX, indentY);
 	window->draw(loading);
 	window->display();

@@ -5,7 +5,7 @@
 
   <!--<SCENE id="scene1">-->
 
-  <FONT id="std" src="scenario/fonts/CyrilicOld.TTF"/>
+  <FONT id="std" src="scenario/fonts/Consolas.ttf"/>
 
   <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
   <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
@@ -19,7 +19,7 @@
   <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
   <MUSIC id="music3" volume="5" loop="true" src="scenario/sounds/rain.ogg"/>
 
-  <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Тестовый пример</TEXT>
+  <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">FFF</TEXT>
 
   <!--</SCENE>-->
 

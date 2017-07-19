@@ -13,10 +13,7 @@ Sound::Sound(std::string _id, std::string src, float volume)
 Sound::Sound(ResData rd)
 {
 	playable = rd.visible;
-	if (!setSound(rd.src, rd.volume))
-		kernel.print("Failed load sound " + rd.id, WARN);
-	else
-		kernel.print("Load sound " + rd.id, INFO);
+	setSound(rd.src, rd.volume);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sound::~Sound() // TODO: проверить [!]

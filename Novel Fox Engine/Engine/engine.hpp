@@ -237,7 +237,7 @@ namespace ng
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
 			void setStop();
-			//void change();
+			//void change(ResData rd);
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -339,7 +339,7 @@ namespace ng
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
-			void computeLayerScale();
+			void getTextRect();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
