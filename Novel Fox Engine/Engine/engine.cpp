@@ -67,27 +67,8 @@ Kernel::Kernel()
 	sf::Sprite loading(texture);
 	float sizeTX = (float)loading.getTextureRect().width;
 	float sizeTY = (float)loading.getTextureRect().height;
-	float indentX = 0;
-	float indentY = 0;
-
-	// Проверка на соотношение [!] TO DO: В зависимости от среды разработки
-	if (window->getSize().x * (9 / 16) <= window->getSize().y)
-	{
-		float sizeX = window->getSize().x / devScreen.x;
-		if (window->getSize().y > sizeTY)
-			indentY = (window->getSize().y*sizeX - sizeTY) / 2;
-		else 
-			indentY = (sizeTY - window->getSize().y*sizeX) / 2;
-		loading.setScale(sizeX, sizeX);
-	} else {
-		float sizeY = window->getSize().y / devScreen.y;
-		if (window->getSize().x > sizeTX)
-			indentX = (window->getSize().x*sizeY - sizeTX) / 2;
-		else 
-			indentX = (sizeTX - window->getSize().x*sizeY) / 2;
-		loading.setScale(sizeY, sizeY);
-	}
-
+	float indentX = window->getSize().x / 2 - sizeTX / 2;
+	float indentY = window->getSize().y / 2 - sizeTY / 2;
 	loading.setPosition(indentX, indentY);
 	window->draw(loading);
 	window->display();
