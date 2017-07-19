@@ -49,6 +49,11 @@ Kernel::Kernel()
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	screen.x = screen_x;               // Размер текущего окна X
+	screen.y = screen_y;			   // Размер текущего окна Y
+	factor.x = screen_x / devScreen.x; // Коэффициент между мониторами X
+	factor.y = screen_y / devScreen.y; // Коэффициент между мониторами Y
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
 	setting.majorVersion = 2;
 	setting.minorVersion = 1;
@@ -190,7 +195,7 @@ bool Kernel::checkEvents(Scene *s)
 		if (event.type == sf::Event::Resized)
 		{
 			window->setView(sf::View(sf::FloatRect(0, 0, 
-				                     event.size.width, event.size.height)));
+				         (float)event.size.width, (float)event.size.height)));
 
 			for (auto &layer : s->layers)
 			{
