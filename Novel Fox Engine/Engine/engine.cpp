@@ -2,6 +2,7 @@
 // engine.cpp                         Реализации ядра и вспомогательных функций
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
+#include "../Data/loading.h"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,7 +49,6 @@ Kernel::Kernel()
 	int screen_mode = std::atoi(conf["screen_mode"].c_str());
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
-	std::string loadingT = conf["loadingTexture"];
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
 	setting.majorVersion = 2;
@@ -60,34 +60,14 @@ Kernel::Kernel()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Окно закрузки [Исправление прозрачного окна]
 	sf::Texture texture;
-	texture.loadFromFile(RES_PATH + loadingT);
+	texture.loadFromMemory(loadingTexture, sizeof(loadingTexture));
 	texture.setSmooth(true);
 	sf::Sprite loading(texture);
 	float sizeTX = (float)loading.getTextureRect().width;
 	float sizeTY = (float)loading.getTextureRect().height;
-	float indentX = 0;
-	float indentY = 0;
 
-	if (window->getSize().x * (9 / 16) <= window->getSize().y)
-	{
-		float sizeX = window->getSize().x / devScreen.x;
-		if (window->getSize().y > sizeTY)
-			indentY = (window->getSize().y*sizeX - sizeTY) / 2;
-		else 
-			indentY = (sizeTY - window->getSize().y*sizeX) / 2;
-		loading.setScale(sizeX, sizeX);
-	} 
-	else 
-	{
-		float sizeY = window->getSize().y / devScreen.y;
-		if (window->getSize().x > sizeTX)
-			indentX = (window->getSize().x*sizeY - sizeTX) / 2;
-		else 
-			indentX = (sizeTX - window->getSize().x*sizeY) / 2;
-		loading.setScale(sizeY, sizeY);
-	}
-
-
+	float indentX = window->getSize().x / 2 - sizeTX / 2;
+	float indentY = window->getSize().y / 2 - sizeTY / 2;
 
 	loading.setPosition(indentX, indentY);
 	window->draw(loading);
