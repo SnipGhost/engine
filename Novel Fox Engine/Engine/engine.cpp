@@ -49,7 +49,6 @@ Kernel::Kernel()
 	int screen_mode = std::atoi(conf["screen_mode"].c_str());
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
-	std::string loadingT = conf["loadingTexture"];
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
 	setting.majorVersion = 2;
@@ -61,7 +60,6 @@ Kernel::Kernel()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Окно закрузки [Исправление прозрачного окна]
 	sf::Texture texture;
-	//texture.loadFromFile(RES_PATH + loadingT);
 	texture.loadFromMemory(loadingTexture, sizeof(loadingTexture));
 	texture.setSmooth(true);
 	sf::Sprite loading(texture);
