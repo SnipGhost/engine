@@ -14,6 +14,7 @@ using namespace ng;
 Text::Text(ResData rd)
 {
 	setText(rd);
+	computeLayerScale();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Text::setText(ResData &rd)
@@ -105,3 +106,18 @@ void Text::setLayerMotion()
 	doLayerMotion(this);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Text::computeLayerScale()
+{
+	float w = this->getGlobalBounds().width;        // Бывает неадекватно [!]
+	float h = this->getGlobalBounds().height;
+	//// ВНИМАНИЕ: константа выведена эмпирически, значит это лишь частный случай
+	//// Рассчитываем scale в зависимости от слоя (квадратичная зависимость)
+	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1));
+	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1));
+	//// Теперь выставляем новые координаты за вычетом увеличения пополам
+	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
+	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
+	//// Ну и потом можно увеличить (теперь уже в зависимости от Layer)
+
+	setScale(sx, sy);
+}

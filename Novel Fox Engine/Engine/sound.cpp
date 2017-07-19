@@ -21,7 +21,7 @@ Sound::Sound(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sound::~Sound() // TODO: проверить [!]
 {
-    kernel.print("SOUND DELETED");
+	kernel.print("SOUND DELETED");
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sound::setSound(std::string src, float volume)

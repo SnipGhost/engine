@@ -51,11 +51,13 @@
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
 #define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// КОСЯЧНО!
 #define WS_X ((float)kernel.window->getSize().x)
 #define WS_Y ((float)kernel.window->getSize().y)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
 #define KWS_Y ((float)kernel.window->getSize().y / kernel.devScreen.y)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define ABS(x) (((x) < 0) ? (-(x)) : (x)) // Абсолютное значение
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 typedef tinyxml2::XMLElement* XMLNode;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -337,7 +339,7 @@ namespace ng
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
-			//void computeLayerScale();
+			void computeLayerScale();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
@@ -370,7 +372,6 @@ namespace ng
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
 			typedef std::map<std::string, ng::Music*>::iterator MusIt;
 			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
-
 		public:
 			std::map<std::string, ng::Displayable*> objects;
 			std::map<std::string, ng::Video*> videos;
