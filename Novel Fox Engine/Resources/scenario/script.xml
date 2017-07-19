@@ -5,7 +5,7 @@
 
   <!--<SCENE id="scene1">-->
 
-  <FONT id="std" src="scenario/fonts/CyrilicOld.ttf"/>
+  <FONT id="std" src="scenario/fonts/CyrilicOld.TTF"/>
 
   <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
   <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
