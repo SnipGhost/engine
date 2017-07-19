@@ -68,7 +68,7 @@ Kernel::Kernel()
 	float indentX = 0;
 	float indentY = 0;
 
-	if (window->getSize().x * (9 / 16) <= window->getSize().y) //Проверка на соотношение [!] TO DO: В зависимости от среды разработки
+	if (window->getSize().x * (9 / 16) <= window->getSize().y)
 	{
 		float sizeX = window->getSize().x / devScreen.x;
 		if (window->getSize().y > sizeTY)
@@ -76,7 +76,9 @@ Kernel::Kernel()
 		else 
 			indentY = (sizeTY - window->getSize().y*sizeX) / 2;
 		loading.setScale(sizeX, sizeX);
-	} else {
+	} 
+	else 
+	{
 		float sizeY = window->getSize().y / devScreen.y;
 		if (window->getSize().x > sizeTX)
 			indentX = (window->getSize().x*sizeY - sizeTX) / 2;
@@ -84,6 +86,8 @@ Kernel::Kernel()
 			indentX = (sizeTX - window->getSize().x*sizeY) / 2;
 		loading.setScale(sizeY, sizeY);
 	}
+
+
 
 	loading.setPosition(indentX, indentY);
 	window->draw(loading);

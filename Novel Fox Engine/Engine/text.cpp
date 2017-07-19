@@ -119,5 +119,7 @@ void Text::computeLayerScale()
 	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
 	//// Ну и потом можно увеличить (теперь уже в зависимости от Layer)
 
+	std::cout << w << " " << h << std::endl;
+
 	setScale(sx, sy);
 }
