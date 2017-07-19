@@ -287,8 +287,7 @@ namespace ng
 	protected:
 		sf::Vector2f size;
 	public:
-		Shape::Shape(sf::Color clr, int pos, 
-			         sf::Vector2f winSize, sf::Vector2f devSize);
+		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize);
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
