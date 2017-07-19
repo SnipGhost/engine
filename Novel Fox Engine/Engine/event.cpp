@@ -9,14 +9,13 @@ using namespace ng;
 bool Event::isKeyboardKey(sf::Keyboard::Key keyboard)
 {
 	static bool flag = true;
-	if(flag == true && type == KeyPressed && key.code == keyboard) 
+	if (flag && type == KeyPressed && key.code == keyboard) 
 	{
-			flag = false;
-			return true;
+		flag = false;
+		return true;
 	}
 
-	if(type == KeyReleased && key.code == keyboard) 
-		flag = true;
+	if (type == KeyReleased && key.code == keyboard) flag = true;
 
 	return false;
 }
@@ -24,16 +23,14 @@ bool Event::isKeyboardKey(sf::Keyboard::Key keyboard)
 // Если окно закрыто
 bool Event::isWinClosed()
 {
-	if(type == sf::Event::Closed) 
-		return true;
-	return false;
+	return (type == sf::Event::Closed);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если произвели клик кнопки мыши
 bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 {
 	static bool flag = true;
-	if (flag == true && type == MouseButtonPressed && mouseButton.button == mouse) 
+	if (flag && type == MouseButtonPressed && mouseButton.button == mouse) 
 	{
 		flag = false;
 		std::string m = "Mouse click: (" + std::to_string(mouseButton.x);
@@ -51,24 +48,18 @@ bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 // Если нажата кнопка мыши
 bool Event::isMouseKey(sf::Mouse::Button mouse)
 {
-	if (type == MouseButtonPressed && mouseButton.button == mouse) 
-		return true;
-	return false;
+	return (type == MouseButtonPressed && mouseButton.button == mouse);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если данная музыка играет
 bool Event::isMusicPlay(sf::Music &music)
 {
-	if (music.getStatus() == sf::Music::Playing) 
-		return true;
-	return false;
+	return (music.getStatus() == sf::Music::Playing);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если данное видео проигрывается
 bool Event::isVideoPlay(sfe::Movie &video)
 {
-	if (video.getStatus() == sfe::Playing)
-		return true;
-	return false;
+	return (video.getStatus() == sfe::Playing);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

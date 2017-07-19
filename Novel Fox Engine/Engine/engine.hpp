@@ -263,9 +263,12 @@ namespace ng
 		public:
 			struct PosScale
 			{
-				sf::Vector2f scale;
 				sf::Vector2f pos;
-			} posScale;
+				sf::Vector2f scale;
+				PosScale() {}
+				PosScale(sf::Vector2f a, sf::Vector2f b) : pos(a), scale(b) {}
+				PosScale(float a, float b, float c, float d): pos(a, b), scale(c, d) {}
+			} posScale, origin;
 			bool visible;
 
 			virtual ~Displayable();
@@ -273,21 +276,19 @@ namespace ng
 			std::string getId();
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
-			virtual void setResize() {}
 			virtual void setLayerMotion() {}
 			virtual std::ostream & print(std::ostream &os) = 0;
 			friend std::ostream & operator << (std::ostream &os, Displayable *s);
+			virtual void setResize();
 	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Displayable::PosScale setResize(sf::Transformable *obj);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Shape: public sf::RectangleShape
 	{
 	protected:
 		sf::Vector2f size;
 	public:
-		Shape(sf::Color color, std::string pos, 
-			  sf::Vector2f size, sf::Vector2f devSize);
+		Shape::Shape(sf::Color clr, int pos, 
+			         sf::Vector2f winSize, sf::Vector2f devSize);
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -368,6 +369,7 @@ namespace ng
 	class Scene
 	{
 		friend ng::Event;
+		friend ng::Kernel;
 
 		protected:
 			std::string id;

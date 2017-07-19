@@ -14,7 +14,10 @@ using namespace ng;
 Text::Text(ResData rd)
 {
 	setText(rd);
-	getTextRect(); //Можно получить размер текста
+	//getTextRect(); //Можно получить размер текста
+
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
+	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Text::setText(ResData &rd)
@@ -42,11 +45,7 @@ bool Text::setText(ResData &rd)
 
 	if (rd.style != "NULL") setStyleText(rd);
 
-	setPosition(rd.x, rd.y);
 	setCharacterSize(rd.size);
-	setScale(rd.scale, rd.scale);
-
-	posScale = ng::setResize(this);
 
 	return 1;
 }
@@ -98,7 +97,9 @@ std::ostream & Text::print(std::ostream &os)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setResize()
 {
-	posScale = ng::setResize(this);
+	Displayable::setResize();
+	setPosition(posScale.pos);
+	setScale(posScale.scale);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setLayerMotion()
@@ -113,3 +114,4 @@ void Text::getTextRect()
 
 	std::cout << x << " " << y << std::endl;
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

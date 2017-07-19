@@ -19,15 +19,15 @@ Sprite::Sprite(ResData rd)
 		kernel.print("Failed to create sprite " + rd.id, WARN);
 	else
 		kernel.print("Sprite created " + rd.id, INFO);
-	setPosition(rd.x, rd.y);
-	setScale(rd.scale, rd.scale);
+
 	setColor(sf::Color(255, 255, 255, rd.alpha));
+	
 	id = rd.id;
 	layer = rd.layer;
 	visible = rd.visible;
-	posScale = ng::setResize(this);
-	computeLayerScale();
-	setPosition(posScale.pos);
+
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
+	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sprite::setStrTexture(std::string src, bool smooth)
@@ -73,7 +73,10 @@ std::ostream & Sprite::print(std::ostream &os)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::setResize() 
 { 
-	posScale = ng::setResize(this);
+	Displayable::setResize();
+	computeLayerScale();
+	setPosition(posScale.pos);
+	setScale(posScale.scale);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::setLayerMotion() 
@@ -94,7 +97,10 @@ void Sprite::computeLayerScale()
 	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
 	// Ну и потом можно увеличить (теперь уже в зависимости от Layer)
 
-	setScale(sx, sy);
+	posScale.scale.x = sx;
+	posScale.scale.y = sy;
+
+	//setScale(sx, sy);
 
 	//float xScale = this->getScale().x;
 	//float yScale = this->getScale().y;

@@ -5,8 +5,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Shape::Shape(sf::Color color, std::string pos, 
-	         sf::Vector2f winSize, sf::Vector2f devSize)
+Shape::Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize)
 {
 	const float k = (float)16 / 9;
 
@@ -14,16 +13,16 @@ Shape::Shape(sf::Color color, std::string pos,
 	{
 		size.y = (winSize.y - winSize.x * devSize.y / devSize.x) / 2;
 		size.x = (float)winSize.x;
-		if (pos == "bottom-right") setPosition(0, winSize.y - size.y);
+		if (pos == 2) setPosition(0, winSize.y - size.y);
 	}
 	else
 	{
 		size.x = (winSize.x - winSize.y * devSize.x / devSize.y) / 2;
 		size.y = (float)winSize.y;
-		if (pos == "bottom-right") setPosition(winSize.x - size.x, 0);
+		if (pos == 2) setPosition(winSize.x - size.x, 0);
 	}
 	setSize(sf::Vector2f(size.x, size.y));
-	setFillColor(color);
+	setFillColor(clr);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Shape::display(sf::RenderWindow *win)

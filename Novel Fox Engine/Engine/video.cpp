@@ -20,17 +20,19 @@ Video::Video(ResData rd)
 		kernel.print("Failed load video " + rd.id, WARN);
 	else
 		kernel.print("Created video " + rd.id, INFO);
+
 	id = rd.id;
 	layer = rd.layer;
 	visible = rd.visible;
-	posScale = ng::setResize(this);
-	setPosition(posScale.pos);
+
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
+	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Video::setVideo(std::string src, int width, int height, float x, float y, 
-	float volume, bool loop)
+	                 float volume, bool loop)
 {
-	if (!openFromFile(src)) 
+	if (!openFromFile(src))
 		return 0;
 	fit(x, y, (float)width, (float)height);
 	setVolume(volume);
@@ -79,7 +81,9 @@ std::ostream & Video::print(std::ostream &os)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::setResize()
 {
-	posScale = ng::setResize(this);
+	Displayable::setResize();
+	setPosition(posScale.pos);
+	setScale(posScale.scale);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::setLayerMotion()

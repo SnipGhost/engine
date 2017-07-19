@@ -50,3 +50,30 @@ std::string Displayable::getId()
 	return id;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Вычисление новых значений размера
+void Displayable::setResize()
+{
+	static const float k = (float)16 / 9;
+
+	if (WS_X * (1 / k) <= WS_Y)
+	{
+		posScale.pos.x = origin.pos.x * KWS_X;
+		posScale.pos.y = origin.pos.y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
+		//obj->setPosition(posX, pozY);
+
+		posScale.scale.x = origin.scale.x * KWS_X;
+		posScale.scale.y = origin.scale.y * KWS_X;
+		//obj->setScale(scaleX, scaleY);
+	}
+	else
+	{
+		posScale.pos.x = origin.pos.x * KWS_Y + ((WS_X - WS_Y * k) / 2);
+		posScale.pos.y = origin.pos.y * KWS_Y;
+		//obj->setPosition(posX, pozY);
+
+		posScale.scale.x = origin.scale.x * KWS_Y;
+		posScale.scale.y = origin.scale.y * KWS_Y;
+		//obj->setScale(scaleX, scaleY);
+	}
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

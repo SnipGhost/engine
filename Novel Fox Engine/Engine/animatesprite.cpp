@@ -16,10 +16,9 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 	lastTime = 0;
 	numFrame = 1;
 	setAnimation(rd.height, rd.width, rd.ms);
-	setPosition(rd.x, rd.y);
-	setScale(rd.scale, rd.scale);
-	posScale = ng::setResize(this);
-	computeLayerScale();
+	
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
+	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 

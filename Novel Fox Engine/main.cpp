@@ -7,24 +7,6 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссыль
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void example(ng::Scene *scene)
-{
-	if (scene->objects.count("rain"))
-		scene->objects["rain"]->visible = false;
-
-	if (scene->music.count("music3"))
-	{
-		scene->music["music3"]->stop();
-		scene->music["music3"]->playable = false;
-	}
-
-	if (scene->music.count("music2"))
-	{
-		scene->music["music2"]->stop();
-		scene->music["music2"]->playable = false;
-	}
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
 	XMLNode node = kernel.loadFirstScene();

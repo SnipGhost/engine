@@ -99,8 +99,8 @@ Kernel::Kernel()
 	}
 	else log->print("Script loaded", NORM);
 	sf::Vector2f winsize(window->getSize());
-	band1 = new Shape(sf::Color::Black, "top-left", winsize, devScreen);
-	band2 = new Shape(sf::Color::Black, "bottom-right", winsize, devScreen);
+	band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
+	band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
 	log->print("Bands created", NORM);
 	loadSpecData();
 }
@@ -189,7 +189,23 @@ bool Kernel::checkEvents(Scene *s)
 
 		if (event.type == sf::Event::Resized)
 		{
-			// TODO: setResize for all objects in scene and bands
+			window->setView(sf::View(sf::FloatRect(0, 0, 
+				                     event.size.width, event.size.height)));
+
+			for (auto &layer : s->layers)
+			{
+				for (auto &object : layer)
+				{
+					object->setResize();
+				}
+			}
+
+			delete band1;
+			delete band2;
+			sf::Vector2f winsize(window->getSize());
+			band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
+			band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
+
 		}
 	}
 	return flag;
@@ -341,41 +357,5 @@ FontData ng::getFontData(XMLNode node)
 std::ostream & ng::operator << (std::ostream & os, Displayable * s)
 {
 	return s->print(os);
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Установка новых значений размера
-Displayable::PosScale ng::setResize(sf::Transformable *obj) // TODO: FIX! [?]
-{
-	Displayable::PosScale ps;
-
-	float k = (float)16 / 9;
-
-	if (WS_X * (1 / k) <= WS_Y)
-	{
-		float posX = obj->getPosition().x * KWS_X;
-		float pozY = obj->getPosition().y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
-		obj->setPosition(posX, pozY);
-
-		float scaleX = obj->getScale().x * KWS_X;
-		float scaleY = obj->getScale().y * KWS_X;
-		obj->setScale(scaleX, scaleY);
-	}
-	else
-	{
-		float posX = obj->getPosition().x * KWS_Y + ((WS_X - WS_Y * k) / 2);
-		float pozY = obj->getPosition().y * KWS_Y;
-		obj->setPosition(posX, pozY);
-
-		float scaleX = obj->getScale().x * KWS_Y;
-		float scaleY = obj->getScale().y * KWS_Y;
-		obj->setScale(scaleX, scaleY);
-	}
-
-	ps.pos.x = obj->getPosition().x;
-	ps.pos.y = obj->getPosition().y;
-
-	ps.scale.x = obj->getScale().x;
-	ps.scale.y = obj->getScale().y;
-	return ps;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
