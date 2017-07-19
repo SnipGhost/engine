@@ -5,7 +5,7 @@
   <FONT id="std" src="scenario/fonts/font.ttf"/>
   <FONT id="rus" src="scenario/fonts/CyrilicOld.ttf"/>
 
-  <SCENE id="scene1">
+  <SCENE id="scene0">
 
     <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
     <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
@@ -18,13 +18,26 @@
     <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
     <MUSIC id="music3" volume="5" loop="true" src="scenario/sounds/rain.ogg"/>
 
-    <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">FFF</TEXT>
+    <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Кликай!</TEXT>
+
+  </SCENE>
+
+  <SCENE id="scene1">
+
+    <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
+    <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
+    <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0/object2.png"/>
+    <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object3.png"/>
+
+    <MUSIC id="music1" volume="5" loop="true" src="scenario/music/music1.ogg"/>
+
+    <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Прекрасно ;)</TEXT>
 
   </SCENE>
 
   <SCENE id="scene2">
 
-    <SPRITE id="zbackground" layer="0" smooth="true" x="0"    y="0"   scale="1"   src="scenario/textures/texture.png"/>
+    <SPRITE id="background" layer="0" smooth="true" x="0"    y="0"   scale="1"   src="scenario/textures/texture.png"/>
     <SPRITE id="maya1"      layer="1" smooth="true" x="700"  y="290" scale="0.7" src="scenario/textures/maya2.png"/>
     <SPRITE id="maya2"      layer="2" smooth="true" x="1040" y="50"  scale="1"   src="scenario/textures/maya1.png"/>
 
@@ -39,6 +52,17 @@
     <TEXT id="txt4"             layer="0" font="rus"  color="black" size="24" x="360" y="440">Конец диалога</TEXT>
 
     <VIDEO id="video1" layer="0" volume="0" loop="true" x="10" y="20" width="750" height="300" src="scenario/videos/video.ogv"/>
+
+  </SCENE>
+
+  <SCENE id="scene3">
+
+    <SPRITE id="bg" layer="0" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/background.png"/>
+    <SPRITE id="t1" layer="1" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/object1.png"/>
+    <SPRITE id="t2" layer="2" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/object2.png"/>
+    <SPRITE id="t3" layer="3" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/object3.png"/>
+
+    <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
 
   </SCENE>
 

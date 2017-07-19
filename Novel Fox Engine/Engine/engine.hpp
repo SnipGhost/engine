@@ -45,7 +45,7 @@
 #define MAX_LINE 256             // Максимальный размер строки конфига/файла
 #define CONF_DELIMS "="          // Разделители ключ/значение в конфиге
 #define SHOW_ALL_TAG 31          // 0b11111 - маска отображения всех сообщений
-#define PARAMS_COUNT 9           // Количество настроек считываемых из конфига
+#define PARAMS_COUNT 8           // Количество настроек считываемых из конфига
 #define FOCUS_DELAY 500          // Пауза в цикле при потере приложением фокуса
 #define NVIDIA_DRIVER 1          // Использовать в компиляции NVIDIA библиотеку
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
@@ -170,7 +170,7 @@ namespace ng
 			std::string operator[] (std::string key); // Выдает конфигурацию
 			sf::Vector2f getMouse();				  // Координаты мыши
 			//-----------------------------------------------------------------
-			bool checkEvents();          // Отследить обычные события
+			bool checkEvents(Scene *s);  // Отследить обычные события
 			bool hasFocus();             // Фокус на приложении
 			bool lostFocus();            // Фокус на приложении потерян
 			void startDisplay();         // Начало отрисовки
@@ -178,6 +178,7 @@ namespace ng
 			void displayUI();            // Отрисовать интерфейс
 			void loadSpecData();         // Загрузить шрифты, звук клика и т.д.
 			void clear();                // Очистка особых объеков ядра
+			XMLNode loadFirstScene();    // Загрузить первую сцену
 			//-----------------------------------------------------------------
 			XMLNode parseXML(XMLNode node, const char *tag);
 			XMLNode getNextXMLNode(XMLNode node, const char *tag);

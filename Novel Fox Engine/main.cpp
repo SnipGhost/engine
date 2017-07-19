@@ -27,20 +27,20 @@ void example(ng::Scene *scene)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
-	XMLNode node = kernel.parseXML(kernel.doc->FirstChildElement("SCRIPT"), "SCENE");
+	XMLNode node = kernel.loadFirstScene();
 	Scene *scene = new Scene(node);
 	
 	while (kernel.window->isOpen())
 	{
-		if (kernel.checkEvents()) // TODO: Возвращать не bool, а enum
+		if (kernel.checkEvents(scene)) // TODO: Возвращать не bool, а enum
 		{
 			delete scene;
-			scene = NULL;
+			scene = nullptr;
 			if (node) node = kernel.getNextXMLNode(node, "SCENE");
 			if (node) scene = new Scene(node);
 			else
 			{
-				node = kernel.parseXML(kernel.doc->FirstChildElement("SCRIPT"), "SCENE");
+				node = kernel.loadFirstScene();
 				if (node) scene = new Scene(node);
 			}
 		}

@@ -14,16 +14,15 @@ using namespace ng;
 const char *ng::DEFAULT[PARAMS_COUNT*2] = \
 {
 	"scenario",       "scenario/script.xml",   // [0] Путь до скрипта
-	"xml_body",       "SCRIPTGAME",            // [1] Заглавный тег сценария
-	"screen_x",       "1280",                  // [2] Ширина окна
-	"screen_y",       "720",                   // [3] Высота окна
-	"screen_mode",    "7",                     // [4] Режим окна
-	"window_name",    "NOVEL FOX ENGINE",      // [5] Название окна
-	"app_icon",       DEFAULT_APP_ICON,        // [6] Иконка приложения
-	"anti_aliasing",  "8",                     // [7] Уровень сглаживания
-	"frame_limit",    "30"                     // [8] Ограничение FPS
+	"screen_x",       "1280",                  // [1] Ширина окна
+	"screen_y",       "720",                   // [2] Высота окна
+	"screen_mode",    "7",                     // [3] Режим окна
+	"window_name",    "NOVEL FOX ENGINE",      // [4] Название окна
+	"app_icon",       DEFAULT_APP_ICON,        // [5] Иконка приложения
+	"anti_aliasing",  "8",                     // [6] Уровень сглаживания
+	"frame_limit",    "30"                     // [7] Ограничение FPS
 };
-const bool ng::RES_PARAMS[PARAMS_COUNT] = { 1, 0, 0, 0, 0, 0, 1, 0, 0 };
+const bool ng::RES_PARAMS[PARAMS_COUNT] = { 1, 0, 0, 0, 0, 1, 0, 0 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Kernel &ng::kernel = Kernel::init();       // Создаем ядро, загружаем настройки
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +173,7 @@ std::string Kernel::operator [] (std::string key)
 	return conf[key];
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Kernel::checkEvents()
+bool Kernel::checkEvents(Scene *s)
 {
 	bool flag = false;
 	while (window->pollEvent(event))
@@ -186,6 +185,11 @@ bool Kernel::checkEvents()
 		{
 			if (click) click->play();
 			flag = true;
+		}
+
+		if (event.type == sf::Event::Resized)
+		{
+			// TODO: setResize for all objects in scene and bands
 		}
 	}
 	return flag;
@@ -250,6 +254,11 @@ void Kernel::clear()
 	log->print("Deleting fonts is complete", NORM);
 	if (kernel.click) delete kernel.click;
 	log->print("Deleting click sound is complete", NORM);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+XMLNode ng::Kernel::loadFirstScene()
+{
+	return parseXML(kernel.doc->FirstChildElement("SCRIPT"), "SCENE");
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::parseXML(XMLNode node, const char *tag)
