@@ -68,9 +68,8 @@ void Displayable::setResize()
 		posScale.pos.x = origin.pos.x * KWS_X;
 		posScale.pos.y = origin.pos.y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
 
-		posScale.scale.x = origin.scale.x * KWS_X; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
-		posScale.scale.y = origin.scale.y * KWS_X; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
-		//Не делается никакое "компенсирование" размера со временем
+		posScale.scale.x = origin.scale.x * KWS_X;
+		posScale.scale.y = origin.scale.y * KWS_X;
 	}
 	else
 	{
@@ -78,9 +77,8 @@ void Displayable::setResize()
 		posScale.pos.x = origin.pos.x * KWS_Y + ((WS_X - WS_Y * k) / 2);
 		posScale.pos.y = origin.pos.y * KWS_Y;
 
-		posScale.scale.x = origin.scale.x * KWS_Y; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
-		posScale.scale.y = origin.scale.y * KWS_Y; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
-		//Не делается никакое "компенсирование" размера с изменением 
+		posScale.scale.x = origin.scale.x * KWS_Y;
+		posScale.scale.y = origin.scale.y * KWS_Y;
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

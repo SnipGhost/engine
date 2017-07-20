@@ -82,6 +82,7 @@ std::ostream & Video::print(std::ostream &os)
 void Video::setResize()
 {
 	Displayable::setResize();
+	computeLayerScale();
 	setPosition(posScale.pos);
 	setScale(posScale.scale);
 }
@@ -89,5 +90,22 @@ void Video::setResize()
 void Video::setLayerMotion()
 {
 	doLayerMotion(this);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Video::computeLayerScale()
+{
+	int w = this->getSize().x; // Не то
+	int h = this->getSize().y; // Не то
+
+	std::cout << "VIDEO: " << w << " " << h << std::endl; //Херь какая-то, починить!
+
+	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * KWS_X;
+	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * KWS_X;
+
+	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
+	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
+
+	posScale.scale.x = sx;
+	posScale.scale.y = sy;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

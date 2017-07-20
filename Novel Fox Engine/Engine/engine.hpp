@@ -360,6 +360,7 @@ namespace ng
 			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
+			void computeLayerScale();
 			void setLayerMotion();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Video &v);
