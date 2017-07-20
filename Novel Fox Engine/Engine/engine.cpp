@@ -284,10 +284,7 @@ XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag)
 {
-	XMLNode n = node->NextSiblingElement(tag);
-	if (n != NULL) log->print("NOT NULL next " + std::string(tag));
-	else log->print("NULL next " + std::string(tag));
-	return n;
+	return node->NextSiblingElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по ресурсам

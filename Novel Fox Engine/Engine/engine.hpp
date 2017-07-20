@@ -250,7 +250,6 @@ namespace ng
 			bool playable;
 			Sound(std::string _id, std::string src, float volume = 100);
 			Sound(ResData rd);
-			~Sound();
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
