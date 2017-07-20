@@ -8,7 +8,7 @@
 #include "../Modules/macros.h"
 #define _CRT_SECURE_NO_WARNINGS
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define VERSION "0.08"
+#define VERSION "0.09"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include <iostream>
 #include <fstream>
