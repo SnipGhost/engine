@@ -64,7 +64,6 @@ void Displayable::setResize()
 
 	if (WS_X * (1 / k) <= WS_Y)
 	{
-		std::cout << "Horizontal" << std::endl;
 		posScale.pos.x = origin.pos.x * KWS_X;
 		posScale.pos.y = origin.pos.y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
 
@@ -73,7 +72,6 @@ void Displayable::setResize()
 	}
 	else
 	{
-		std::cout << "Vertical" << std::endl;
 		posScale.pos.x = origin.pos.x * KWS_Y + ((WS_X - WS_Y * k) / 2);
 		posScale.pos.y = origin.pos.y * KWS_Y;
 

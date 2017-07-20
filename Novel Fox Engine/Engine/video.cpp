@@ -94,10 +94,8 @@ void Video::setLayerMotion()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::computeLayerScale()
 {
-	int w = this->getSize().x; // Не то
-	int h = this->getSize().y; // Не то
-
-	std::cout << "VIDEO: " << w << " " << h << std::endl; //Херь какая-то, починить!
+	float w = this->getSize().x;
+	float h = this->getSize().y;
 
 	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * KWS_X;
 	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * KWS_X;
