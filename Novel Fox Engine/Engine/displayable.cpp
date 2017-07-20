@@ -14,8 +14,8 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 {
 	if (layer <= 0) return;
 
-	const float centerX = kernel.screen.x / 2;
-	const float centerY = kernel.screen.y / 2;
+	const float centerX = WS_X / 2;
+	const float centerY = WS_Y / 2;
 	float mouseXC = centerX - kernel.getMouse().x;
 	float mouseYC = centerY - kernel.getMouse().y;
 
@@ -27,12 +27,12 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 
 	float k = (float)16 / 9;
 
-	if ((kernel.screen.x * (1 / k) > kernel.screen.y && kernel.getMouse().x > size.x &&
+	if ((WS_X * (1 / k) > WS_Y && kernel.getMouse().x > size.x &&
 		kernel.getMouse().x < kernel.window->getSize().x - size.x && 
-		kernel.getMouse().y > 0 && kernel.getMouse().y < kernel.screen.y) ||
-		(kernel.screen.x * (1 / k) <= kernel.screen.y  && kernel.getMouse().y > size.y &&
+		kernel.getMouse().y > 0 && kernel.getMouse().y < WS_Y) || 
+		(WS_X * (1 / k) <= WS_Y  && kernel.getMouse().y > size.y &&
 		kernel.getMouse().y < kernel.window->getSize().y - size.y &&
-		kernel.getMouse().x > 0 && kernel.getMouse().x < kernel.screen.x))
+		kernel.getMouse().x > 0 && kernel.getMouse().x < WS_X))
 		{
 			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
 			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));
@@ -55,24 +55,24 @@ void Displayable::setResize()
 {
 	static const float k = (float)16 / 9;
 
-	if (kernel.screen.x * (1 / k) <= kernel.screen.y)
+	if (WS_X * (1 / k) <= WS_Y)
 	{
-		posScale.pos.x = origin.pos.x * kernel.factor.x;
-		posScale.pos.y = origin.pos.y * kernel.factor.x + (kernel.screen.y - kernel.screen.x * (1 / k)) / 2;
+		posScale.pos.x = origin.pos.x * KWS_X;
+		posScale.pos.y = origin.pos.y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
 		//obj->setPosition(posX, pozY);
 
-		posScale.scale.x = origin.scale.x * kernel.factor.x;
-		posScale.scale.y = origin.scale.y * kernel.factor.x;
+		posScale.scale.x = origin.scale.x * KWS_X;
+		posScale.scale.y = origin.scale.y * KWS_X;
 		//obj->setScale(scaleX, scaleY);
 	}
 	else
 	{
-		posScale.pos.x = origin.pos.x * kernel.screen.y + ((kernel.screen.x - kernel.screen.y * k) / 2);
-		posScale.pos.y = origin.pos.y * kernel.factor.y;
+		posScale.pos.x = origin.pos.x * KWS_Y + ((WS_X - WS_Y * k) / 2);
+		posScale.pos.y = origin.pos.y * KWS_Y;
 		//obj->setPosition(posX, pozY);
 
-		posScale.scale.x = origin.scale.x * kernel.factor.y;
-		posScale.scale.y = origin.scale.y * kernel.factor.y;
+		posScale.scale.x = origin.scale.x * KWS_Y;
+		posScale.scale.y = origin.scale.y * KWS_Y;
 		//obj->setScale(scaleX, scaleY);
 	}
 }

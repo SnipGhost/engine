@@ -7,10 +7,10 @@
 
   <SCENE id="scene0">
 
-    <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
-    <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
-    <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0/object2.png"/>
-    <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object3.png"/>
+    <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/background.png"/>
+    <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object1.png"/>
+    <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0_test/object2.png"/>
+    <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object3.png"/>
 
     <ANIMATION id="rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
 
@@ -38,8 +38,8 @@
   <SCENE id="scene2">
 
     <SPRITE id="background" layer="0" smooth="true" x="0"    y="0"   scale="1"   src="scenario/textures/texture.png"/>
-    <SPRITE id="maya1"      layer="1" smooth="true" x="700"  y="290" scale="0.7" src="scenario/textures/maya2.png"/>
-    <SPRITE id="maya2"      layer="2" smooth="true" x="1040" y="50"  scale="1"   src="scenario/textures/maya1.png"/>
+    <SPRITE id="maya1"      layer="0" smooth="true" x="700"  y="290" scale="0.7" src="scenario/textures/maya2.png"/>
+    <SPRITE id="maya2"      layer="0" smooth="true" x="1040" y="50"  scale="1"   src="scenario/textures/maya1.png"/>
 
     <ANIMATION id="gif1" layer="0" smooth="true" x="50" y="300" scale="1" width="256" height="256" delay="40" src="scenario/textures/gifFile1.png"/>
     <ANIMATION id="gif2" layer="0" smooth="true" x="50" y="500" scale="1" width="256" height="256" delay="40" src="scenario/textures/gifFile2.png"/>

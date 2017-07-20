@@ -51,6 +51,12 @@
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
 #define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define WS_X ((float)kernel.window->getSize().x)
+#define WS_Y ((float)kernel.window->getSize().y)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
+#define KWS_Y ((float)kernel.window->getSize().y / kernel.devScreen.y)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define ABS(x) (((x) < 0) ? (-(x)) : (x)) // Абсолютное значение
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 namespace ng
@@ -156,8 +162,6 @@ namespace ng
 			std::map<std::string, Font*> fonts;  // Набор шрифтов
 			ng::Sound *click;                    // Звук для клика
 			sf::Vector2f devScreen;              // Размеры среды разработки
-			sf::Vector2f screen;                 // Размеры окна текущего
-			sf::Vector2f factor;                 // Коэффициент между окнами
 			ng::Shape *band1, *band2;            // Полосы сокрытия
 			//-----------------------------------------------------------------
 			static Kernel & init();                   // Instance-метод
