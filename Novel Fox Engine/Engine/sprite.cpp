@@ -86,16 +86,26 @@ void Sprite::setLayerMotion()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::computeLayerScale()
 {
-	int w = this->getTextureRect().width;        // Получаем ширину и высоту
+	int w = this->getTextureRect().width;
 	int h = this->getTextureRect().height;
-	// ВНИМАНИЕ: константа выведена эмпирически, значит это лишь частный случай
-	// Рассчитываем scale в зависимости от слоя (квадратичная зависимость)
-	float sx = posScale.scale.x + (float)0.03 * (2 << (layer-1));
-	float sy = posScale.scale.y + (float)0.03 * (2 << (layer-1));
-	// Теперь выставляем новые координаты за вычетом увеличения пополам
-	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
-	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
-	// Ну и потом можно увеличить (теперь уже в зависимости от Layer
+
+	std::cout << "Get textureRect sprite: " << w << " " << h << std::endl;
+
+	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1));
+	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1));
+	
+	std::cout << "Get coef.: " << sx << " " << sy << std::endl;
+	std::cout << "Get size: " << posScale.scale.x << " " << posScale.scale.y << std::endl;
+
+	//posScale.pos.x = posScale.pos.x - w * (float)0.03 * (2 << (layer - 1)) / 2;		// ПОПЫТКА 
+	//posScale.pos.y = posScale.pos.y - h * (float)0.03 * (2 << (layer - 1)) / 2;		// ПОПЫТКА 
+
+	std::cout << "Get position: " << posScale.pos.x << " " << posScale.pos.y << std::endl;
+
+	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;				    // Вносим после обработки Displayable::setResize(); НЕПРАВИЛЬНАЯ ОБРАБОТКА?!
+	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;				    // Вносим после обработки Displayable::setResize(); НЕПРАВИЛЬНАЯ ОБРАБОТКА?!
+	//Sprite неправильно сжимается по Scale именно в Displayable::setResize();
+
 	posScale.scale.x = sx;
 	posScale.scale.y = sy;
 }

@@ -25,7 +25,7 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 	size.x = (kernel.window->getSize().x - kernel.window->getSize().y * 
 		kernel.devScreen.x / kernel.devScreen.y) / 2;
 
-	float k = (float)16 / 9;
+	float k = kernel.devScreen.x / kernel.devScreen.y;
 
 	if ((WS_X * (1 / k) > WS_Y && kernel.getMouse().x > size.x &&
 		kernel.getMouse().x < kernel.window->getSize().x - size.x && 
@@ -34,8 +34,15 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 		kernel.getMouse().y < kernel.window->getSize().y - size.y &&
 		kernel.getMouse().x > 0 && kernel.getMouse().x < WS_X))
 		{
-			float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));
-			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));
+
+			/*float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));		// СТАРАЯ РЕАЛИЗАЦИЯ
+			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));*/		// СТАРАЯ РЕАЛИЗАЦИЯ
+
+			/*float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1));			//ПРИМЕР ИЗ computeLayerScale
+			float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1));*/			//ПРИМЕР ИЗ computeLayerScale
+
+			float posX = posScale.pos.x + mouseXC * (float)0.03 * (2 << (layer - 1));   // ЗАМЕНА БОЛЕЕ ПОХОЖИМ
+			float posY = posScale.pos.y + mouseYC * (float)0.03 * (2 << (layer - 1));   // ЗАМЕНА БОЛЕЕ ПОХОЖИМ
 			obj->setPosition(posX, posY);
 		}
 }
@@ -53,27 +60,27 @@ std::string Displayable::getId()
 // Вычисление новых значений размера
 void Displayable::setResize()
 {
-	static const float k = (float)16 / 9;
+	static const float k = kernel.devScreen.x / kernel.devScreen.y;
 
 	if (WS_X * (1 / k) <= WS_Y)
 	{
+		std::cout << "Horizontal" << std::endl;
 		posScale.pos.x = origin.pos.x * KWS_X;
 		posScale.pos.y = origin.pos.y * KWS_X + (WS_Y - WS_X * (1 / k)) / 2;
-		//obj->setPosition(posX, pozY);
 
-		posScale.scale.x = origin.scale.x * KWS_X;
-		posScale.scale.y = origin.scale.y * KWS_X;
-		//obj->setScale(scaleX, scaleY);
+		posScale.scale.x = origin.scale.x * KWS_X; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
+		posScale.scale.y = origin.scale.y * KWS_X; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
+		//Не делается никакое "компенсирование" размера со временем
 	}
 	else
 	{
+		std::cout << "Vertical" << std::endl;
 		posScale.pos.x = origin.pos.x * KWS_Y + ((WS_X - WS_Y * k) / 2);
 		posScale.pos.y = origin.pos.y * KWS_Y;
-		//obj->setPosition(posX, pozY);
 
-		posScale.scale.x = origin.scale.x * KWS_Y;
-		posScale.scale.y = origin.scale.y * KWS_Y;
-		//obj->setScale(scaleX, scaleY);
+		posScale.scale.x = origin.scale.x * KWS_Y; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
+		posScale.scale.y = origin.scale.y * KWS_Y; // ВОЗМОЖНО: НУЖНО ДОБАВИТЬ ЧТО-НИБУДЬ
+		//Не делается никакое "компенсирование" размера с изменением 
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

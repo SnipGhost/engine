@@ -106,6 +106,7 @@ void ng::Scene::stopMedia()
 	for (auto &tempo : music)
 		if (tempo.second)
 			tempo.second->setPause();
+	delay(FOCUS_DELAY);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Отрисовка всех объектов

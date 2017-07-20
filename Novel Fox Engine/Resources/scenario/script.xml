@@ -9,7 +9,7 @@
 
     <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/background.png"/>
     <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object1.png"/>
-    <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0_test/object2.png"/>
+    <SPRITE id="girl"  layer="2"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object2.png"/>
     <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object3.png"/>
 
     <ANIMATION id="rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>

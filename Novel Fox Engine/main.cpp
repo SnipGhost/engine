@@ -30,14 +30,11 @@ int main()
 		if (kernel.lostFocus())
 		{
 			if (scene) scene->stopMedia();
-			delay(FOCUS_DELAY);
 			continue;
 		}
 
 		if (kernel.hasFocus())
-		{
 			if (scene) scene->startMedia();
-		}
 
 		kernel.startDisplay();
 
