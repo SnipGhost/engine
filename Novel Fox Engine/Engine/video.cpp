@@ -14,7 +14,7 @@ Video::Video(std::string src, int width, int height, float x, float y,
 		kernel.print("Created video " + src, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Video::Video(ResData rd)
+Video::Video(Data rd)
 {
 	if (!setVideo(rd.src, rd.width, rd.height, rd.x, rd.y, rd.volume, rd.loop))
 		kernel.print("Failed load video " + rd.id, WARN);

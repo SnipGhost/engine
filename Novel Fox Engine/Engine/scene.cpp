@@ -28,7 +28,7 @@ void Scene::loadScene(XMLNode scene)
 		node = kernel.parseXML(scene, TAGS[i]);
 		while (node != NULL)
 		{
-			ResData data = getResData(node);
+			Data data = getData(node);
 			switch (i)
 			{
 			case 0:

@@ -11,7 +11,7 @@ AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Spri
 	numFrame = 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
+AnimateSprite::AnimateSprite(Data rd) : Sprite(rd)
 {
 	lastTime = 0;
 	numFrame = 1;

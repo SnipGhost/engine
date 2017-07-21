@@ -11,10 +11,11 @@
             <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0/object2.png"/>
             <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object3.png"/>
             <ANIMATION id="rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
-            <MUSIC id="music1" volume="5" loop="true" src="scenario/music/music1.ogg"/>
-            <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
-            <MUSIC id="music3" volume="5" loop="true" src="scenario/sounds/rain.ogg"/>
+            <MUSIC id="music1" volume="50" loop="true" src="scenario/music/music1.ogg"/>
+            <MUSIC id="music2" volume="25" loop="true" src="scenario/sounds/wind.ogg"/>
+            <MUSIC id="music3" volume="25" loop="true" src="scenario/sounds/rain.ogg"/>
             <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Кликай!</TEXT>
+            <JUMP id="scene2"/>
       </SCENE>
 
       <SCENE id="scene1">

@@ -41,8 +41,8 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 			/*float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1));			//ПРИМЕР ИЗ computeLayerScale
 			float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1));*/			//ПРИМЕР ИЗ computeLayerScale
 
-			float posX = posScale.pos.x + mouseXC * (float)0.03 * (2 << (layer - 1));   // ЗАМЕНА БОЛЕЕ ПОХОЖИМ
-			float posY = posScale.pos.y + mouseYC * (float)0.03 * (2 << (layer - 1));   // ЗАМЕНА БОЛЕЕ ПОХОЖИМ
+			float posX = posScale.pos.x + mouseXC * (float)0.03 * (2 << (layer - 1));
+			float posY = posScale.pos.y + mouseYC * (float)0.03 * (2 << (layer - 1));
 			obj->setPosition(posX, posY);
 		}
 }

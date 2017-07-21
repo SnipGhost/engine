@@ -10,7 +10,7 @@ Sound::Sound(std::string _id, std::string src, float volume)
 	setSound(src, volume);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sound::Sound(ResData rd)
+Sound::Sound(Data rd)
 {
 	playable = rd.visible;
 	setSound(rd.src, rd.volume);

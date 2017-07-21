@@ -40,6 +40,7 @@ Kernel::Kernel()
 	version = VERSION;
 	log->print("Novel fox engine v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Установка начальных значений из файла конфигурации
 	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
 	screen.x = std::stof(conf["screen_x"].c_str());
 	screen.y = std::stof(conf["screen_y"].c_str());
@@ -49,18 +50,20 @@ Kernel::Kernel()
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Установка коэффициента размера окна разработки и использования
 	factor.x = screen.x / devScreen.x;
 	factor.y = screen.y / devScreen.y;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Настройка и создание окна
 	sf::ContextSettings setting;
 	setting.majorVersion = 2;
 	setting.minorVersion = 1;
 	setting.antialiasingLevel = anti_aliasing;
-	sf::VideoMode videoMode(screen.x, screen.y);
+	sf::VideoMode videoMode((int)screen.x, (int)screen.y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//Окно закрузки [Исправление прозрачного окна]
+	// Окно закрузки [Исправление прозрачного окна]
 	sf::Texture texture;
 	texture.loadFromMemory(loadingTexture, sizeof(loadingTexture));
 	texture.setSmooth(true);
@@ -86,6 +89,7 @@ Kernel::Kernel()
 	}
 	window->setFramerateLimit(frame_limit);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Прикрепление иконки к приложению
 	ng::Icon icon;
 	if(!icon.loadFromFile(conf["app_icon"]))
 		log->print("Failed to load icon " + conf["app_icon"], WARN);
@@ -93,6 +97,7 @@ Kernel::Kernel()
 		log->print("Icon loaded " + conf["app_icon"], NORM);
 	window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Открытие файла сценария
 	doc = new tinyxml2::XMLDocument();
 	doc->LoadFile((conf["scenario"]).c_str());
 	if (doc->Error())
@@ -101,6 +106,8 @@ Kernel::Kernel()
 		exit(EXIT_FAILURE);	
 	}
 	else log->print("Script loaded", NORM);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Создание первоначальных полос сокрытия
 	sf::Vector2f winsize(window->getSize());
 	band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 	band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
@@ -176,19 +183,24 @@ std::string Kernel::operator [] (std::string key)
 	return conf[key];
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//Стандартные события
+// Стандартные события
 void Kernel::eventUpdate(Scene *s)
 {
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
 
-		if (event.isMouseClickKey(sf::Mouse::Left) && click)
-			click->play();
+		if (event.isMouseClickKey(sf::Mouse::Left))
+		{
+			if (click) click->play();
+
+			kernel.print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "
+				+ std::to_string(event.mouseButton.y) + ")");
+		}
 
 		if (event.type == sf::Event::Resized)
 		{
-			screen.x = window->getSize().x;
-			screen.y = window->getSize().y;
+			screen.x = (float)window->getSize().x;
+			screen.y = (float)window->getSize().y;
 			factor.x = screen.x / devScreen.x;
 			factor.y = screen.y / devScreen.y;
 
@@ -257,7 +269,7 @@ void Kernel::loadSpecData()
 	node = parseXML(doc->FirstChildElement("SCRIPT"), "CLICK");
 	if (node != NULL)
 	{
-		ResData data = getResData(node);
+		Data data = getData(node);
 		click = new Sound(data.id, data.src, data.volume);
 		log->print("Loaded click sound: " + data.src, INFO);
 	}
@@ -282,13 +294,32 @@ XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 	return node->FirstChildElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag)
+XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 {
+	if (id != "next")
+	{
+		bool correctTag = false;
+
+		while (!correctTag)
+		{
+			const char *idNextScene = node->NextSiblingElement(tag)->Attribute("id"); //Ошибка "Пустоты". Мои проверки не помогли... Пробовать!
+			//TO DO: Если указаного ID нет, то говорить как-то это пользователю (например, просто переключиться на следующую сцену)
+			if (!strcmp(idNextScene, id.c_str()))
+			{
+				kernel.print("~~> JUMP TO " + (std::string)idNextScene, 3);
+				node = node->NextSiblingElement(tag);
+				correctTag = true;
+			}
+			else node = node->NextSiblingElement(tag);
+		}
+		if (correctTag) return node;
+	}
+
 	return node->NextSiblingElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по ресурсам
-ResData ng::getResData(XMLNode node)
+Data ng::getData(XMLNode node)
 {
 	const char *x = node->Attribute("x");
 	const char *y = node->Attribute("y");
@@ -298,6 +329,7 @@ ResData ng::getResData(XMLNode node)
 	const char *loop = node->Attribute("loop");
 	const char *fontId = node->Attribute("font");
 	const char *alpha = node->Attribute("alpha");
+	const char *command = node->Attribute("cmd");
 	const char *color = node->Attribute("color");
 	const char *scale = node->Attribute("scale");
 	const char *style = node->Attribute("style");
@@ -313,8 +345,7 @@ ResData ng::getResData(XMLNode node)
 	if (!strcmp(node->Name(), "TEXT")) 
 		text = node->GetText();
 
-	ResData res;
-
+	Data res;
 	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
@@ -326,6 +357,7 @@ ResData ng::getResData(XMLNode node)
 	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
 	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
 	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
+	(command) ? res.command = command : res.command = "NULL";
 	(fontId) ? res.fontId = fontId : res.fontId = "standart";
 	(width) ? res.width = std::atoi(width) : res.width = 256;
 	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
@@ -335,7 +367,6 @@ ResData ng::getResData(XMLNode node)
 	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
 	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
 	(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
-
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

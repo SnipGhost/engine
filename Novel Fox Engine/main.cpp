@@ -22,7 +22,18 @@ int main()
 			{
 				delete scene;
 				scene = nullptr;
-				if (node) node = kernel.getNextXMLNode(node, "SCENE");
+
+				Data data;
+				if (node && node->FirstChildElement("JUMP")) {
+					data = getData(node->FirstChildElement("JUMP"));
+					node = kernel.getNextXMLNode(node, "SCENE", data.id);
+				} 
+				else
+				{
+					kernel.print("~~> GO TO NEXT SCENE", 3);
+					if (node) node = kernel.getNextXMLNode(node, "SCENE");
+				}
+
 				if (node) scene = new Scene(node);
 				else
 				{

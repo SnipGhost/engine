@@ -13,7 +13,7 @@ Music::Music(std::string src, float volume, bool loop)
 		kernel.print("Created music " + src, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Music::Music(ResData rd)
+Music::Music(Data rd)
 {
 	playable = rd.visible;
 	if (!setMusic(rd.src, rd.volume, rd.loop))

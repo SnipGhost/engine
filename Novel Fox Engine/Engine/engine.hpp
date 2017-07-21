@@ -177,7 +177,7 @@ namespace ng
 			XMLNode loadFirstScene();    // Загрузить первую сцену
 			//-----------------------------------------------------------------
 			XMLNode parseXML(XMLNode node, const char *tag);
-			XMLNode getNextXMLNode(XMLNode node, const char *tag);
+			XMLNode getNextXMLNode(XMLNode node, const char *tag, std::string id = "next");
 			//-----------------------------------------------------------------
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{
@@ -187,7 +187,7 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct ResData
+	struct Data
 	{
 		int ms;                  // Параметр задержки
 		int layer;               // Слой отображения
@@ -208,11 +208,12 @@ namespace ng
 		std::string style;       // Стиль текста
 		std::string color;       // Цвет текста
 		std::string fontId;      // Идентификатор шрифта
+		std::string command;     // Команда
 		std::string namePerson;  // Подпись говорившего
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode); // Распарсить FONT-ноду
-	ResData getResData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
+	Data getData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class Icon: public sf::Image
 	{
@@ -230,11 +231,11 @@ namespace ng
 			bool playable;
 			Music(const Music &copy) {};
 			Music(std::string src, float volume = 100, bool loop = true);
-			Music(ResData rd);
+			Music(Data rd);
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
 			void setStop();
-			//void change(ResData rd);
+			//void change(Data rd);
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,7 +246,7 @@ namespace ng
 		public:
 			bool playable;
 			Sound(std::string _id, std::string src, float volume = 100);
-			Sound(ResData rd);
+			Sound(Data rd);
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
@@ -293,9 +294,9 @@ namespace ng
 		public:
 			Sprite() {}
 			Sprite(std::string id, std::string src, bool smooth = true);
-			Sprite(ResData rd);
+			Sprite(Data rd);
 			bool setStrTexture(std::string src, bool smooth);
-			/*void change(ResData rd);*/
+			/*void change(Data rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();
@@ -314,10 +315,10 @@ namespace ng
 			int delay;               // Время между кадрами в миллисекундах
 		public:
 			AnimateSprite(std::string id, std::string src, bool smooth = true);
-			AnimateSprite(ResData rd);
+			AnimateSprite(Data rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
-			/*void change(ResData rd);*/
+			/*void change(Data rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
@@ -328,10 +329,10 @@ namespace ng
 		protected:
 			std::map <std::string, int> mapping;
 		public:
-			Text(ResData rd);
-			bool setText(ResData &rd);
-			void setStyleText(ResData &rd);
-			/*void change(ResData rd);*/
+			Text(Data rd);
+			bool setText(Data &rd);
+			void setStyleText(Data &rd);
+			/*void change(Data rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
@@ -347,12 +348,12 @@ namespace ng
 		public:
 			Video(std::string src, int width, int height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
-			Video(ResData rd);
+			Video(Data rd);
 			bool setVideo(std::string src, int width, int height,
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();
-			/*void change(ResData rd);*/
+			/*void change(Data rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();
@@ -367,7 +368,7 @@ namespace ng
 		friend ng::Kernel;
 
 		protected:
-			std::string id;
+			std::string idNextScene;
 			std::vector<Displayable*> layers[C_LAYERS];
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
 			typedef std::map<std::string, ng::Music*>::iterator MusIt;

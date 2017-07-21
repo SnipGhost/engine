@@ -11,7 +11,7 @@ using namespace ng;
 #define ITALIC sf::Text::Italic
 #define UNDERLINED sf::Text::Underlined
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Text::Text(ResData rd)
+Text::Text(Data rd)
 {
 	setText(rd);
 	//getTextRect(); //Можно получить размер текста
@@ -20,7 +20,7 @@ Text::Text(ResData rd)
 	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Text::setText(ResData &rd)
+bool Text::setText(Data &rd)
 {
 	(rd.namePerson != "") ? rd.text = rd.namePerson + ": " + rd.text : rd.text;
 	setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
@@ -50,7 +50,7 @@ bool Text::setText(ResData &rd)
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::setStyleText(ResData &rd)
+void Text::setStyleText(Data &rd)
 {
 	char *Ptr = strtok((char*)rd.style.c_str() , " ");
 
