@@ -75,7 +75,7 @@ std::ostream & Video::print(std::ostream &os)
 	os << "\tLayer:   \t" << layer << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:  \t(" << KWS_X << "; " << KWS_Y << ")" << std::endl;
+	os << "\tReSize:  \t(" << kernel. factor.x << "; " << kernel.factor.y << ")" << std::endl;
 	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,8 +97,8 @@ void Video::computeLayerScale()
 	float w = this->getSize().x;
 	float h = this->getSize().y;
 
-	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * KWS_X;
-	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * KWS_X;
+	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
 
 	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
 	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;

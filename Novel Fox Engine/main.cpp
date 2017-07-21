@@ -14,16 +14,21 @@ int main()
 	
 	while (kernel.window->isOpen())
 	{
-		if (kernel.checkEvents(scene)) // TODO: Возвращать не bool, а enum
+		while (kernel.window->pollEvent(kernel.event))
 		{
-			delete scene;
-			scene = nullptr;
-			if (node) node = kernel.getNextXMLNode(node, "SCENE");
-			if (node) scene = new Scene(node);
-			else
+			kernel.eventUpdate(scene); //Update стандартных событий
+
+			if (kernel.event.isMouseKey(sf::Mouse::Left))
 			{
-				node = kernel.loadFirstScene();
+				delete scene;
+				scene = nullptr;
+				if (node) node = kernel.getNextXMLNode(node, "SCENE");
 				if (node) scene = new Scene(node);
+				else
+				{
+					node = kernel.loadFirstScene();
+					if (node) scene = new Scene(node);
+				}
 			}
 		}
 
@@ -34,17 +39,16 @@ int main()
 		}
 
 		if (kernel.hasFocus())
+		{
 			if (scene) scene->startMedia();
+		}
 
 		kernel.startDisplay();
-
 		if (scene) scene->displayAll();
-
 		kernel.endDisplay();
 	}
 
 	if (scene) delete scene;
-
 	kernel.clear();
 
 	return EXIT_SUCCESS;

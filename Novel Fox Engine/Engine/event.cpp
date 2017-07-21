@@ -15,7 +15,8 @@ bool Event::isKeyboardKey(sf::Keyboard::Key keyboard)
 		return true;
 	}
 
-	if (type == KeyReleased && key.code == keyboard) flag = true;
+	if (type == KeyReleased && key.code == keyboard) 
+		flag = true;
 
 	return false;
 }
@@ -33,9 +34,11 @@ bool Event::isMouseClickKey(sf::Mouse::Button mouse)
 	if (flag && type == MouseButtonPressed && mouseButton.button == mouse) 
 	{
 		flag = false;
-		std::string m = "Mouse click: (" + std::to_string(mouseButton.x);
-		m += "; " + std::to_string(mouseButton.y) + ")";
-		kernel.print(m);
+
+		//Регистрация клика [УБРАТЬ]
+		kernel.print("Mouse click: (" + std::to_string(mouseButton.x) + "; " 
+			+ std::to_string(mouseButton.y) + ")");
+
 		return true;
 	}
 

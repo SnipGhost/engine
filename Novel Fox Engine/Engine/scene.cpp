@@ -5,17 +5,17 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ng::Scene::Scene(XMLNode scene)
+Scene::Scene(XMLNode scene)
 {
 	loadScene(scene);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ng::Scene::~Scene()
+Scene::~Scene()
 {
 	clear();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void ng::Scene::loadScene(XMLNode scene)
+void Scene::loadScene(XMLNode scene)
 {
 	const size_t COUNT = 6;
 	const char *TAGS[COUNT] = {
@@ -84,7 +84,7 @@ void ng::Scene::loadScene(XMLNode scene)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Включение любых проигрывающихся ресурсов
-void ng::Scene::startMedia()
+void Scene::startMedia()
 {
 	for (auto &video : videos)
 		if (!kernel.event.isVideoPlay(*video.second))
@@ -95,7 +95,7 @@ void ng::Scene::startMedia()
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Остановка любых проигрывающихся ресурсов
-void ng::Scene::stopMedia()
+void Scene::stopMedia()
 {
 	for (auto &sound : sounds)
 		if (sound.second)
@@ -110,7 +110,7 @@ void ng::Scene::stopMedia()
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Отрисовка всех объектов
-void ng::Scene::displayAll()
+void Scene::displayAll()
 {
 	for (auto &layer : layers)
 	{
@@ -126,7 +126,7 @@ void ng::Scene::displayAll()
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Удаление всех отрисованных объектов
-void ng::Scene::clear()
+void Scene::clear()
 {
 	for (auto &layer : layers)
 	{

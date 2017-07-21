@@ -41,19 +41,22 @@ Kernel::Kernel()
 	log->print("Novel fox engine v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
-	int screen_x = std::atoi(conf["screen_x"].c_str());
-	int screen_y = std::atoi(conf["screen_y"].c_str());
+	screen.x = std::stof(conf["screen_x"].c_str());
+	screen.y = std::stof(conf["screen_y"].c_str());
 	devScreen.x = std::stof(conf["devScreen_x"].c_str());
 	devScreen.y = std::stof(conf["devScreen_y"].c_str());
 	int screen_mode = std::atoi(conf["screen_mode"].c_str());
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	factor.x = screen.x / devScreen.x;
+	factor.y = screen.y / devScreen.y;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	sf::ContextSettings setting;
 	setting.majorVersion = 2;
 	setting.minorVersion = 1;
 	setting.antialiasingLevel = anti_aliasing;
-	sf::VideoMode videoMode(screen_x, screen_y);
+	sf::VideoMode videoMode(screen.x, screen.y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -173,22 +176,22 @@ std::string Kernel::operator [] (std::string key)
 	return conf[key];
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Kernel::checkEvents(Scene *s)
+//Стандартные события
+void Kernel::eventUpdate(Scene *s)
 {
-	bool flag = false;
-	while (window->pollEvent(event))
-	{
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
 
-		if (event.isMouseClickKey(sf::Mouse::Left))
-		{
-			if (click) click->play();
-			flag = true;
-		}
+		if (event.isMouseClickKey(sf::Mouse::Left) && click)
+			click->play();
 
 		if (event.type == sf::Event::Resized)
 		{
+			screen.x = window->getSize().x;
+			screen.y = window->getSize().y;
+			factor.x = screen.x / devScreen.x;
+			factor.y = screen.y / devScreen.y;
+
 			window->setView(sf::View(sf::FloatRect(0, 0, 
 				         (float)event.size.width, (float)event.size.height)));
 
@@ -205,10 +208,7 @@ bool Kernel::checkEvents(Scene *s)
 			sf::Vector2f winsize(window->getSize());
 			band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 			band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
-
 		}
-	}
-	return flag;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если окно потеряло фокус

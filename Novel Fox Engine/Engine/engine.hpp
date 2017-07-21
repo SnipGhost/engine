@@ -51,12 +51,6 @@
 #define MAX_LAYER 10             // Максимальное допустимое значение слоя
 #define C_LAYERS (MAX_LAYER*2+1) // Количество всех слоев
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define WS_X ((float)kernel.window->getSize().x)
-#define WS_Y ((float)kernel.window->getSize().y)
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define KWS_X ((float)kernel.window->getSize().x / kernel.devScreen.x)
-#define KWS_Y ((float)kernel.window->getSize().y / kernel.devScreen.y)
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define ABS(x) (((x) < 0) ? (-(x)) : (x)) // Абсолютное значение
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 namespace ng
@@ -155,13 +149,15 @@ namespace ng
 		public:
 			std::string version;                 // Версия движка
 			LogStream *log;                      // Логи программы
-			Clock globalClock;                   // Счетчик времени
+			Clock globalClock;                   // Глобальное время
 			tinyxml2::XMLDocument *doc;          // XML-документ сценария
 			sf::RenderWindow *window;            // SFML-окно
-			ng::Event event;                     // Ловец событий
+			ng::Event event;                     // События
 			std::map<std::string, Font*> fonts;  // Набор шрифтов
 			ng::Sound *click;                    // Звук для клика
 			sf::Vector2f devScreen;              // Размеры среды разработки
+			sf::Vector2f screen;				 // Размеры монитора
+			sf::Vector2f factor;				 // Коэффициент между мониторами
 			ng::Shape *band1, *band2;            // Полосы сокрытия
 			//-----------------------------------------------------------------
 			static Kernel & init();                   // Instance-метод
@@ -170,7 +166,7 @@ namespace ng
 			std::string operator[] (std::string key); // Выдает конфигурацию
 			sf::Vector2f getMouse();				  // Координаты мыши
 			//-----------------------------------------------------------------
-			bool checkEvents(Scene *s);  // Отследить обычные события
+			void eventUpdate(Scene *s);  // Отследить обычные события
 			bool hasFocus();             // Фокус на приложении
 			bool lostFocus();            // Фокус на приложении потерян
 			void startDisplay();         // Начало отрисовки
