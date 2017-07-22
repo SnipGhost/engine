@@ -18,27 +18,38 @@ int main()
 		{
 			kernel.eventUpdate(scene); //Update стандартных событий
 
-			if (kernel.event.isMouseKey(sf::Mouse::Left))
+			if (kernel.event.isMouseClickKey(sf::Mouse::Left)) //Нельзя делить кликовые функции
 			{
-				delete scene;
-				scene = nullptr;
+				if (kernel.click) kernel.click->play();
 
-				Data data;
-				if (node && node->FirstChildElement("JUMP")) {
-					data = getData(node->FirstChildElement("JUMP"));
-					node = kernel.getNextXMLNode(node, "SCENE", data.id);
-				} 
-				else
-				{
-					kernel.print("~~> GO TO NEXT SCENE", 3);
-					if (node) node = kernel.getNextXMLNode(node, "SCENE");
-				}
+				kernel.print("Mouse click: (" + std::to_string(kernel.event.mouseButton.x) + "; "
+					+ std::to_string(kernel.event.mouseButton.y) + ")");
 
-				if (node) scene = new Scene(node);
-				else
-				{
-					node = kernel.loadFirstScene();
-					if (node) scene = new Scene(node);
+				if (scene->doEvent(node)) {
+
+					delete scene;
+					scene = nullptr;
+
+					Data data;
+					if (node && scene->jump(node))
+					{
+						data = getData(node->FirstChildElement("JUMP"));
+						node = kernel.getNextXMLNode(node, "SCENE", data.id);
+					}
+					else
+					{
+						kernel.print("~~> GO TO NEXT SCENE", 3);
+						if (node) node = kernel.getNextXMLNode(node, "SCENE");
+					}
+
+					if (node)
+						scene = new Scene(node);
+					else
+					{
+						node = kernel.loadFirstScene();
+						if (node) scene = new Scene(node);
+					}
+
 				}
 			}
 		}

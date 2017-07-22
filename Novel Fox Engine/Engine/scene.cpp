@@ -7,6 +7,7 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Scene::Scene(XMLNode scene)
 {
+	firstEvent = true;
 	loadScene(scene);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,6 +82,36 @@ void Scene::loadScene(XMLNode scene)
 		}
 	}
 	kernel.print("Resources loaded", NORM);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Read event
+bool Scene::doEvent(XMLNode scene)
+{
+	if (firstEvent)
+	{
+		eventNode = scene->FirstChildElement("EVENT"); 
+		if (eventNode)
+			loadScene(eventNode);
+		else
+			return 1;
+		firstEvent = false;
+	} 
+	else
+	{
+		eventNode = eventNode->NextSiblingElement("EVENT");
+		if (eventNode)
+			loadScene(eventNode);
+		else
+			return 1;
+	}
+	return 0;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Jump check
+bool Scene::jump(XMLNode node)
+{
+	if (node->FirstChildElement("JUMP")) return 1;
+	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Включение любых проигрывающихся ресурсов

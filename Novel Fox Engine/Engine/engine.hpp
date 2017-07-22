@@ -368,6 +368,7 @@ namespace ng
 		friend ng::Kernel;
 
 		protected:
+			bool firstEvent;
 			std::string idNextScene;
 			std::vector<Displayable*> layers[C_LAYERS];
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
@@ -375,14 +376,18 @@ namespace ng
 			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
 
 		public:
+			XMLNode eventNode;
 			std::map<std::string, ng::Displayable*> objects;
 			std::map<std::string, ng::Video*> videos;
 			std::map<std::string, ng::Music*> music;
 			std::map<std::string, ng::Sound*> sounds;
 
+			Scene() {}
 			Scene(XMLNode node);
 			~Scene();
-			void loadScene(XMLNode scene);
+			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
+			bool doEvent(XMLNode scene);	// Проход по event для исполнения
+			bool jump(XMLNode scene);       // Проверка на JUMP
 			void startMedia();
 			void stopMedia();
 			void displayAll();

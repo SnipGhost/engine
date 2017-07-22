@@ -189,14 +189,6 @@ void Kernel::eventUpdate(Scene *s)
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
 
-		if (event.isMouseClickKey(sf::Mouse::Left))
-		{
-			if (click) click->play();
-
-			kernel.print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "
-				+ std::to_string(event.mouseButton.y) + ")");
-		}
-
 		if (event.type == sf::Event::Resized)
 		{
 			screen.x = (float)window->getSize().x;
@@ -296,26 +288,32 @@ XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 {
+	XMLNode saveNode = node; // ВРЕМЕННОЕ INFO: Сохраняем ноду, так как может не найти нужную сцену
 	if (id != "next")
 	{
 		bool correctTag = false;
-
+		XMLNode nextScene;
 		while (!correctTag)
 		{
-			const char *idNextScene = node->NextSiblingElement(tag)->Attribute("id"); //Ошибка "Пустоты". Мои проверки не помогли... Пробовать!
-			//TO DO: Если указаного ID нет, то говорить как-то это пользователю (например, просто переключиться на следующую сцену)
-			if (!strcmp(idNextScene, id.c_str()))
-			{
-				kernel.print("~~> JUMP TO " + (std::string)idNextScene, 3);
+			const char *idNextScene = nullptr;
+			nextScene = node->NextSiblingElement(tag);
+			if (nextScene)
+			{ 
+				idNextScene = node->NextSiblingElement(tag)->Attribute("id");
+				if (!strcmp(idNextScene, id.c_str()))
+				{
+					kernel.print("~~> JUMP TO " + (std::string)idNextScene, 3);
+					return node->NextSiblingElement(tag);
+				}
 				node = node->NextSiblingElement(tag);
-				correctTag = true;
 			}
-			else node = node->NextSiblingElement(tag);
+			else // ВРЕМЕННОЕ INFO: Если получил пустую nextScene (то бишь не нашёл scene с нужным id)
+			{
+				correctTag = true; // ВРЕМЕННОЕ INFO: Выходит из цикла и возвращает следующий scene с помощью резервного сохранения
+			}
 		}
-		if (correctTag) return node;
 	}
-
-	return node->NextSiblingElement(tag);
+	return saveNode->NextSiblingElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по ресурсам

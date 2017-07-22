@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SCRIPT>
 
-      <CLICK id="click" volume="5" src="scenario/sounds/click.ogg"/>
+      <CLICK id="click" volume="25" src="scenario/sounds/click.ogg"/>
       <FONT id="std" src="scenario/fonts/font.ttf"/>
       <FONT id="rus" src="scenario/fonts/CyrilicOld.ttf"/>
 
@@ -10,12 +10,19 @@
             <SPRITE id="back"  layer="1" alpha="75" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object1.png"/>
             <SPRITE id="girl"  layer="2"            smooth="true" x="80" y="80" scale="0.9" src="scenario/textures/scene_0/object2.png"/>
             <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object3.png"/>
-            <ANIMATION id="rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
             <MUSIC id="music1" volume="50" loop="true" src="scenario/music/music1.ogg"/>
-            <MUSIC id="music2" volume="25" loop="true" src="scenario/sounds/wind.ogg"/>
-            <MUSIC id="music3" volume="25" loop="true" src="scenario/sounds/rain.ogg"/>
             <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Кликай!</TEXT>
-            <JUMP id="scene2"/>
+            <EVENT id="2">
+                <MUSIC id="music2" volume="25" loop="true" src="scenario/sounds/wind.ogg"/>
+                <MUSIC id="music3" volume="25" loop="true" src="scenario/sounds/rain.ogg"/>
+                <ANIMATION id="rain" layer="3" alpha="25" smooth="true" x="0" y="0" scale="1" width="1280" height="720" delay="40" src="scenario/textures/gifRain.png"/>
+                <SPRITE id="front" layer="2"            smooth="true" x="760" y="310" scale="0.3" src="scenario/textures/scene_0/sit.png"/>
+            </EVENT>
+            <EVENT id="3">
+                <SPRITE id="front1" layer="0"           smooth="true" x="1050" y="100" scale="0.7" src="scenario/textures/scene_0/hello.png"/>
+                <TEXT id="txt2" font="std" style="italic" layer="2" x="190" y="560" color="red" scale="1" size="60">Скорее, уничтожь истории в ВК!</TEXT>
+                <TEXT id="txt3" font="std" style="italic" layer="2" x="370" y="620" color="black" scale="1" size="40">Пока не слишком поздно...</TEXT>
+            </EVENT>
       </SCENE>
 
       <SCENE id="scene1">
@@ -25,6 +32,7 @@
             <SPRITE id="front" layer="3"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/object3.png"/>
             <MUSIC id="music1" volume="5" loop="true" src="scenario/music/music1.ogg"/>
             <TEXT id="txt" font="std" style="italic" layer="2" x="730" y="400" color="white" scale="1" size="60">Прекрасно ;)</TEXT>
+            <JUMP id="scene4"/>  Нельзя вызвать следующий по порядку. В таком случае JUMP писать не нужно-->
       </SCENE>
 
       <SCENE id="scene2">
@@ -47,6 +55,11 @@
             <SPRITE id="t2" layer="2" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/object2.png"/>
             <SPRITE id="t3" layer="3" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/object3.png"/>
             <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
+      </SCENE>
+
+      <SCENE id="scene4">
+        <SPRITE id="bg" layer="0" smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_1/background.png"/>
+        <MUSIC id="music2" volume="5" loop="true" src="scenario/sounds/wind.ogg"/>
       </SCENE>
 
 </SCRIPT>
