@@ -2,7 +2,6 @@
 // text.cpp                                            Реализация класса текста
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
-#include <codecvt>
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -11,18 +10,16 @@ using namespace ng;
 #define ITALIC sf::Text::Italic
 #define UNDERLINED sf::Text::Underlined
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Text::Text(Data rd)
+Text::Text(ResData rd)
 {
 	setText(rd);
-	//getTextRect(); //Можно получить размер текста
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Text::setText(Data &rd)
+bool Text::setText(ResData &rd)
 {
-	(rd.namePerson != "") ? rd.text = rd.namePerson + ": " + rd.text : rd.text;
 	setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
 	setFont(*kernel.fonts[rd.fontId]);
 
@@ -43,6 +40,9 @@ bool Text::setText(Data &rd)
 	if (rd.color == "black") 
 		setFillColor(sf::Color::Black);
 
+	//setOutlineThickness(2);				//Обводка
+	//setOutlineColor(sf::Color::Blue);     //Цвет обводки
+
 	if (rd.style != "NULL") setStyleText(rd);
 
 	setCharacterSize(rd.size);
@@ -50,7 +50,7 @@ bool Text::setText(Data &rd)
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::setStyleText(Data &rd)
+void Text::setStyleText(ResData &rd)
 {
 	char *Ptr = strtok((char*)rd.style.c_str() , " ");
 
@@ -72,7 +72,7 @@ void Text::setStyleText(Data &rd)
 	setStyle(styleNum);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::display(sf::RenderWindow *win)
+void Text::display(sf::RenderWindow *win) //Переделать
 {
 	win->draw(*this);
 }
@@ -87,7 +87,7 @@ std::ostream & Text::print(std::ostream &os)
 	sf::Vector2f pos = getPosition();
 	sf::Vector2f scl = getScale();
 	os << id << " [ng::Text]" << std::endl;
-	os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
+	//os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
 	os << "\tLayer:   \t" << layer << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;

@@ -132,10 +132,10 @@
     <ClCompile Include="Engine\engine.cpp" />
     <ClCompile Include="Engine\event.cpp" />
     <ClCompile Include="Engine\font.cpp" />
-    <ClCompile Include="Engine\icon.cpp" />
     <ClCompile Include="Engine\logstream.cpp" />
     <ClCompile Include="Engine\music.cpp" />
     <ClCompile Include="Engine\scene.cpp" />
+    <ClCompile Include="Engine\shader.cpp" />
     <ClCompile Include="Engine\shape.cpp" />
     <ClCompile Include="Engine\sound.cpp" />
     <ClCompile Include="Engine\sprite.cpp" />
@@ -153,7 +153,9 @@
     <None Include="Resources\config.ini" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\scenario\script.xml" />
+    <Xml Include="Resources\scenario\script.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

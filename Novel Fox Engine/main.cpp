@@ -5,7 +5,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссыль
+//Kernel &kernel = ng::Kernel::init(); // Для наглядности получаем свою ссылку
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
@@ -16,21 +16,21 @@ int main()
 	{
 		while (kernel.window->pollEvent(kernel.event))
 		{
-			kernel.eventUpdate(scene); //Update стандартных событий
+			kernel.eventUpdate(scene);
 
-			if (kernel.event.isMouseClickKey(sf::Mouse::Left)) //Нельзя делить кликовые функции
+			if (kernel.event.isMouseClickKey(sf::Mouse::Left))
 			{
 				if (kernel.click) kernel.click->play();
 
 				kernel.print("Mouse click: (" + std::to_string(kernel.event.mouseButton.x) + "; "
-					+ std::to_string(kernel.event.mouseButton.y) + ")");
+					+ std::to_string(kernel.event.mouseButton.y) + ")",INFO);
 
 				if (scene->doEvent(node)) {
 
 					delete scene;
 					scene = nullptr;
 
-					Data data;
+					ResData data;
 					if (node && scene->jump(node))
 					{
 						data = getData(node->FirstChildElement("JUMP"));
@@ -53,6 +53,16 @@ int main()
 				}
 			}
 		}
+
+		//sf::VideoMode vd;
+		//std::cout << vd.getDesktopMode().bitsPerPixel << std::endl; // Выдает текущую битность используемого монитора
+		//std::cout << vd.isValid() << std::endl; // Проверяющая функция "Стоит ли Fullscreen?"
+		//std::cout << vd.getDesktopMode().isValid() << std::endl; // Проверяет сам монитор на пригодность к Fullscreen? Надо разобраться!
+		//std::cout << "Height monitor: " << vd.getDesktopMode().height << " Width monitir: " << vd.getDesktopMode().width << std::endl; // Размер монитора на любой платформе
+
+		//sf::Mouse mouseGlobal;
+		//std::cout << mouseGlobal.getPosition().x << " " << mouseGlobal.getPosition().y << std::endl; // Координаты на рабочем столе
+		//std::cout << mouseGlobal.getPosition(*kernel.window).x << " " << mouseGlobal.getPosition(*kernel.window).y << std::endl; // Координаты в окне
 
 		if (kernel.lostFocus())
 		{

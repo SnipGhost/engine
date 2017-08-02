@@ -5,21 +5,17 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Music::Music(std::string src, float volume, bool loop)
+Music::Music(std::string id, std::string src, float volume, bool loop)
 {
 	if (!setMusic(src, volume, loop))
-		kernel.print("Failed load music " + src, WARN);
-	else
-		kernel.print("Created music " + src, INFO);
+		kernel.print("Failed load music " + id, WARN);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Music::Music(Data rd)
+Music::Music(ResData rd)
 {
 	playable = rd.visible;
 	if (!setMusic(rd.src, rd.volume, rd.loop))
 		kernel.print("Failed load music " + rd.id, WARN);
-	else
-		kernel.print("Created music " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Music::setMusic(std::string src, float volume, bool loop)
@@ -27,11 +23,12 @@ bool Music::setMusic(std::string src, float volume, bool loop)
 	if (!openFromFile(src)) 
 		return 0;
 	setVolume(volume);
+	//setPitch(2); // Установка скорости
 	setLoop(loop);
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Music::setStop()
+void Music::setSlowStop()
 {
 	if (getStatus() == sf::Music::Playing) {
 		volume = getVolume();

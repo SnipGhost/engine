@@ -7,17 +7,19 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Displayable::~Displayable()
 {
-	kernel.print("Deleted displayble object: " + id, INFO);
+	kernel.print("Deleted object: " + id, NORM);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 {
 	if (layer <= 0) return;
 
-	const float centerX = kernel.screen.x / 2;
-	const float centerY = kernel.screen.y / 2;
-	float mouseXC = centerX - kernel.getMouse().x;
-	float mouseYC = centerY - kernel.getMouse().y;
+	if (layer > 3) return; // Что дальше 3 layer-a у нас работает через ж*пу
+	///Дальше 3 layer-а мы будем кидать text и другие важные штуки, как посчитает 
+	///нужным дальнейший разарботчик
+
+	float mouseXC = kernel.screen.x / 2 - kernel.getMouse().x;
+	float mouseYC = kernel.screen.y / 2 - kernel.getMouse().y;
 
 	sf::Vector2f size;
 	size.y = (kernel.window->getSize().y - kernel.window->getSize().x * 
@@ -34,13 +36,6 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 		kernel.getMouse().y < kernel.window->getSize().y - size.y &&
 		kernel.getMouse().x > 0 && kernel.getMouse().x < kernel.screen.x))
 		{
-
-			/*float posX = posScale.pos.x + mouseXC / (40 / (2 << (layer - 1)));		// СТАРАЯ РЕАЛИЗАЦИЯ
-			float posY = posScale.pos.y + mouseYC / (40 / (2 << (layer - 1)));*/		// СТАРАЯ РЕАЛИЗАЦИЯ
-
-			/*float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1));			//ПРИМЕР ИЗ computeLayerScale
-			float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1));*/			//ПРИМЕР ИЗ computeLayerScale
-
 			float posX = posScale.pos.x + mouseXC * (float)0.03 * (2 << (layer - 1));
 			float posY = posScale.pos.y + mouseYC * (float)0.03 * (2 << (layer - 1));
 			obj->setPosition(posX, posY);

@@ -101,43 +101,35 @@ namespace ng
 			}
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Clock: public sf::Clock
+	// Глобальные часы
+	class Clock : public sf::Clock
 	{
-		public:
-			int getMilliSecond();
+	public:
+		int getMilliSecond();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Event: public sf::Event
+	// Класс событий/проверок на события
+	class Event : public sf::Event
 	{
-		 public:
-			sf::Keyboard keyboard;
-			sf::Mouse mouse;
-			bool isKeyboardKey(sf::Keyboard::Key keyboard);
-			bool isWinClosed();
-			bool isMouseClickKey(sf::Mouse::Button mouse);
-			bool isMouseKey(sf::Mouse::Button mouse);
-			bool isMusicPlay(sf::Music &music);
-			bool isVideoPlay(sfe::Movie &video);
+	public:
+		sf::Keyboard keyboard;
+		sf::Mouse mouse;
+		bool isKeyboardKey(sf::Keyboard::Key keyboard);
+		bool isWinClosed();
+		bool isMouseClickKey(sf::Mouse::Button mouse);
+		bool isMouseKey(sf::Mouse::Button mouse);
+		bool isMusicPlay(sf::Music &music);
+		bool isVideoPlay(sfe::Movie &video);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct FontData
-	{
-		std::string src; // Путь до ресурса
-		std::string id;  // Идентификатор шрифта
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Font : public sf::Font
-	{
-		public:
-			std::string id;
-			Font(std::string src);
-			Font(FontData fd);
-	};
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Преобъявление классов для Kernel
+	class Font;
 	class Sound;
 	class Shape;
 	class Scene;
+	class Music;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс-ядро игрового движка
 	class Kernel
 	{
 		private:       
@@ -147,24 +139,25 @@ namespace ng
 			Kernel & operator=(const Kernel&) = delete;
 			//-----------------------------------------------------------------
 		public:
-			std::string version;                 // Версия движка
-			LogStream *log;                      // Логи программы
-			Clock globalClock;                   // Глобальное время
-			tinyxml2::XMLDocument *doc;          // XML-документ сценария
-			sf::RenderWindow *window;            // SFML-окно
-			ng::Event event;                     // События
-			std::map<std::string, Font*> fonts;  // Набор шрифтов
-			ng::Sound *click;                    // Звук для клика
-			sf::Vector2f devScreen;              // Размеры среды разработки
-			sf::Vector2f screen;				 // Размеры монитора
-			sf::Vector2f factor;				 // Коэффициент между мониторами
-			ng::Shape *band1, *band2;            // Полосы сокрытия
+			std::string version;				// Версия движка
+			LogStream *log;						// Логи программы
+			Clock globalClock;					// Глобальное время
+			tinyxml2::XMLDocument *doc;			// XML-документ сценария
+			sf::RenderWindow *window;			// SFML-окно
+			ng::Event event;					// События
+			std::map<std::string, Font*> fonts;	// Набор шрифтов
+			std::map<std::string, Music*> music;// Набор музыки
+			ng::Sound *click;					// Звук для клика
+			sf::Vector2f devScreen;				// Размеры среды разработки
+			sf::Vector2f screen;				// Размеры монитора
+			sf::Vector2f factor;				// Коэффициент между мониторами
+			ng::Shape *band1, *band2;			// Полосы сокрытия
 			//-----------------------------------------------------------------
 			static Kernel & init();                   // Instance-метод
-			~Kernel();                                // Обязателен деструктор
+			~Kernel();                                // Обязательный деструктор
 			bool parseConfig(std::string file);       // Загрузить конфигурацию
 			std::string operator[] (std::string key); // Выдает конфигурацию
-			sf::Vector2f getMouse();				  // Координаты мыши
+			sf::Vector2f getMouse();				  // Запрос координат мыши
 			//-----------------------------------------------------------------
 			void eventUpdate(Scene *s);  // Отследить обычные события
 			bool hasFocus();             // Фокус на приложении
@@ -187,7 +180,13 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern Kernel &kernel;          // Глобально объявляем наличие объекта ядра
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct Data
+	struct FontData
+	{
+		std::string src;		 // Путь до ресурса
+		std::string id;			 // Идентификатор шрифта
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	struct ResData
 	{
 		int ms;                  // Параметр задержки
 		int layer;               // Слой отображения
@@ -206,23 +205,26 @@ namespace ng
 		std::string src;         // Путь до ресурса
 		std::string text;        // Содержание текста
 		std::string style;       // Стиль текста
+		std::string namePerson;  // Имя персонажа
+		std::string colorname;   // Цвет имени персонажа
 		std::string color;       // Цвет текста
 		std::string fontId;      // Идентификатор шрифта
 		std::string command;     // Команда
-		std::string namePerson;  // Подпись говорившего
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode); // Распарсить FONT-ноду
-	Data getData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
+	ResData getData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	class Icon: public sf::Image
+	// Класс шрифтов
+	class Font : public sf::Font
 	{
-		public:
-			Icon() {}
-			Icon(std::string src);
-			bool setIcon(std::string src);
+	public:
+		std::string id;
+		Font(std::string src);
+		Font(FontData fd);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс музыки/действий над музыкой
 	class Music: public sf::Music
 	{
 		private:
@@ -230,27 +232,29 @@ namespace ng
 		public:
 			bool playable;
 			Music(const Music &copy) {};
-			Music(std::string src, float volume = 100, bool loop = true);
-			Music(Data rd);
+			Music(std::string id, std::string src, float volume = 100, bool loop = true);
+			Music(ResData rd);
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
-			void setStop();
-			//void change(Data rd);
+			void setSlowStop();
+			//void change(ResData rd);
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс звуков/действий над звуками
 	class Sound: public sf::Sound
 	{
 		protected:
 			sf::SoundBuffer buffer;
 		public:
 			bool playable;
-			Sound(std::string _id, std::string src, float volume = 100);
-			Sound(Data rd);
+			Sound(std::string id, std::string src, float volume = 100);
+			Sound(ResData rd);
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс "видимых" объектов и действий над ними
 	class Displayable
 	{
 		protected:
@@ -278,6 +282,7 @@ namespace ng
 			virtual void setResize();
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс простых отображаемых фигур
 	class Shape: public sf::RectangleShape
 	{
 	protected:
@@ -287,6 +292,7 @@ namespace ng
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс текстур(спрайтов) и действий над ними
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{
 		protected:
@@ -294,9 +300,9 @@ namespace ng
 		public:
 			Sprite() {}
 			Sprite(std::string id, std::string src, bool smooth = true);
-			Sprite(Data rd);
+			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
-			/*void change(Data rd);*/
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();
@@ -305,6 +311,7 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Sprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс анимации(GIF) и действий над ней
 	class AnimateSprite: public ng::Sprite
 	{
 		protected:
@@ -315,24 +322,25 @@ namespace ng
 			int delay;               // Время между кадрами в миллисекундах
 		public:
 			AnimateSprite(std::string id, std::string src, bool smooth = true);
-			AnimateSprite(Data rd);
+			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
-			/*void change(Data rd);*/
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс текста/действий над текстом
 	class Text: public sf::Text, public ng::Displayable
 	{
 		protected:
 			std::map <std::string, int> mapping;
 		public:
-			Text(Data rd);
-			bool setText(Data &rd);
-			void setStyleText(Data &rd);
-			/*void change(Data rd);*/
+			Text(ResData rd);
+			bool setText(ResData &rd);
+			void setStyleText(ResData &rd);
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
@@ -341,6 +349,7 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс видео/действий над видео
 	class Video: public sfe::Movie, public ng::Displayable
 	{
 		protected:
@@ -348,12 +357,12 @@ namespace ng
 		public:
 			Video(std::string src, int width, int height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
-			Video(Data rd);
+			Video(ResData rd);
 			bool setVideo(std::string src, int width, int height,
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();
-			/*void change(Data rd);*/
+			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();
@@ -362,6 +371,16 @@ namespace ng
 			friend std::ostream & operator << (std::ostream &os, Video &v);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс шейдеров(визуальных эффектов над спрайтами)
+	class Shader : public sf::Shader
+	{
+	public:
+		Shader();
+		//Shader(ResData rd);
+		friend std::ostream & operator << (std::ostream &os, const Shader *s);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс сцены(объект, включающий в себя все остальные классы)
 	class Scene
 	{
 		friend ng::Event;
@@ -379,7 +398,7 @@ namespace ng
 			XMLNode eventNode;
 			std::map<std::string, ng::Displayable*> objects;
 			std::map<std::string, ng::Video*> videos;
-			std::map<std::string, ng::Music*> music;
+			//std::map<std::string, ng::Music*> music; // Music используется не только в одной сцене
 			std::map<std::string, ng::Sound*> sounds;
 
 			Scene() {}

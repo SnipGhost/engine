@@ -8,12 +8,14 @@ using namespace ng;
 Font::Font(std::string src)
 {
 	id = "FONT";
-	loadFromFile(src);
+	if (!loadFromFile(src))
+		kernel.print("Failed load font " + src, WARN);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Font::Font(FontData fd)
 {
 	id = fd.id;
-	loadFromFile(fd.src);
+	if (!loadFromFile(fd.src))
+		kernel.print("Failed load font " + fd.src, WARN);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

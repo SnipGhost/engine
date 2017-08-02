@@ -5,15 +5,17 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sound::Sound(std::string _id, std::string src, float volume)
+Sound::Sound(std::string id, std::string src, float volume)
 {
-	setSound(src, volume);
+	if (!setSound(src, volume))
+		kernel.print("Failed load sound " + id, WARN);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sound::Sound(Data rd)
+Sound::Sound(ResData rd)
 {
 	playable = rd.visible;
-	setSound(rd.src, rd.volume);
+	if (!setSound(rd.src, rd.volume))
+		kernel.print("Failed load sound " + rd.id, WARN);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sound::setSound(std::string src, float volume)

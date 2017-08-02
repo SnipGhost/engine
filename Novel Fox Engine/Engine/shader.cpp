@@ -1,21 +1,24 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// icon.cpp                                            Реализация класса иконки
+// shader.cpp                                         Реализация класса спрайта
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Icon::Icon(std::string src)
+Shader::Shader()
 {
-	if (!setIcon(src))
-		std::cout << "Failed load icon " << src << std::endl;
-	else
-		std::cout << "Set icon " << src << std::endl;
+	//loadFromFile("resources/blur.frag", sf::Shader::Fragment);
+	//setUniform("texture", sf::Shader::CurrentTexture);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Icon::setIcon(std::string src)
+//Sprite::Sprite(ResData rd)
+//{
+//	
+//}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+std::ostream &ng::operator << (std::ostream &os, const Shader *s)
 {
-	if (!loadFromFile(src)) return 0;
-		return 1;
+	os << "[ng::Shader]" << std::endl;
+	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

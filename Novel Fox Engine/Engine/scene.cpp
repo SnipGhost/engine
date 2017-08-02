@@ -18,6 +18,13 @@ Scene::~Scene()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Scene::loadScene(XMLNode scene)
 {
+	std::string line = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+	kernel.print(line + "[Start loading resources]", INFO);
+	const char *sceneId = scene->Attribute("id");
+	if (sceneId)
+		kernel.print("\t\t\t\t\t\t\t\t[Scene id: " + std::string(sceneId) + "]", INFO);
+	else
+		kernel.print("\t\t\t\t\t\t\t\t\t\t  [Event]", INFO);
 	const size_t COUNT = 6;
 	const char *TAGS[COUNT] = {
 		"SPRITE", "ANIMATION", "VIDEO", "TEXT", "MUSIC", "SOUND"
@@ -29,59 +36,144 @@ void Scene::loadScene(XMLNode scene)
 		node = kernel.parseXML(scene, TAGS[i]);
 		while (node != NULL)
 		{
-			Data data = getData(node);
+			ResData data = getData(node);
 			switch (i)
 			{
-			case 0:
+			case 0: // [SPRITE]
 			{
-				objects[data.id] = new Sprite(data);
-				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
-				kernel.print(objects[data.id], INFO);
+				if (objects[data.id]) /// Если он есть в системе, то этот tag превращается в tag-edit
+				{	//Спрайт с этим id уже существует
+					std::cout << "Edit type for sprite: " << data.id << std::endl;  // [DELETE]
+					if (data.command == "edit")
+					{
+						//Edit
+						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
+					}
+				}
+				else
+				{
+					objects[data.id] = new Sprite(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
+					kernel.print(objects[data.id], INFO);
+				}
 				break;
 			}
-			case 1:
+			case 1: // [ANIMATESPRITE]
 			{
-				objects[data.id] = new AnimateSprite(data);
-				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
-				kernel.print(objects[data.id], INFO);
+				if (objects[data.id])
+				{	//Анимация с этим id уже существует
+					std::cout << "Edit type for animatesprite: " << data.id << std::endl;  // [DELETE]
+					if (data.command == "edit")
+					{
+						//Edit
+						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
+					}
+				}
+				else
+				{
+					objects[data.id] = new AnimateSprite(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
+					kernel.print(objects[data.id], INFO);
+				}
 				break;
 			}
-			case 2:
+			case 2: // [VIDEO]
 			{
-				Video *video = new Video(data);
-				video->play();
-				videos[data.id] = video;
-				objects[data.id] = video;
-				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
-				kernel.print(video, INFO);
+				if (objects[data.id])
+				{	// Видео с этим id уже существует
+					std::cout << "Edit type for video: " << data.id << std::endl;  // [DELETE]
+					if (data.command == "edit")
+					{
+						//if (data.volume)
+						//if (data.scale) 
+						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
+					}
+				}
+				else
+				{
+					Video *video = new Video(data);
+					video->play();
+					videos[data.id] = video;
+					objects[data.id] = video;
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
+					kernel.print(video, INFO);
+				}
 				break;
 			}
-			case 3:
+			case 3: // [TEXT]
 			{
-				objects[data.id] = new Text(data);
-				layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
-				kernel.print(objects[data.id], INFO);
+				if (objects[data.id])
+				{	// Текст с данным id уже существует
+					std::cout << "Edit type for text: " << data.id << std::endl; // [DELETE]
+					if (data.command == "edit")
+					{
+						//Edit
+						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
+					}
+				}
+				else
+				{
+					//Рассчёт нужного количества конструкторов Text: Имя, 1-я строчка, 2-я строчка и т.д.
+					objects[data.id] = new Text(data);
+					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
+					kernel.print(objects[data.id], INFO);
+				}
 				break;
 			}
-			case 4:
+			case 4: // [MUSIC]
 			{
-				Music *mus = new Music(data);
-				mus->play();
-				music[data.id] = mus;
-				kernel.print(mus, INFO);
+				if (kernel.music[data.id])
+				{	// Музыка с данным id уже существует
+					std::cout << "Edit music " << data.id << std::endl; // [DELETE]
+					if (data.command == "stop") // Остановка с последующим запуском с начала
+					{
+						//Сделать setSlowStop()
+						delete kernel.music[data.id];
+						kernel.music[data.id] = nullptr;
+					}
+					if (data.command == "pause") // Остановка с последующим запуском с места остановки
+					{
+						kernel.music[data.id]->playable = false;
+						kernel.music[data.id]->pause();
+					}
+					if (data.command == "edit")
+					{
+						if (data.volume) kernel.music[data.id]->setVolume(data.volume);
+						(data.loop) ? kernel.music[data.id]->setLoop(true) : kernel.music[data.id]->setLoop(false);
+						(data.visible) ? kernel.music[data.id]->playable = true : kernel.music[data.id]->playable = false; //Нужна ли?
+					}
+				}											
+				else
+				{
+					Music *mus = new Music(data);
+					mus->play();
+					kernel.music[data.id] = mus;
+					kernel.print(mus, INFO);
+				}
 				break;
 			}
-			case 5:
+			case 5: // [SOUND]
 			{
-				sounds[data.id] = new Sound(data);
-				kernel.print(sounds[data.id], INFO);
+				if (sounds[data.id]) // Map со звуками очищается при delete scene и менять звук можно в момент EVENT, для новой scene придётся создавать новый звук
+				{	//Звук с данным id на этой scene уже существует
+					std::cout << "Edit type for sound: " << data.id << std::endl; // [DELETE]
+					if (data.command == "edit")
+					{
+						//if (data.volume) sounds[data.id]->setVolume(data.volume);
+					}
+				}
+				else
+				{
+					sounds[data.id] = new Sound(data);
+					kernel.print(sounds[data.id], INFO);
+				}
 				break;
 			}
 			}
 			node = kernel.getNextXMLNode(node, TAGS[i]);
 		}
 	}
-	kernel.print("Resources loaded", NORM);
+	kernel.print(line + "~~~~~~~[Resources loaded]", INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Read event
@@ -118,10 +210,12 @@ bool Scene::jump(XMLNode node)
 void Scene::startMedia()
 {
 	for (auto &video : videos)
-		if (!kernel.event.isVideoPlay(*video.second))
+		if (video.second && !kernel.event.isVideoPlay(*video.second) && 
+			video.second->visible)
 			video.second->play();
-	for (auto &tempo : music)
-		if (!kernel.event.isMusicPlay(*tempo.second) && tempo.second->playable)
+	for (auto &tempo : kernel.music)
+		if (tempo.second && !kernel.event.isMusicPlay(*tempo.second) && 
+			tempo.second->playable)
 			tempo.second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +228,7 @@ void Scene::stopMedia()
 	for (auto &video : videos)
 		if (video.second)
 			video.second->setPause();
-	for (auto &tempo : music)
+	for (auto &tempo : kernel.music)
 		if (tempo.second)
 			tempo.second->setPause();
 	delay(FOCUS_DELAY);
@@ -163,7 +257,6 @@ void Scene::clear()
 	{
 		for (auto &obj : layer)
 		{
-			kernel.print("Deleting objects: " + obj->getId(), INFO);
 			delete obj;
 			obj = NULL;
 		}
@@ -171,8 +264,8 @@ void Scene::clear()
 	for (auto &sound : sounds) 
 		if (sound.second)
 			delete sound.second;
-	for (auto &tempo : music) 
-		if (tempo.second)
-			delete tempo.second;
+	//for (auto &tempo : music) // Музыку удаляет сам дальнейший разработчик из XML сценария
+	//	if (tempo.second)
+	//		delete tempo.second;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

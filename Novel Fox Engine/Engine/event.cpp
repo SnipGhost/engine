@@ -52,12 +52,16 @@ bool Event::isMouseKey(sf::Mouse::Button mouse)
 // Если данная музыка играет
 bool Event::isMusicPlay(sf::Music &music)
 {
-	return (music.getStatus() == sf::Music::Playing);
+	if (&music) // Если музыка существует [ВРОДЕ НЕ РАБОТАЕТ]
+		return (music.getStatus() == sf::Music::Playing);
+	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если данное видео проигрывается
 bool Event::isVideoPlay(sfe::Movie &video)
 {
-	return (video.getStatus() == sfe::Playing);
+	if (&video) // Если видео существует [ВРОДЕ НЕ РАБОТАЕТ]
+		return (video.getStatus() == sfe::Playing);
+	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

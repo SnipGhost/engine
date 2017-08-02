@@ -10,16 +10,12 @@ Video::Video(std::string src, int width, int height, float x, float y,
 {
 	if (!setVideo(src, width, height, x, y, volume, loop))
 		kernel.print("Failed load video " + src, WARN);
-	else
-		kernel.print("Created video " + src, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Video::Video(Data rd)
+Video::Video(ResData rd)
 {
 	if (!setVideo(rd.src, rd.width, rd.height, rd.x, rd.y, rd.volume, rd.loop))
 		kernel.print("Failed load video " + rd.id, WARN);
-	else
-		kernel.print("Created video " + rd.id, INFO);
 
 	id = rd.id;
 	layer = rd.layer;

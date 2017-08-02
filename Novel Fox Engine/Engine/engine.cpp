@@ -37,16 +37,38 @@ Kernel::Kernel()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	log = new LogStream(RES_PATH + LOG_FILE);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	std::string line = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+	log->print(line + "~~~~~~~~~~~~~~~~~~~~[Engine log]", INFO);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	version = VERSION;
-	log->print("Novel fox engine v" + version, NORM);
+	log->print("NOVEL FOX ENGINE v" + version, NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Установка начальных значений из файла конфигурации
 	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
-	screen.x = std::stof(conf["screen_x"].c_str());
-	screen.y = std::stof(conf["screen_y"].c_str());
 	devScreen.x = std::stof(conf["devScreen_x"].c_str());
 	devScreen.y = std::stof(conf["devScreen_y"].c_str());
 	int screen_mode = std::atoi(conf["screen_mode"].c_str());
+	switch (screen_mode)
+	{
+	case 8:
+	{
+		sf::VideoMode videoMode;
+		screen.x = (float)videoMode.getDesktopMode().width;
+		screen.y = (float)videoMode.getDesktopMode().height;
+		break;
+	}
+	case 7:
+	{
+		screen.x = std::stof(conf["screen_x"].c_str());
+		screen.y = std::stof(conf["screen_y"].c_str());
+		break;
+	}
+	default:
+	{
+		log->print("INVALID SCREEN MODE!", WARN);
+		break;
+	}
+	}
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,16 +103,16 @@ Kernel::Kernel()
 	else
 	{
 		std::string msg = "Failed to open window\n";
-		msg += "\tvideo mode:\t" + conf["screen_x"] + "x" + conf["screen_y"];
-		msg += "\n\tanti-Aliasing:\t" + conf["anti_aliasing"];
-		msg += "\n\twindow name:\t" + conf["window_name"];
+		msg += "\tVideo mode:\t" + conf["screen_x"] + "x" + conf["screen_y"];
+		msg += "\n\tAnti-Aliasing:\t" + conf["anti_aliasing"];
+		msg += "\n\tWindow name:\t" + conf["window_name"];
 		log->print(msg, CRIT);
 		exit(EXIT_FAILURE);	
 	}
 	window->setFramerateLimit(frame_limit);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Прикрепление иконки к приложению
-	ng::Icon icon;
+	sf::Image icon;
 	if(!icon.loadFromFile(conf["app_icon"]))
 		log->print("Failed to load icon " + conf["app_icon"], WARN);
 	else 
@@ -242,6 +264,7 @@ void Kernel::endDisplay()
 	window->display();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Отображение скрывающих полосок
 void ng::Kernel::displayUI()
 {
 	band1->display();
@@ -261,7 +284,7 @@ void Kernel::loadSpecData()
 	node = parseXML(doc->FirstChildElement("SCRIPT"), "CLICK");
 	if (node != NULL)
 	{
-		Data data = getData(node);
+		ResData data = getData(node);
 		click = new Sound(data.id, data.src, data.volume);
 		log->print("Loaded click sound: " + data.src, INFO);
 	}
@@ -317,54 +340,63 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по ресурсам
-Data ng::getData(XMLNode node)
+ResData ng::getData(XMLNode node)
 {
+	ResData res;
+
+	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO"))
+	{
+		const char *alpha = node->Attribute("alpha");
+		(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
+		const char *width = node->Attribute("width");
+		(width) ? res.width = std::atoi(width) : res.width = 256;
+		const char *height = node->Attribute("height");
+		(height) ? res.height = std::atoi(height) : res.height = 256;
+		const char *smooth = node->Attribute("smooth");
+		(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
+		const char *delay = node->Attribute("delay");
+		(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
+	}
+	if (!strcmp(node->Name(), "TEXT"))
+	{
+		const char *text = node->GetText();
+		(text) ? res.text = text : res.text = "NO TEXT";
+		const char *style = node->Attribute("style");
+		(style) ? res.style = style : res.style = "NULL";
+		const char *fontId = node->Attribute("font");
+		(fontId) ? res.fontId = fontId : res.fontId = "standart";
+		const char *colorname = node->Attribute("colorname");
+		(colorname) ? res.colorname = colorname : res.colorname = "black";
+		const char *namePerson = node->Attribute("name");
+		(namePerson) ? res.namePerson = namePerson : res.namePerson = "NULL";
+		const char *color = node->Attribute("color");
+		(color) ? res.color = color : res.color = "black";
+	}
+
 	const char *x = node->Attribute("x");
 	const char *y = node->Attribute("y");
 	const char *id = node->Attribute("id");
 	const char *src = node->Attribute("src");
 	const char *size = node->Attribute("size");
 	const char *loop = node->Attribute("loop");
-	const char *fontId = node->Attribute("font");
-	const char *alpha = node->Attribute("alpha");
-	const char *command = node->Attribute("cmd");
-	const char *color = node->Attribute("color");
+	const char *command = node->Attribute("command");
 	const char *scale = node->Attribute("scale");
-	const char *style = node->Attribute("style");
 	const char *layer = node->Attribute("layer");
-	const char *width = node->Attribute("width");
-	const char *delay = node->Attribute("delay");
-	const char *smooth = node->Attribute("smooth");
-	const char *height = node->Attribute("height");
-	const char *volume = node->Attribute("volume");
 	const char *visible = node->Attribute("visible");
-	const char *namePerson = node->Attribute("name");
-	const char *text = NULL;
-	if (!strcmp(node->Name(), "TEXT")) 
-		text = node->GetText();
+	const char *volume = node->Attribute("volume");
 
-	Data res;
 	(id) ? res.id = id : res.id = "NULL";
 	(x) ? res.x = std::stof(x) : res.x = 0;
 	(y) ? res.y = std::stof(y) : res.y = 0;
-	(text) ? res.text = text : res.text = "NO TEXT";
-	(style) ? res.style = style : res.style = "NULL";
-	(color) ? res.color = color : res.color = "black";
-	(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
 	(size) ? res.size = std::atoi(size) : res.size = 1;
 	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
 	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
 	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
 	(command) ? res.command = command : res.command = "NULL";
-	(fontId) ? res.fontId = fontId : res.fontId = "standart";
-	(width) ? res.width = std::atoi(width) : res.width = 256;
-	(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
-	(height) ? res.height = std::atoi(height) : res.height = 256;
 	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
 	(visible) ? res.visible = CONVTRUE(visible) : res.visible = true;
 	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
-	(namePerson) ? res.namePerson = namePerson : res.namePerson = "";
-	(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
+
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -375,8 +407,8 @@ FontData ng::getFontData(XMLNode node)
 	const char *id = node->Attribute("id");
 
 	FontData res;
-	res.id = id;
-	res.src = RES_PATH + src;
+	(id) ? res.id = id : res.id = "NULL";
+	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

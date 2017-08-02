@@ -9,16 +9,12 @@ Sprite::Sprite(std::string id, std::string src, bool smooth)
 {
 	if (!setStrTexture(src, smooth))
 		kernel.print("Failed to create sprite " + id, WARN);
-	else
-		kernel.print("Sprite created " + id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sprite::Sprite(Data rd)
+Sprite::Sprite(ResData rd)
 {
 	if (!setStrTexture(rd.src, rd.smooth))
 		kernel.print("Failed to create sprite " + rd.id, WARN);
-	else
-		kernel.print("Sprite created " + rd.id, INFO);
 
 	setColor(sf::Color(255, 255, 255, rd.alpha));
 	
@@ -39,7 +35,7 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//void Sprite::change(Data rd)
+//void Sprite::change(ResData rd)
 //{
 //	if (!setStrTexture(rd.src, rd.smooth))
 //		kernel.print("Failed to change sprite " + rd.id, WARN);
