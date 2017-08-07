@@ -206,7 +206,7 @@ std::string Kernel::operator [] (std::string key)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Стандартные события
-void Kernel::eventUpdate(Scene *s)
+void Kernel::eventUpdate()
 {
 		if (event.isKeyboardKey(event.keyboard.Escape) || event.isWinClosed())
 			window->close();
@@ -221,7 +221,7 @@ void Kernel::eventUpdate(Scene *s)
 			window->setView(sf::View(sf::FloatRect(0, 0, 
 				         (float)event.size.width, (float)event.size.height)));
 
-			for (auto &layer : s->layers)
+			for (auto &layer : scene->layers)
 			{
 				for (auto &object : layer)
 				{
@@ -235,6 +235,72 @@ void Kernel::eventUpdate(Scene *s)
 			band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 			band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
 		}
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Kernel::sceneUpdate()
+{
+	bool clickMouseLeft = false;
+	bool clickEnter = false;
+	if (event.isMouseClickKey(sf::Mouse::Left)) clickMouseLeft = true;
+	if (event.isKeyboardKey(sf::Keyboard::Return)) clickEnter = true; //Return - Enter
+	if (clickMouseLeft || clickEnter || scene->tEvent == 0) //Добавить переключение по другим причинам
+	{
+		if (scene->tEvent != 0 && click) click->play();
+
+		if (clickMouseLeft) print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "
+			+ std::to_string(event.mouseButton.y) + ")", INFO);
+		if (clickEnter) print("Keyboard click: Enter", INFO);
+		if (scene->tEvent == 0) print("Event timeout ", INFO);
+
+		if (scene->doEvent(node)) {
+
+			delete scene;
+			scene = nullptr;
+
+			ResData data;
+			if (node && scene->jump(node))
+			{
+				data = getData(node->FirstChildElement("JUMP"));
+				node = getNextXMLNode(node, "SCENE", data.id);
+			}
+			else
+			{
+				print("~~> GO TO NEXT SCENE", NORM);
+				if (node) node = getNextXMLNode(node, "SCENE");
+			}
+
+			if (node)
+				scene = new Scene(node);
+			else
+			{
+				node = loadFirstScene();
+				if (node) scene = new Scene(node);
+			}
+
+		}
+	}
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Kernel::updateAll()
+{
+	while (window->pollEvent(event))
+	{
+		eventUpdate();
+		sceneUpdate();
+	}
+
+	if (scene->tEvent > 0) // Если нашли Event с time
+	{
+		scene->tEvent -= globalClock.getMilliSecond() - scene->saveTTEvent;
+		scene->saveTTEvent = globalClock.getMilliSecond();
+		if (scene->tEvent < 0) scene->tEvent = 0;
+	}
+	else if (scene->tEvent != -1)
+	{
+		sceneUpdate();
+	}
+
+	// Другие update
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Если окно потеряло фокус
@@ -325,7 +391,7 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 				idNextScene = node->NextSiblingElement(tag)->Attribute("id");
 				if (!strcmp(idNextScene, id.c_str()))
 				{
-					kernel.print("~~> JUMP TO " + (std::string)idNextScene, 3);
+					kernel.print("~~> JUMP TO SCENE " + (std::string)idNextScene, NORM);
 					return node->NextSiblingElement(tag);
 				}
 				node = node->NextSiblingElement(tag);
@@ -343,59 +409,84 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 ResData ng::getData(XMLNode node)
 {
 	ResData res;
+	res.bitMask = 0; //Обнуляем битовую маску
 
 	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO"))
 	{
-		const char *alpha = node->Attribute("alpha");
-		(alpha) ? res.alpha = 255 * std::atoi(alpha) / 100 : res.alpha = 255;
 		const char *width = node->Attribute("width");
-		(width) ? res.width = std::atoi(width) : res.width = 256;
+		if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 256;
+
 		const char *height = node->Attribute("height");
-		(height) ? res.height = std::atoi(height) : res.height = 256;
+		if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 256;
+
 		const char *smooth = node->Attribute("smooth");
-		(smooth) ? res.smooth = CONVTRUE(smooth) : res.smooth = 0;
+		if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
+
 		const char *delay = node->Attribute("delay");
-		(delay) ? res.ms = std::atoi(delay) : res.ms = 40;
+		if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); } else res.delay = 40;
 	}
 	if (!strcmp(node->Name(), "TEXT"))
 	{
 		const char *text = node->GetText();
-		(text) ? res.text = text : res.text = "NO TEXT";
+		if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";
+
+		const char *type = node->Attribute("type");
+		if (type) { res.type = type; res.bitMask = res.bitMask | (1 << _type); } else res.type = "NULL";
+
 		const char *style = node->Attribute("style");
-		(style) ? res.style = style : res.style = "NULL";
+		if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
+
 		const char *fontId = node->Attribute("font");
-		(fontId) ? res.fontId = fontId : res.fontId = "standart";
+		if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); } else res.fontId = "standart";
+
 		const char *colorname = node->Attribute("colorname");
-		(colorname) ? res.colorname = colorname : res.colorname = "black";
+		if (colorname) { res.colorname = colorname; res.bitMask = res.bitMask | (1 << _colorname); } else res.colorname = "black";
+
 		const char *namePerson = node->Attribute("name");
-		(namePerson) ? res.namePerson = namePerson : res.namePerson = "NULL";
+		if (namePerson) { res.namePerson = namePerson; res.bitMask = res.bitMask | (1 << _namePerson); } else res.namePerson = "NULL";
+
 		const char *color = node->Attribute("color");
-		(color) ? res.color = color : res.color = "black";
+		if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); } else res.color = "black";
 	}
 
-	const char *x = node->Attribute("x");
-	const char *y = node->Attribute("y");
 	const char *id = node->Attribute("id");
-	const char *src = node->Attribute("src");
-	const char *size = node->Attribute("size");
-	const char *loop = node->Attribute("loop");
-	const char *command = node->Attribute("command");
-	const char *scale = node->Attribute("scale");
-	const char *layer = node->Attribute("layer");
-	const char *visible = node->Attribute("visible");
-	const char *volume = node->Attribute("volume");
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
 
-	(id) ? res.id = id : res.id = "NULL";
-	(x) ? res.x = std::stof(x) : res.x = 0;
-	(y) ? res.y = std::stof(y) : res.y = 0;
-	(size) ? res.size = std::atoi(size) : res.size = 1;
-	(loop) ? res.loop = CONVTRUE(loop) : res.loop = false;
-	(scale) ? res.scale = std::stof(scale) : res.scale = 1;
-	(layer) ? res.layer = std::atoi(layer) : res.layer = 0;
-	(command) ? res.command = command : res.command = "NULL";
-	(volume) ? res.volume = std::stof(volume) : res.volume = 100;
-	(visible) ? res.visible = CONVTRUE(visible) : res.visible = true;
-	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
+	const char *x = node->Attribute("x");
+	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
+
+	const char *y = node->Attribute("y");
+	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
+
+	const char *size = node->Attribute("size");
+	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;
+
+	const char *loop = node->Attribute("loop");
+	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
+
+	const char *layermotion = node->Attribute("layermotion");
+	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
+
+	const char *scale = node->Attribute("scale");
+	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+
+	const char *layer = node->Attribute("layer");
+	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
+	
+	const char *command = node->Attribute("command");
+	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
+
+	const char *volume = node->Attribute("volume");
+	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
+	
+	const char *visible = node->Attribute("visible");
+	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
+
+	const char *alpha = node->Attribute("alpha");
+	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
+
+	const char *src = node->Attribute("src");
+	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
 
 	return res;
 }

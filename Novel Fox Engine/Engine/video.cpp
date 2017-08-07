@@ -19,6 +19,7 @@ Video::Video(ResData rd)
 
 	id = rd.id;
 	layer = rd.layer;
+	layermotion = rd.layermotion;
 	visible = rd.visible;
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
@@ -46,6 +47,12 @@ void Video::setPause()
 {
 	if (getStatus() == sfe::Playing)
 		pause();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Video::edit(ResData rd)
+{
+	//Сделать Edit для видео
+	kernel.print("Edit mode for video: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::display(sf::RenderWindow *win)
@@ -92,9 +99,37 @@ void Video::computeLayerScale()
 {
 	float w = this->getSize().x;
 	float h = this->getSize().y;
+	float sx = 0;
+	float sy = 0;
 
-	float sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
-	float sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+	static const float k = kernel.devScreen.x / kernel.devScreen.y;
+
+	if (kernel.screen.x * (1 / k) <= kernel.screen.y) //Горизонтальные полосы
+	{
+		if (layer <= 0 || layer > 3)
+		{
+			sx = posScale.scale.x + (float)0.03 * kernel.factor.x;
+			sy = posScale.scale.y + (float)0.03 * kernel.factor.x;
+		}
+		else
+		{
+			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+		}
+	}
+	else // Вертикальные полосы
+	{
+		if (layer <= 0 || layer > 3)
+		{
+			sx = posScale.scale.x + (float)0.03 * kernel.factor.y;
+			sy = posScale.scale.y + (float)0.03 * kernel.factor.y;
+		}
+		else
+		{
+			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
+			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
+		}
+	}
 
 	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
 	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;

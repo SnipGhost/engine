@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SCRIPT>
+
+  <CLICK id="click" volume="5" src="scenario/sounds/click.ogg"/>
+  <FONT id="std" src="scenario/fonts/font.ttf"/>
+  <FONT id="rus" src="scenario/fonts/CyrilicOld.ttf"/>
+
+  <SCENE id="guidebot">
+    <MUSIC id="main" volume="2" loop="true" src="scenario/music/music3.ogg"/>
+    <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
+    <SPRITE id="info"  layer="1"            smooth="true" x="50" y="270" scale="0.3" src="scenario/textures/demoVersion/info.png"/>
+    <SPRITE id="logo"  layer="2"            smooth="true" x="600" y="100" scale="0.6" src="scenario/textures/demoVersion/logo.png"/>
+    <EVENT>
+      <SPRITE id="logo"  command="edit" visible="false"/>
+      <SPRITE id="info"  command="edit" visible="false"/>
+      <SPRITE id="bot1off"  layer="0"            smooth="true" x="500" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot1off.png"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="hud"   layer="4"            smooth="true" x="470" y="550" scale="0.2" src="scenario/textures/demoVersion/hud.png"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="hud"  command="edit" visible="false"/>
+      <SPRITE id="bot1off" command="edit" visible="false"/>
+      <SPRITE id="bot1loading"  layer="0"            smooth="true" x="500" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot1loading.png"/>
+      <MUSIC id="loadingbot" volume="5" loop="false" src="scenario/music/loadingbot.ogg"/>
+    </EVENT>
+    <EVENT>
+      <MUSIC id="loadingbot" command="stop"/>
+      <SPRITE id="bot1loading" command="edit" visible="false"/>
+      <SPRITE id="bot1tell"  layer="0"            smooth="true" x="500" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot1tell.png"/>
+      <MUSIC id="botbeep" volume="1" loop="false" src="scenario/music/botbeep.ogg"/>
+      <SPRITE id="hud"  command="edit" visible="true"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="bot1tell" command="edit" visible="false"/>
+      <SPRITE id="bot1norm"  layer="0"            smooth="true" x="500" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot1norm.png"/>
+      <SPRITE id="hud"  command="edit" visible="false"/>
+      <MUSIC id="botbeep" command="stop"/>
+    </EVENT>
+  </SCENE>
+  <SCENE id="eventbot">
+    <SPRITE id="bg"    layer="0"            smooth="true" x="00" y="00" scale="1.0" src="scenario/textures/scene_0/background.png"/>
+    <SPRITE id="bot4norm"  layer="0"            smooth="true" x="200" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot4norm.png"/>
+    <EVENT>
+      <SPRITE id="bot4norm"  command="edit" visible="false"/>
+      <SPRITE id="bot4tell"  layer="0"            smooth="true" x="200" y="-50" scale="0.5" src="scenario/textures/demoVersion/bot4tell.png"/>
+      <MUSIC id="botbeep" volume="1" loop="false" src="scenario/music/botbeep.ogg"/>
+      <SPRITE id="hud"   layer="4"            smooth="true" x="470" y="550" scale="0.2" src="scenario/textures/demoVersion/hud.png"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="bot4tell"  command="edit" visible="false"/>
+      <SPRITE id="bot4norm"  command="edit" visible="true"/>
+      <SPRITE id="hud"  command="edit" visible="false"/>
+      <MUSIC id="botbeep" command="stop"/>
+      <MUSIC id="main" command="stop"/>
+    </EVENT>
+  </SCENE>
+
+</SCRIPT>

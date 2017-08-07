@@ -25,34 +25,42 @@ bool Text::setText(ResData &rd)
 
 	id = rd.id;
 	layer = rd.layer;
+	layermotion = rd.layermotion;
 	visible = rd.visible;
-
-	if (rd.color == "red") 
-		setFillColor(sf::Color::Red);
-	if (rd.color == "green") 
-		setFillColor(sf::Color::Green);
-	if (rd.color == "blue") 
-		setFillColor(sf::Color::Blue);
-	if (rd.color == "yellow") 
-		setFillColor(sf::Color::Yellow);
-	if (rd.color == "white") 
-		setFillColor(sf::Color::White); 
-	if (rd.color == "black") 
-		setFillColor(sf::Color::Black);
+	positionObj = sf::Vector2f(rd.x, rd.y);
+	scaleObj = rd.scale;
 
 	//setOutlineThickness(2);				//Обводка
 	//setOutlineColor(sf::Color::Blue);     //Цвет обводки
 
-	if (rd.style != "NULL") setStyleText(rd);
-
+	setColorText(rd);
 	setCharacterSize(rd.size);
+	if (rd.style != "NULL") setStyleText(rd);
 
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Text::setColorText(ResData &rd)
+{
+	if (rd.color == "red")
+		setFillColor(sf::Color::Red);
+	if (rd.color == "green")
+		setFillColor(sf::Color::Green);
+	if (rd.color == "blue")
+		setFillColor(sf::Color::Blue);
+	if (rd.color == "yellow")
+		setFillColor(sf::Color::Yellow);
+	if (rd.color == "white")
+		setFillColor(sf::Color::White);
+	if (rd.color == "black")
+		setFillColor(sf::Color::Black);
+
+	//setColor(sf::Color(255, 255, 255, rd.alpha)); //Сделать установку alpha
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setStyleText(ResData &rd)
 {
-	char *Ptr = strtok((char*)rd.style.c_str() , " ");
+	char *Ptr = strtok((char*)rd.style.c_str(), " ");
 
 	unsigned int styleNum = 0;
 
@@ -64,12 +72,38 @@ void Text::setStyleText(ResData &rd)
 			styleNum += STRIKETHROUGH;
 		if (!strcmp(Ptr, "italic"))
 			styleNum += ITALIC;
-		if (!strcmp(Ptr, "underlined")) 
+		if (!strcmp(Ptr, "underlined"))
 			styleNum += UNDERLINED;
 		Ptr = strtok(0, " ");
 	}
 
 	setStyle(styleNum);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Text::edit(ResData rd)
+{
+	//Layer - НЕЛЬЗЯ
+	if (GETBIT(rd.bitMask, _x) && GETBIT(rd.bitMask, _y)) //ЕСЛИ ЕСТЬ ДВЕ КООРДИНАТЫ - ФИКСИТЬ
+	{
+		positionObj = sf::Vector2f(rd.x, rd.y); //Перезаписали стандартные значения
+		setPosition(rd.x, rd.y);
+		origin = PosScale(rd.x, rd.y, getScaleObj(), getScaleObj());
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _scale))
+	{
+		scaleObj = rd.scale; //Перезаписали стандартные значения
+		setScale(rd.scale, rd.scale);
+		origin = PosScale(getPositionObj().x, getPositionObj().y, rd.scale, rd.scale);
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _size)) setCharacterSize(rd.size);
+	if (GETBIT(rd.bitMask, _fontId)) setFont(*kernel.fonts[rd.fontId]);
+	if (GETBIT(rd.bitMask, _text)) setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
+	if (GETBIT(rd.bitMask, _color)) setColorText(rd);
+	if (GETBIT(rd.bitMask, _style)) setStyleText(rd);
+	//if (GETBIT(rd.bitMask, _alpha)) setColor(sf::Color(255, 255, 255, rd.alpha));
+	kernel.print("Edit mode for text: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::display(sf::RenderWindow *win) //Переделать
@@ -87,7 +121,7 @@ std::ostream & Text::print(std::ostream &os)
 	sf::Vector2f pos = getPosition();
 	sf::Vector2f scl = getScale();
 	os << id << " [ng::Text]" << std::endl;
-	//os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
+	os << "\tColor:   \t" << getFillColor().toInteger() << std::endl;
 	os << "\tLayer:   \t" << layer << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
@@ -105,13 +139,5 @@ void Text::setResize()
 void Text::setLayerMotion()
 {
 	doLayerMotion(this);
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::getTextRect()
-{
-	float x = this->getLocalBounds().width;
-	float y = this->getLocalBounds().height;
-
-	std::cout << x << " " << y << std::endl;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

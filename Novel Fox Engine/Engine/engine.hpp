@@ -61,6 +61,9 @@ namespace ng
 	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
 	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
+	enum { _delay = 0, _layer, _width, _height, _alpha, _size, _x, _y, _scale, 
+		   _volume, _loop, _smooth, _visible, _layermotion, _id, _src, _text, 
+		   _type, _style, _namePerson, _colorname, _color, _fontId, _command };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
@@ -152,6 +155,8 @@ namespace ng
 			sf::Vector2f screen;				// Размеры монитора
 			sf::Vector2f factor;				// Коэффициент между мониторами
 			ng::Shape *band1, *band2;			// Полосы сокрытия
+			XMLNode node;					    // Общая текущая node
+			Scene *scene;						// Общая текущая сцена
 			//-----------------------------------------------------------------
 			static Kernel & init();                   // Instance-метод
 			~Kernel();                                // Обязательный деструктор
@@ -159,7 +164,9 @@ namespace ng
 			std::string operator[] (std::string key); // Выдает конфигурацию
 			sf::Vector2f getMouse();				  // Запрос координат мыши
 			//-----------------------------------------------------------------
-			void eventUpdate(Scene *s);  // Отследить обычные события
+			void updateAll();            // Обновить всё, что есть в списке
+			void eventUpdate();			 // Отследить обычные события
+			void sceneUpdate();			 // Отследить событие переключения
 			bool hasFocus();             // Фокус на приложении
 			bool lostFocus();            // Фокус на приложении потерян
 			void startDisplay();         // Начало отрисовки
@@ -188,28 +195,31 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct ResData
 	{
-		int ms;                  // Параметр задержки
-		int layer;               // Слой отображения
-		int width;               // Ширина объекта
-		int height;              // Высота объекта
-		int alpha;               // Прозрачность
-		unsigned int size;       // Размер текста
-		float x;                 // Позиция по X
-		float y;                 // Позиция по Y
-		float scale;             // Масштаб (sX = sY)
-		float volume;            // Громкость
-		bool loop;               // Зацикливание
-		bool smooth;             // Размытие
-		bool visible;            // Видимость
-		std::string id;          // Идентификатор объекта
-		std::string src;         // Путь до ресурса
-		std::string text;        // Содержание текста
-		std::string style;       // Стиль текста
-		std::string namePerson;  // Имя персонажа
-		std::string colorname;   // Цвет имени персонажа
-		std::string color;       // Цвет текста
-		std::string fontId;      // Идентификатор шрифта
-		std::string command;     // Команда
+		int delay;               // Параметр задержки		0
+		int layer;               // Слой отображения		1
+		int width;               // Ширина объекта			2
+		int height;              // Высота объекта			3
+		int alpha;               // Прозрачность			4
+		unsigned int size;       // Размер текста			5
+		float x;                 // Позиция по X			6
+		float y;                 // Позиция по Y			7
+		float scale;             // Масштаб (sX = sY)		8
+		float volume;            // Громкость				9
+		bool loop;               // Зацикливание			10
+		bool smooth;             // Размытие				11
+		bool visible;            // Видимость				12
+		bool layermotion;		 // Движение слоёв			13
+		std::string id;          // Идентификатор объекта	14
+		std::string src;         // Путь до ресурса			15
+		std::string text;        // Содержание текста		16		
+		std::string type;       // Тип текста				17
+		std::string style;       // Стиль текста			18
+		std::string namePerson;  // Имя персонажа			19	
+		std::string colorname;   // Цвет имени персонажа	20
+		std::string color;       // Цвет текста				21	
+		std::string fontId;      // Идентификатор шрифта	22
+		std::string command;     // Команда					23
+		unsigned __int32 bitMask;  // Битовая маска изменений
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode); // Распарсить FONT-ноду
@@ -230,14 +240,12 @@ namespace ng
 		private:
 			float volume;
 		public:
+			std::string state;
 			bool playable;
-			Music(const Music &copy) {};
-			Music(std::string id, std::string src, float volume = 100, bool loop = true);
 			Music(ResData rd);
 			bool setMusic(std::string src, float volume, bool loop);
 			void setPause();
-			void setSlowStop();
-			//void change(ResData rd);
+			//bool setSlowStop();
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,7 +267,10 @@ namespace ng
 	{
 		protected:
 			int layer;
+			bool layermotion;
 			std::string id;
+			sf::Vector2f positionObj;
+			float scaleObj;
 		public:
 			struct PosScale
 			{
@@ -272,8 +283,11 @@ namespace ng
 			bool visible;
 
 			virtual ~Displayable();
-			unsigned int getLayer();
-			std::string getId();
+
+			sf::Vector2f getPositionObj(); //Первоначально установенные 
+			float getScaleObj();		   //Первоначально установенные 
+
+			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
 			virtual void setLayerMotion() {}
@@ -302,8 +316,8 @@ namespace ng
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
-			/*void change(ResData rd);*/
 			void display(sf::RenderWindow *win = kernel.window);
+			void edit(ResData rd);
 			void setResize();
 			void computeLayerScale();
 			void setLayerMotion();
@@ -325,7 +339,7 @@ namespace ng
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
-			/*void change(ResData rd);*/
+			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
@@ -334,17 +348,15 @@ namespace ng
 	// Класс текста/действий над текстом
 	class Text: public sf::Text, public ng::Displayable
 	{
-		protected:
-			std::map <std::string, int> mapping;
 		public:
 			Text(ResData rd);
 			bool setText(ResData &rd);
+			void setColorText(ResData &rd);
 			void setStyleText(ResData &rd);
-			/*void change(ResData rd);*/
+			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
-			void getTextRect();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
 	};
@@ -362,7 +374,7 @@ namespace ng
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();
-			/*void change(ResData rd);*/
+			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();
@@ -398,12 +410,13 @@ namespace ng
 			XMLNode eventNode;
 			std::map<std::string, ng::Displayable*> objects;
 			std::map<std::string, ng::Video*> videos;
-			//std::map<std::string, ng::Music*> music; // Music используется не только в одной сцене
 			std::map<std::string, ng::Sound*> sounds;
 
 			Scene() {}
 			Scene(XMLNode node);
 			~Scene();
+			int tEvent;
+			int saveTTEvent;
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
 			bool jump(XMLNode scene);       // Проверка на JUMP

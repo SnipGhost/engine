@@ -5,14 +5,9 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Music::Music(std::string id, std::string src, float volume, bool loop)
-{
-	if (!setMusic(src, volume, loop))
-		kernel.print("Failed load music " + id, WARN);
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Music::Music(ResData rd)
 {
+	state = "normal";
 	playable = rd.visible;
 	if (!setMusic(rd.src, rd.volume, rd.loop))
 		kernel.print("Failed load music " + rd.id, WARN);
@@ -27,18 +22,26 @@ bool Music::setMusic(std::string src, float volume, bool loop)
 	setLoop(loop);
 	return 1;
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Music::setSlowStop()
-{
-	if (getStatus() == sf::Music::Playing) {
-		volume = getVolume();
-		volume-=1;
-		if (volume <= 0)	
-			stop();
-		else 
-			setVolume(volume);
-	}
-}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//bool Music::setSlowStop()
+//{
+//	static float firstTime = kernel.globalClock.getMilliSecond();
+//	float nextTime = kernel.globalClock.getMilliSecond();
+//	float k = (nextTime - firstTime)/10;
+//
+//	std::cout << firstTime << std::endl;
+//
+//	if (getStatus() == sf::Music::Playing && k <= 100) {
+//		volume = getVolume() - getVolume()*k/100;
+//
+//		if (volume <= 100 && volume >= 0) setVolume(volume);
+//		return 0; 
+//	}
+//	else
+//	{
+//		return 1;
+//	}
+//}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Music::setPause()
 {

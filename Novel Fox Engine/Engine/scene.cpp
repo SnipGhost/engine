@@ -8,6 +8,7 @@ using namespace ng;
 Scene::Scene(XMLNode scene)
 {
 	firstEvent = true;
+	tEvent = -1;
 	loadScene(scene);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,14 +42,10 @@ void Scene::loadScene(XMLNode scene)
 			{
 			case 0: // [SPRITE]
 			{
-				if (objects[data.id]) /// Если он есть в системе, то этот tag превращается в tag-edit
-				{	//Спрайт с этим id уже существует
-					std::cout << "Edit type for sprite: " << data.id << std::endl;  // [DELETE]
-					if (data.command == "edit")
-					{
-						//Edit
-						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
-					}
+				if (objects[data.id])
+				{	
+					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
+					objects[data.id]->edit(data);
 				}
 				else
 				{
@@ -61,13 +58,9 @@ void Scene::loadScene(XMLNode scene)
 			case 1: // [ANIMATESPRITE]
 			{
 				if (objects[data.id])
-				{	//Анимация с этим id уже существует
-					std::cout << "Edit type for animatesprite: " << data.id << std::endl;  // [DELETE]
-					if (data.command == "edit")
-					{
-						//Edit
-						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
-					}
+				{	
+					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
+					objects[data.id]->edit(data);
 				}
 				else
 				{
@@ -80,14 +73,9 @@ void Scene::loadScene(XMLNode scene)
 			case 2: // [VIDEO]
 			{
 				if (objects[data.id])
-				{	// Видео с этим id уже существует
-					std::cout << "Edit type for video: " << data.id << std::endl;  // [DELETE]
-					if (data.command == "edit")
-					{
-						//if (data.volume)
-						//if (data.scale) 
-						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
-					}
+				{
+					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
+					objects[data.id]->edit(data);
 				}
 				else
 				{
@@ -103,13 +91,9 @@ void Scene::loadScene(XMLNode scene)
 			case 3: // [TEXT]
 			{
 				if (objects[data.id])
-				{	// Текст с данным id уже существует
-					std::cout << "Edit type for text: " << data.id << std::endl; // [DELETE]
-					if (data.command == "edit")
-					{
-						//Edit
-						(data.visible) ? objects[data.id]->visible = true : objects[data.id]->visible = false;
-					}
+				{
+					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
+					objects[data.id]->edit(data);
 				}
 				else
 				{
@@ -123,24 +107,36 @@ void Scene::loadScene(XMLNode scene)
 			case 4: // [MUSIC]
 			{
 				if (kernel.music[data.id])
-				{	// Музыка с данным id уже существует
-					std::cout << "Edit music " << data.id << std::endl; // [DELETE]
-					if (data.command == "stop") // Остановка с последующим запуском с начала
+				{
+					if (data.command == "stop") // Остановка и удаление
 					{
-						//Сделать setSlowStop()
 						delete kernel.music[data.id];
 						kernel.music[data.id] = nullptr;
 					}
-					if (data.command == "pause") // Остановка с последующим запуском с места остановки
+					if (data.command == "pause") // Остановка на паузу
 					{
 						kernel.music[data.id]->playable = false;
 						kernel.music[data.id]->pause();
 					}
+					if (data.command == "play") // Остановка на паузу
+					{
+						kernel.music[data.id]->playable = true;
+						kernel.music[data.id]->play();
+					}
+
+					//if (data.command == "slowstop") // Плавная остатовка и удаление
+					//	kernel.music[data.id]->state = "slowstop";
+					//if (data.command == "slowpause") // Плавная остановка на паузу
+					//	kernel.music[data.id]->state = "slowpause";
+					//if (data.command == "slowplay") // Плавное включение
+					//	kernel.music[data.id]->state = "slowstart";
+
+
 					if (data.command == "edit")
 					{
-						if (data.volume) kernel.music[data.id]->setVolume(data.volume);
-						(data.loop) ? kernel.music[data.id]->setLoop(true) : kernel.music[data.id]->setLoop(false);
-						(data.visible) ? kernel.music[data.id]->playable = true : kernel.music[data.id]->playable = false; //Нужна ли?
+						//if (data.volume) kernel.music[data.id]->setVolume(data.volume);
+						//(data.loop) ? kernel.music[data.id]->setLoop(true) : kernel.music[data.id]->setLoop(false);
+						//(data.visible) ? kernel.music[data.id]->playable = true : kernel.music[data.id]->playable = false; //Нужна ли?
 					}
 				}											
 				else
@@ -155,8 +151,7 @@ void Scene::loadScene(XMLNode scene)
 			case 5: // [SOUND]
 			{
 				if (sounds[data.id]) // Map со звуками очищается при delete scene и менять звук можно в момент EVENT, для новой scene придётся создавать новый звук
-				{	//Звук с данным id на этой scene уже существует
-					std::cout << "Edit type for sound: " << data.id << std::endl; // [DELETE]
+				{	
 					if (data.command == "edit")
 					{
 						//if (data.volume) sounds[data.id]->setVolume(data.volume);
@@ -183,7 +178,12 @@ bool Scene::doEvent(XMLNode scene)
 	{
 		eventNode = scene->FirstChildElement("EVENT"); 
 		if (eventNode)
+		{
 			loadScene(eventNode);
+			const char *timeEvent = eventNode->Attribute("time");  //Добавить переключение по другим причинам
+			if (timeEvent) tEvent = std::atoi(timeEvent);
+			saveTTEvent = kernel.globalClock.getMilliSecond();
+		}
 		else
 			return 1;
 		firstEvent = false;
@@ -192,7 +192,12 @@ bool Scene::doEvent(XMLNode scene)
 	{
 		eventNode = eventNode->NextSiblingElement("EVENT");
 		if (eventNode)
+		{
 			loadScene(eventNode);
+			const char *timeEvent = eventNode->Attribute("time");  //Добавить переключение по другим причинам
+			if (timeEvent) tEvent = std::atoi(timeEvent);
+			saveTTEvent = kernel.globalClock.getMilliSecond();
+		}
 		else
 			return 1;
 	}
@@ -215,7 +220,7 @@ void Scene::startMedia()
 			video.second->play();
 	for (auto &tempo : kernel.music)
 		if (tempo.second && !kernel.event.isMusicPlay(*tempo.second) && 
-			tempo.second->playable)
+			tempo.second->playable && tempo.second->getLoop() == true) //[?]
 			tempo.second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

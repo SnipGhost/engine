@@ -12,11 +12,7 @@ Displayable::~Displayable()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 {
-	if (layer <= 0) return;
-
-	if (layer > 3) return; // Что дальше 3 layer-a у нас работает через ж*пу
-	///Дальше 3 layer-а мы будем кидать text и другие важные штуки, как посчитает 
-	///нужным дальнейший разарботчик
+	if (layer <= 0 || layer > 3 || ((layer > 0 || layer <= 3) && !layermotion)) return;
 
 	float mouseXC = kernel.screen.x / 2 - kernel.getMouse().x;
 	float mouseYC = kernel.screen.y / 2 - kernel.getMouse().y;
@@ -42,14 +38,44 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-unsigned int Displayable::getLayer() 
-{ 
-	return layer; 
+//bool Displayable::getLayermotion()
+//{
+//	return layermotion;
+//}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//bool Displayable::getSmoothObj()
+//{
+//	return smoothObj;
+//}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//std::string Displayable::getId()
+//{
+//	return id;
+//}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//std::string Displayable::getSrcObj()
+//{
+//	return srcObj;
+//}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//int Displayable::getAlpha()
+//{;
+//	return alpha;
+//}
+////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//int Displayable::getLayer()
+//{
+//	return layer;
+//}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sf::Vector2f Displayable::getPositionObj()
+{
+	return positionObj;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::string Displayable::getId()
+float Displayable::getScaleObj()
 {
-	return id;
+	return scaleObj;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Вычисление новых значений размера
@@ -57,7 +83,7 @@ void Displayable::setResize()
 {
 	static const float k = kernel.devScreen.x / kernel.devScreen.y;
 
-	if (kernel.screen.x * (1 / k) <= kernel.screen.y)
+	if (kernel.screen.x * (1 / k) <= kernel.screen.y) //Горизонтальные полосы
 	{
 		posScale.pos.x = origin.pos.x * kernel.factor.x;
 		posScale.pos.y = origin.pos.y * kernel.factor.x + (kernel.screen.y - kernel.screen.x * (1 / k)) / 2;
@@ -65,7 +91,7 @@ void Displayable::setResize()
 		posScale.scale.x = origin.scale.x * kernel.factor.x;
 		posScale.scale.y = origin.scale.y * kernel.factor.x;
 	}
-	else
+	else // Вертикальные полосы
 	{
 		posScale.pos.x = origin.pos.x * kernel.factor.y + ((kernel.screen.x - kernel.screen.y * k) / 2);
 		posScale.pos.y = origin.pos.y * kernel.factor.y;

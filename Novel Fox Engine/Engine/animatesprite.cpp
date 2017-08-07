@@ -15,7 +15,7 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 {
 	lastTime = 0;
 	numFrame = 1;
-	setAnimation(rd.height, rd.width, rd.ms);
+	setAnimation(rd.height, rd.width, rd.delay);
 	
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -40,6 +40,34 @@ void AnimateSprite::update()
 			numFrame = 0;
 	}
 	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void AnimateSprite::edit(ResData rd)
+{
+	//if (GETBIT(rd.bitMask, _alpha)) setColor(sf::Color(255, 255, 255, rd.alpha));
+	if (GETBIT(rd.bitMask, _x) && GETBIT(rd.bitMask, _y)) //ЕСЛИ ЕСТЬ ДВЕ КООРДИНАТЫ - ФИКСИТЬ
+	{
+		positionObj = sf::Vector2f(rd.x, rd.y); //Перезаписали стандартные значения
+		setPosition(rd.x, rd.y);
+		origin = PosScale(rd.x, rd.y, getScaleObj(), getScaleObj());
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _scale))
+	{
+		scaleObj = rd.scale; //Перезаписали стандартные значения
+		setScale(rd.scale, rd.scale);
+		origin = PosScale(getPositionObj().x, getPositionObj().y, rd.scale, rd.scale);
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, true);
+	if (GETBIT(rd.bitMask, _width) && GETBIT(rd.bitMask, _height))
+	{
+		sideHeight = rd.height;
+		if (rd.width == 0) rd.width = rd.height;
+		else sideWidth = rd.width;
+		setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
+	}
+	if (GETBIT(rd.bitMask, _delay)) delay = _delay;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::display(sf::RenderWindow *win) 
