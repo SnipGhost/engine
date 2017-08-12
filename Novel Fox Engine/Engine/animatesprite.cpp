@@ -27,7 +27,8 @@ void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms)
 	if (frameWidth == 0) frameWidth = frameHeight;
 	else sideWidth = frameWidth;
 	delay = ms;
-	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
+	/*setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));*/
+	setTextureRect(sf::IntRect(sideWidth, 0, sideWidth, sideHeight));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::update() 
@@ -44,29 +45,33 @@ void AnimateSprite::update()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::edit(ResData rd)
 {
-	//if (GETBIT(rd.bitMask, _alpha)) setColor(sf::Color(255, 255, 255, rd.alpha));
-	if (GETBIT(rd.bitMask, _x) && GETBIT(rd.bitMask, _y)) //ЕСЛИ ЕСТЬ ДВЕ КООРДИНАТЫ - ФИКСИТЬ
+	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
-		positionObj = sf::Vector2f(rd.x, rd.y); //Перезаписали стандартные значения
-		setPosition(rd.x, rd.y);
-		origin = PosScale(rd.x, rd.y, getScaleObj(), getScaleObj());
+		if (GETBIT(rd.bitMask, _x))
+		{
+			positionObj.x = rd.x;
+			setPosition(rd.x, positionObj.y);
+			origin = PosScale(rd.x, positionObj.y, scaleObj, scaleObj);
+		}
+		if (GETBIT(rd.bitMask, _y))
+		{
+			positionObj.y = rd.y;
+			setPosition(positionObj.x, rd.y);
+			origin = PosScale(positionObj.x, rd.y, scaleObj, scaleObj);
+		}
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _scale))
 	{
-		scaleObj = rd.scale; //Перезаписали стандартные значения
+		scaleObj = rd.scale;
 		setScale(rd.scale, rd.scale);
-		origin = PosScale(getPositionObj().x, getPositionObj().y, rd.scale, rd.scale);
+		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
-	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, true);
-	if (GETBIT(rd.bitMask, _width) && GETBIT(rd.bitMask, _height))
-	{
-		sideHeight = rd.height;
-		if (rd.width == 0) rd.width = rd.height;
-		else sideWidth = rd.width;
-		setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
-	}
+	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
+	if (GETBIT(rd.bitMask, _width)) sideWidth = rd.width;
+	if (GETBIT(rd.bitMask, _height)) sideHeight = rd.height;
 	if (GETBIT(rd.bitMask, _delay)) delay = _delay;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

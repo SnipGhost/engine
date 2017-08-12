@@ -150,16 +150,17 @@ void Scene::loadScene(XMLNode scene)
 			}
 			case 5: // [SOUND]
 			{
-				if (sounds[data.id]) // Map со звуками очищается при delete scene и менять звук можно в момент EVENT, для новой scene придётся создавать новый звук
+				if (sounds[data.id])
 				{	
-					if (data.command == "edit")
-					{
-						//if (data.volume) sounds[data.id]->setVolume(data.volume);
-					}
+					sounds[data.id]->edit(data);
+					sounds[data.id]->playable = true;
+					sounds[data.id]->play();
 				}
 				else
 				{
-					sounds[data.id] = new Sound(data);
+					Sound *sound = new Sound(data);
+					sound->play();
+					sounds[data.id] = sound;
 					kernel.print(sounds[data.id], INFO);
 				}
 				break;

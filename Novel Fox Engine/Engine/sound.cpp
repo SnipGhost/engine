@@ -13,9 +13,14 @@ Sound::Sound(std::string id, std::string src, float volume)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sound::Sound(ResData rd)
 {
-	playable = rd.visible;
+	playable = true;
 	if (!setSound(rd.src, rd.volume))
 		kernel.print("Failed load sound " + rd.id, WARN);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Sound::edit(ResData rd)
+{
+	if (GETBIT(rd.bitMask, _src) && GETBIT(rd.bitMask, _volume)) setSound(rd.src, rd.volume);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sound::setSound(std::string src, float volume)
@@ -31,7 +36,6 @@ std::ostream &ng::operator << (std::ostream &os, const Sound *s)
 {
 	os << "[ng::Sound]" << std::endl;
 	os << "\tVolume level: \t" << s->getVolume() << std::endl;
-	os << "\tLooping:     \t" << ((s->getLoop()) ? "true" : "false") << std::endl;
 	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

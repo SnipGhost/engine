@@ -43,19 +43,19 @@ bool Text::setText(ResData &rd)
 void Text::setColorText(ResData &rd)
 {
 	if (rd.color == "red")
-		setFillColor(sf::Color::Red);
+		setFillColor(sf::Color(255, 0, 0, rd.alpha));
 	if (rd.color == "green")
-		setFillColor(sf::Color::Green);
+		setFillColor(sf::Color(0, 128, 0, rd.alpha));
 	if (rd.color == "blue")
-		setFillColor(sf::Color::Blue);
+		setFillColor(sf::Color(0, 0, 255, rd.alpha));
 	if (rd.color == "yellow")
-		setFillColor(sf::Color::Yellow);
+		setFillColor(sf::Color(255, 255, 0, rd.alpha));
 	if (rd.color == "white")
-		setFillColor(sf::Color::White);
+		setFillColor(sf::Color(255, 255, 255, rd.alpha));
 	if (rd.color == "black")
-		setFillColor(sf::Color::Black);
+		setFillColor(sf::Color(0, 0, 0, rd.alpha));
 
-	//setColor(sf::Color(255, 255, 255, rd.alpha)); //Сделать установку alpha
+	//ДОБАВИТЬ ФУНКЦИЮ RGB!
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setStyleText(ResData &rd)
@@ -83,18 +83,27 @@ void Text::setStyleText(ResData &rd)
 void Text::edit(ResData rd)
 {
 	//Layer - НЕЛЬЗЯ
-	if (GETBIT(rd.bitMask, _x) && GETBIT(rd.bitMask, _y)) //ЕСЛИ ЕСТЬ ДВЕ КООРДИНАТЫ - ФИКСИТЬ
+	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
-		positionObj = sf::Vector2f(rd.x, rd.y); //Перезаписали стандартные значения
-		setPosition(rd.x, rd.y);
-		origin = PosScale(rd.x, rd.y, getScaleObj(), getScaleObj());
+		if (GETBIT(rd.bitMask, _x))
+		{
+			positionObj.x = rd.x;
+			setPosition(rd.x, positionObj.y);
+			origin = PosScale(rd.x, positionObj.y, scaleObj, scaleObj);
+		}
+		if (GETBIT(rd.bitMask, _y))
+		{
+			positionObj.y = rd.y;
+			setPosition(positionObj.x, rd.y);
+			origin = PosScale(positionObj.x, rd.y, scaleObj, scaleObj);
+		}
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _scale))
 	{
-		scaleObj = rd.scale; //Перезаписали стандартные значения
+		scaleObj = rd.scale;
 		setScale(rd.scale, rd.scale);
-		origin = PosScale(getPositionObj().x, getPositionObj().y, rd.scale, rd.scale);
+		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _size)) setCharacterSize(rd.size);
@@ -102,7 +111,6 @@ void Text::edit(ResData rd)
 	if (GETBIT(rd.bitMask, _text)) setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
 	if (GETBIT(rd.bitMask, _color)) setColorText(rd);
 	if (GETBIT(rd.bitMask, _style)) setStyleText(rd);
-	//if (GETBIT(rd.bitMask, _alpha)) setColor(sf::Color(255, 255, 255, rd.alpha));
 	kernel.print("Edit mode for text: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

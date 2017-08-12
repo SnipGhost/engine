@@ -16,8 +16,8 @@ Sprite::Sprite(ResData rd)
 	if (!setStrTexture(rd.src, rd.smooth))
 		kernel.print("Failed to create sprite " + rd.id, WARN);
 
-	setColor(sf::Color(255, 255, 255, rd.alpha));
-	
+	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+
 	id = rd.id;
 	layer = rd.layer;
 	layermotion = rd.layermotion;
@@ -38,27 +38,40 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Sprite::setAlpha(int alpha)
+{
+	color.a = alpha; // ДЛЯ ТОГО, ЧТОБЫ ПОТОМ МОЖНО БЫЛО СПРОСИТЬ У COLOR ALPHA
+	setColor(sf::Color(255, 255, 255, color.a));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::edit(ResData rd)
 {
-
 	//Layer - НЕЛЬЗЯ
-	//Smooth - НЕ РЕКОМЕНДУЕТСЯ
-	if (GETBIT(rd.bitMask, _alpha)) setColor(sf::Color(255, 255, 255, rd.alpha));
-	if (GETBIT(rd.bitMask, _x) && GETBIT(rd.bitMask, _y)) //ЕСЛИ ЕСТЬ ДВЕ КООРДИНАТЫ - ФИКСИТЬ
+	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
-		positionObj = sf::Vector2f(rd.x, rd.y); //Перезаписали стандартные значения
-		setPosition(rd.x, rd.y);
-		origin = PosScale(rd.x, rd.y, getScaleObj(), getScaleObj());
+		if (GETBIT(rd.bitMask, _x))
+		{
+			positionObj.x = rd.x;
+			setPosition(rd.x, positionObj.y);
+			origin = PosScale(rd.x, positionObj.y, scaleObj, scaleObj);
+		}
+		if (GETBIT(rd.bitMask, _y))
+		{
+			positionObj.y = rd.y;
+			setPosition(positionObj.x, rd.y);
+			origin = PosScale(positionObj.x, rd.y, scaleObj, scaleObj);
+		}
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _scale))
 	{
-		scaleObj = rd.scale; //Перезаписали стандартные значения
+		scaleObj = rd.scale;
 		setScale(rd.scale, rd.scale);
-		origin = PosScale(getPositionObj().x, getPositionObj().y, rd.scale, rd.scale);
+		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
-	if (GETBIT(rd.bitMask, _src) && GETBIT(rd.bitMask, _smooth)) setStrTexture(rd.src, rd.smooth);
+	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
 	kernel.print("Edit mode for sprite: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

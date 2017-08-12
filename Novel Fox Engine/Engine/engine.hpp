@@ -258,11 +258,12 @@ namespace ng
 			bool playable;
 			Sound(std::string id, std::string src, float volume = 100);
 			Sound(ResData rd);
+			void edit(ResData rd);
 			bool setSound(std::string src, float volume);
 			friend std::ostream & operator << (std::ostream &os, const Sound *s);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// Класс "видимых" объектов и действий над ними
+	// Класс "видимого" объекта и действий над ним
 	class Displayable
 	{
 		protected:
@@ -280,12 +281,13 @@ namespace ng
 				PosScale(sf::Vector2f a, sf::Vector2f b) : pos(a), scale(b) {}
 				PosScale(float a, float b, float c, float d): pos(a, b), scale(c, d) {}
 			} posScale, origin;
-			bool visible;
-
+			
 			virtual ~Displayable();
 
-			sf::Vector2f getPositionObj(); //Первоначально установенные 
-			float getScaleObj();		   //Первоначально установенные 
+			sf::Vector2f getPositionObj(); // Первоначально установенные 
+			float getScaleObj();		   // Первоначально установенные 
+
+			bool visible;				   // Состояние объекта 
 
 			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
@@ -310,12 +312,14 @@ namespace ng
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{
 		protected:
+			sf::Color color;
 			sf::Texture texture;
 		public:
 			Sprite() {}
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
+			void setAlpha(int alpha);
 			void display(sf::RenderWindow *win = kernel.window);
 			void edit(ResData rd);
 			void setResize();
@@ -415,15 +419,15 @@ namespace ng
 			Scene() {}
 			Scene(XMLNode node);
 			~Scene();
-			int tEvent;
-			int saveTTEvent;
+			int tEvent;						// Время задержки в EVENT-тэге
+			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
 			bool jump(XMLNode scene);       // Проверка на JUMP
-			void startMedia();
-			void stopMedia();
+			void startMedia();				// Запуск остановленных объектов
+			void stopMedia();				// Остановка объектов
 			void displayAll();
-			void clear();
+			void clear();					// Очистка всех составляющих сцены
 	};
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

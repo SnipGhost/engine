@@ -223,9 +223,9 @@ void Kernel::eventUpdate()
 
 			for (auto &layer : scene->layers)
 			{
-				for (auto &object : layer)
+				for (auto &obj : layer)
 				{
-					object->setResize();
+					obj->setResize();
 				}
 			}
 
@@ -245,6 +245,13 @@ void Kernel::sceneUpdate()
 	if (event.isKeyboardKey(sf::Keyboard::Return)) clickEnter = true; //Return - Enter
 	if (clickMouseLeft || clickEnter || scene->tEvent == 0) //Добавить переключение по другим причинам
 	{
+		for (auto &sound : scene->sounds) // Выключение звука, если насильно переключили
+			if (sound.second)
+			{
+				sound.second->playable = false;
+				sound.second->stop();
+			}
+
 		if (scene->tEvent != 0 && click) click->play();
 
 		if (clickMouseLeft) print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "

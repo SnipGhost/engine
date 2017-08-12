@@ -6,55 +6,65 @@
   <FONT id="rus" src="scenario/fonts/classicold.ttf"/>
   <FONT id="simple" src="scenario/fonts/simple.ttf"/>
 
+   <SCENE id="girl1">
+    <SPRITE id="bg" layer="0" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/background.png"/>
+    <SPRITE id="back" layer="0" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object1.png"/>
+    <SPRITE id="girl" layer="0" alpha="75" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object2.png"/>
+    <SPRITE id="front" layer="0" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object3.png"/>
+  </SCENE>
+    
+  <SCENE id="girl2">
+     <SPRITE id="background" layer="1" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/scene_1/background.png"/>
+     <SPRITE id="back" layer="2" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/scene_1/back.png"/>
+     <SPRITE id="center" layer="3" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/scene_1/center.png"/>
+  </SCENE>
+    
   <SCENE id="guidebot">
      <MUSIC id="main" volume="3" loop="true" src="scenario/music/main.ogg"/>
-     <SPRITE id="bg"    layer="-10"  smooth="true"  x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/background_1.png"/>
-     <SPRITE id="plan"  layer="1"  smooth="true" x="600" y="100" scale="0.6" src="scenario/textures/demoVersion/plan.png"/>
-     <SPRITE id="info"  layer="1" smooth="true" x="50" y="270" scale="0.3" src="scenario/textures/demoVersion/info.png"/>
-     <SPRITE id="logo"  layer="2"  smooth="true" x="600" y="100" scale="0.6" src="scenario/textures/demoVersion/logo.png"/>
-     <SPRITE id="sticker"  layer="1"  smooth="true" x="210" y="0" scale="0.5" src="scenario/textures/demoVersion/sticker.png"/>
+     <SPRITE id="bg" layer="-10" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/background_1.png"/>
+     <SPRITE id="plan" layer="1" x="600" y="100" scale="0.6" src="scenario/textures/demoVersion/plan.png"/>
+     <SPRITE id="info" layer="1" x="50" y="270" scale="0.3" src="scenario/textures/demoVersion/info.png"/>
+     <SPRITE id="logo" layer="2" x="600" y="100" scale="0.6" src="scenario/textures/demoVersion/logo.png"/>
+     <SPRITE id="sticker" layer="1" x="210" y="0" scale="0.5" src="scenario/textures/demoVersion/sticker.png"/>
     <EVENT>
       <MUSIC id="wind" volume="3" loop="true" src="scenario/music/forest.ogg"/>
       <SPRITE id="logo" visible="false"/>
       <SPRITE id="info" visible="false"/>
       <SPRITE id="plan" visible="false"/>
       <SPRITE id="sticker" visible="false"/>
-      <SPRITE id="bread"  layer="0" visible="true" smooth="true" x="500" y="-50" scale="1.0" src="scenario/textures/demoVersion/breadnorm.png"/>
-      <ANIMATION id="energy" layer="-1" visible="true" smooth="true" x="800" y="220" scale="1.0" width="200" height="200" delay="40" src="scenario/textures/demoVersion/energy.png"/>-->
+      <SPRITE id="bread" layer="0"  x="500" y="-50" scale="1.0" src="scenario/textures/demoVersion/breadnorm.png"/>
+      <ANIMATION id="energy" layer="-1" alpha="80" x="800" y="220" scale="1.0" width="200" height="200" delay="40" src="scenario/textures/demoVersion/energy.png"/>-->
     </EVENT>>
     <EVENT>
       <TEXT id="text" font="std" layer="5" x="160" y="550" color="blue" scale="1.0" size="23">Ой, привет, ну и беспорядок у нас на первой странице. Я всё уберу.</TEXT>
-      <SPRITE id="bread" smooth="true" src="scenario/textures/demoVersion/breadtell.png"/>
-      <MUSIC id="botbeep" volume="20" loop="false" src="scenario/sounds/bot_tell_1.ogg"/>
-      <SPRITE id="hud"   layer="4" visible="true" smooth="true" x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
+      <SPRITE id="bread" src="scenario/textures/demoVersion/breadtell.png"/>
+      <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_1.ogg"/>
+      <SPRITE id="hud" layer="4"  x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
     </EVENT>
     <EVENT>
-      <MUSIC id="botbeep" command="stop"/>
-      <MUSIC id="botbeep1" volume="20" loop="false" src="scenario/sounds/bot_tell_2.ogg"/>
+      <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_2.ogg"/>
       <TEXT id="text">Кстати, я робот-помощник... кх, "Батон", очень приятно!</TEXT>
     </EVENT>
     <EVENT>
-      <MUSIC id="botbeep1" command="stop"/>
-      <MUSIC id="botbeep2" volume="20" loop="false" src="scenario/sounds/bot_tell_3.ogg"/>
+      <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_3.ogg"/>
       <TEXT id="text">В будущем я буду помогать тебе в создании твоего проекта!</TEXT>
     </EVENT>
     <EVENT>
       <TEXT id="text" visible="false"/>
-      <MUSIC id="botbeep2" command="stop"/>
       <SPRITE id="hud" visible="false"/>
-      <SPRITE id="bread" smooth="true" src="scenario/textures/demoVersion/breadnorm.png"/>
+      <SPRITE id="bread" src="scenario/textures/demoVersion/breadnorm.png"/>
     </EVENT>
     <EVENT time="2000">
-      <SPRITE id="eventTest"  layer="4" visible="true" smooth="true" x="50" y="50" scale="0.8" src="scenario/textures/demoVersion/event1.png"/>
+      <SPRITE id="eventTest" layer="4"  x="50" y="50" scale="0.8" src="scenario/textures/demoVersion/event1.png"/>
     </EVENT>
     <EVENT time="2000">
-      <SPRITE id="eventTest" smooth="true" src="scenario/textures/demoVersion/event2.png"/>
+      <SPRITE id="eventTest" x="100" src="scenario/textures/demoVersion/event2.png"/>
     </EVENT>
     <EVENT time="2000">
-      <SPRITE id="eventTest" smooth="true" src="scenario/textures/demoVersion/event3.png"/>
+      <SPRITE id="eventTest" y="100" src="scenario/textures/demoVersion/event3.png"/>
     </EVENT>
     <EVENT time="2000">
-      <SPRITE id="eventTest" smooth="true" src="scenario/textures/demoVersion/event4.png"/>
+      <SPRITE id="eventTest" x="50" src="scenario/textures/demoVersion/event4.png"/>
     </EVENT>
   <JUMP id="dana"/>
   </SCENE>
@@ -64,13 +74,14 @@
   </SCENE>
   
   <SCENE id="dana">
-    <SPRITE id="bg"    layer="-10" visible="true" smooth="true"  x="00" y="00" scale="0.7" src="scenario/textures/demoVersion/background_2.png"/>
-     <SPRITE id="back" layer="1" visible="true" smooth="true"  x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/object1.png"/>
-    <SPRITE id="dana"  layer="2" layermotion="false" visible="true" smooth="true" x="700" y="170" scale="0.4" src="scenario/textures/demoVersion/dana.png"/>
-    <SPRITE id="front" layer="3" visible="true" smooth="true"  x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/object3.png"/>
+     <SPRITE id="bg" layer="-10" x="00" y="00" scale="0.7" src="scenario/textures/demoVersion/background_3.png"/>
+     <SPRITE id="back" layer="1" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/object1.png"/>
+     <SPRITE id="dana" layer="2" layermotion="false" x="700" y="170" scale="0.4" src="scenario/textures/demoVersion/dana.png"/>
+     <SPRITE id="front" layer="3" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/object3.png"/>
     <EVENT>
+      <SPRITE id="bg" src="scenario/textures/demoVersion/background_3blur.png"/>
       <TEXT id="text" font="simple" style="italic bold" layer="5" x="160" y="550" color="red" scale="1.0" size="33">День добрый! Меня зовут Дана и я символ этого игрового движка.</TEXT>
-      <SPRITE id="hud"   layer="4"  visible="true" smooth="true"  x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
+      <SPRITE id="hud" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
     </EVENT>
     <EVENT>
       <TEXT id="text">Я так же буду помогать в создании твоего проекта.</TEXT>
@@ -79,6 +90,7 @@
       <TEXT id="text">Можешь обратиться ко мне в любое время. Буду ждать!</TEXT>
     </EVENT>
     <EVENT>
+      <SPRITE id="bg" src="scenario/textures/demoVersion/background_3.png"/>
       <TEXT id="text" visible="false"/>
       <SPRITE id="hud" visible="false"/>
       <MUSIC id="main" command="stop"/>
