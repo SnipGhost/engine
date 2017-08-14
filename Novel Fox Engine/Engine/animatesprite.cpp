@@ -12,7 +12,7 @@ AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Spri
 	xPozAnim = 0;
 	yPozAnim = 0;
 
-	//Надо ли?
+	//Нужно ли делать? [!]
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
@@ -36,7 +36,6 @@ void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms)
 	sideHeight = frameHeight;
 	sideWidth = frameWidth;
 	delay = ms;
-	setTextureRect(sf::IntRect(0, 0, sideWidth, sideHeight)); //Бессмыслица походу [!]
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::update() 
@@ -92,13 +91,13 @@ void AnimateSprite::edit(ResData rd)
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
-	if (GETBIT(rd.bitMask, _width)) //Проверить на работоспособность!
+	if (GETBIT(rd.bitMask, _width))
 	{
 		sideWidth = rd.width;
 		xEnd = (getTexture()->getSize().x / rd.width) - 1;
 		xPozAnim = 0;
 	}
-	if (GETBIT(rd.bitMask, _height)) //Проверить на работоспособность!
+	if (GETBIT(rd.bitMask, _height))
 	{
 		sideHeight = rd.height;
 		yEnd = (getTexture()->getSize().y / rd.height) - 1;
@@ -109,7 +108,7 @@ void AnimateSprite::edit(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::display(sf::RenderWindow *win) 
 {
-	this->update();
+	update();
 	win->draw(*this);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

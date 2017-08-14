@@ -384,7 +384,7 @@ XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 {
-	XMLNode saveNode = node; // ВРЕМЕННОЕ INFO: Сохраняем ноду, так как может не найти нужную сцену
+	XMLNode saveNode = node;
 	if (id != "next")
 	{
 		bool correctTag = false;
@@ -403,9 +403,9 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 				}
 				node = node->NextSiblingElement(tag);
 			}
-			else // ВРЕМЕННОЕ INFO: Если получил пустую nextScene (то бишь не нашёл scene с нужным id)
+			else
 			{
-				correctTag = true; // ВРЕМЕННОЕ INFO: Выходит из цикла и возвращает следующий scene с помощью резервного сохранения
+				correctTag = true;
 			}
 		}
 	}
@@ -416,7 +416,7 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 ResData ng::getData(XMLNode node)
 {
 	ResData res;
-	res.bitMask = 0; //Обнуляем битовую маску
+	res.bitMask = 0;
 
 	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO"))
 	{

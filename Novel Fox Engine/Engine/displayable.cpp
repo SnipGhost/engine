@@ -38,36 +38,6 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//bool Displayable::getLayermotion()
-//{
-//	return layermotion;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//bool Displayable::getSmoothObj()
-//{
-//	return smoothObj;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//std::string Displayable::getId()
-//{
-//	return id;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//std::string Displayable::getSrcObj()
-//{
-//	return srcObj;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//int Displayable::getAlpha()
-//{;
-//	return alpha;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//int Displayable::getLayer()
-//{
-//	return layer;
-//}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sf::Vector2f Displayable::getPositionObj()
 {
 	return positionObj;

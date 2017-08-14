@@ -334,15 +334,10 @@ namespace ng
 	{
 		protected:
 			int lastTime;            // Предыдущее время смены кадра
-
-			//unsigned int numFrame;   // Текущий номер кадра
-
-			unsigned int xPozAnim;
-			unsigned int yPozAnim;
-
-			unsigned int xEnd;
-			unsigned int yEnd;
-
+			unsigned int xPozAnim;   // Текущее положение анимации по X
+			unsigned int yPozAnim;   // Текущее положение анимации по Y
+			unsigned int xEnd;       // Номер конечного положения по X
+			unsigned int yEnd;       // Номер конечного положения по Y
 			unsigned int sideWidth;  // Ширина кадра
 			unsigned int sideHeight; // Высота кадра
 			int delay;               // Время между кадрами в миллисекундах
@@ -434,7 +429,7 @@ namespace ng
 			bool jump(XMLNode scene);       // Проверка на JUMP
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов
-			void displayAll();
+			void displayAll();              // Отобразить все объекты сцены
 			void clear();					// Очистка всех составляющих сцены
 	};
 };

@@ -12,7 +12,7 @@
     <SPRITE id="girl" layer="0" alpha="75" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object2.png"/>
     <SPRITE id="front" layer="0" x="00" y="00" scale="1.0" src="scenario/textures/scene_0_test/object3.png"/>
     <ANIMATION id="gif" layer="0" x="00" y="00" scale="1" width="256" height="256" delay="40" src="scenario/textures/gifFile2.png"/>
-  </SCENE>
+   </SCENE>
     
   <SCENE id="girl2">
      <SPRITE id="background" layer="1" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/scene_1/background.png"/>

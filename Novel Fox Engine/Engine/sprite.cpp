@@ -113,8 +113,8 @@ void Sprite::setLayerMotion()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::computeLayerScale()
 {
-	int w = this->getTextureRect().width;
-	int h = this->getTextureRect().height;
+	int w = getTextureRect().width;
+	int h = getTextureRect().height;
 	float sx = 0;
 	float sy = 0;
 

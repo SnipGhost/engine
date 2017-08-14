@@ -270,8 +270,5 @@ void Scene::clear()
 	for (auto &sound : sounds) 
 		if (sound.second)
 			delete sound.second;
-	//for (auto &tempo : music) // Музыку удаляет сам дальнейший разработчик из XML сценария
-	//	if (tempo.second)
-	//		delete tempo.second;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
