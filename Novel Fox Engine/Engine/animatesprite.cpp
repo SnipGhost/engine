@@ -8,13 +8,23 @@ using namespace ng;
 AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Sprite(id, src, smooth)
 {
 	lastTime = 0;
-	numFrame = 1;
+
+	xPozAnim = 0;
+	yPozAnim = 0;
+
+	//Надо ли?
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 {
 	lastTime = 0;
-	numFrame = 1;
+
+	xPozAnim = 0;
+	yPozAnim = 0;
+
+	xEnd = (getTexture()->getSize().x / rd.width) - 1;
+	yEnd = (getTexture()->getSize().y / rd.height) - 1;
+
 	setAnimation(rd.height, rd.width, rd.delay);
 	
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
@@ -24,11 +34,9 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
 {
 	sideHeight = frameHeight;
-	if (frameWidth == 0) frameWidth = frameHeight;
-	else sideWidth = frameWidth;
+	sideWidth = frameWidth;
 	delay = ms;
-	/*setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));*/
-	setTextureRect(sf::IntRect(sideWidth, 0, sideWidth, sideHeight));
+	setTextureRect(sf::IntRect(0, 0, sideWidth, sideHeight)); //Бессмыслица походу [!]
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::update() 
@@ -36,11 +44,25 @@ void AnimateSprite::update()
 	if ((kernel.globalClock.getMilliSecond()-lastTime) >= delay)
 	{
 		lastTime = kernel.globalClock.getMilliSecond();
-		numFrame++;
-		if (numFrame * sideWidth >= this->getTexture()->getSize().x)
-			numFrame = 0;
+		if (xPozAnim != xEnd) // ОЧЕНЬ ЖЁСТКАЯ СИСТЕМА
+		{
+			xPozAnim++;
+		}
+		else
+		{
+			if (yPozAnim != yEnd)
+			{
+				yPozAnim++;
+				xPozAnim = 0;
+			}
+			else
+			{
+				xPozAnim = 0;
+				yPozAnim = 0;
+			}
+		}
 	}
-	setTextureRect(sf::IntRect(sideWidth*numFrame, 0, sideWidth, sideHeight));
+	setTextureRect(sf::IntRect(sideWidth * xPozAnim, sideHeight * yPozAnim, sideWidth, sideHeight));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::edit(ResData rd)
@@ -70,8 +92,18 @@ void AnimateSprite::edit(ResData rd)
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
-	if (GETBIT(rd.bitMask, _width)) sideWidth = rd.width;
-	if (GETBIT(rd.bitMask, _height)) sideHeight = rd.height;
+	if (GETBIT(rd.bitMask, _width)) //Проверить на работоспособность!
+	{
+		sideWidth = rd.width;
+		xEnd = (getTexture()->getSize().x / rd.width) - 1;
+		xPozAnim = 0;
+	}
+	if (GETBIT(rd.bitMask, _height)) //Проверить на работоспособность!
+	{
+		sideHeight = rd.height;
+		yEnd = (getTexture()->getSize().y / rd.height) - 1;
+		yPozAnim = 0;
+	}
 	if (GETBIT(rd.bitMask, _delay)) delay = _delay;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

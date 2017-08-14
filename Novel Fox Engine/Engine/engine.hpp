@@ -334,7 +334,15 @@ namespace ng
 	{
 		protected:
 			int lastTime;            // Предыдущее время смены кадра
-			unsigned int numFrame;   // Текущий номер кадра
+
+			//unsigned int numFrame;   // Текущий номер кадра
+
+			unsigned int xPozAnim;
+			unsigned int yPozAnim;
+
+			unsigned int xEnd;
+			unsigned int yEnd;
+
 			unsigned int sideWidth;  // Ширина кадра
 			unsigned int sideHeight; // Высота кадра
 			int delay;               // Время между кадрами в миллисекундах
