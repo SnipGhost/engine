@@ -440,7 +440,8 @@ ResData ng::getData(XMLNode node)
 	ResData res;
 	res.bitMask = 0;
 
-	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO"))
+	//ПРОДУМАТЬ ЛУЧШЕ!! [!]
+	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO")) 
 	{
 		const char *smooth = node->Attribute("smooth");
 		if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
@@ -451,16 +452,10 @@ ResData ng::getData(XMLNode node)
 	{
 		const char *text = node->GetText();
 		if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";
-		const char *type = node->Attribute("type");
-		if (type) { res.type = type; res.bitMask = res.bitMask | (1 << _type); } else res.type = "NULL";
 		const char *style = node->Attribute("style");
 		if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
 		const char *fontId = node->Attribute("font");
 		if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); } else res.fontId = "standart";
-		const char *colorname = node->Attribute("colorname");
-		if (colorname) { res.colorname = colorname; res.bitMask = res.bitMask | (1 << _colorname); } else res.colorname = "black";
-		const char *namePerson = node->Attribute("name");
-		if (namePerson) { res.namePerson = namePerson; res.bitMask = res.bitMask | (1 << _namePerson); } else res.namePerson = "NULL";
 		const char *color = node->Attribute("color");
 		if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); } else res.color = "black";
 	}

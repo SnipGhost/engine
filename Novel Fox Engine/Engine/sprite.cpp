@@ -40,7 +40,7 @@ bool Sprite::setStrTexture(std::string src, bool smooth)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::setAlpha(int alpha)
 {
-	color.a = alpha; // ДЛЯ ТОГО, ЧТОБЫ ПОТОМ МОЖНО БЫЛО СПРОСИТЬ У COLOR ALPHA
+	color.a = alpha;
 	setColor(sf::Color(255, 255, 255, color.a));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

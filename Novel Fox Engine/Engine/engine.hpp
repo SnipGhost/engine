@@ -63,7 +63,7 @@ namespace ng
 	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
 	enum { _delay = 0, _layer, _width, _height, _alpha, _size, _x, _y, _scale, 
 		   _volume, _loop, _smooth, _visible, _layermotion, _id, _src, _text, 
-		   _type, _style, _namePerson, _colorname, _color, _fontId, _command };
+		   _style, _color, _fontId, _command };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
@@ -213,13 +213,10 @@ namespace ng
 		std::string id;          // Идентификатор объекта	14
 		std::string src;         // Путь до ресурса			15
 		std::string text;        // Содержание текста		16		
-		std::string type;       // Тип текста				17
-		std::string style;       // Стиль текста			18
-		std::string namePerson;  // Имя персонажа			19	
-		std::string colorname;   // Цвет имени персонажа	20
-		std::string color;       // Цвет текста				21	
-		std::string fontId;      // Идентификатор шрифта	22
-		std::string command;     // Команда					23
+		std::string style;       // Стиль текста			17
+		std::string color;       // Цвет текста				18	
+		std::string fontId;      // Идентификатор шрифта	19
+		std::string command;     // Команда					20
 		unsigned __int32 bitMask;  // Битовая маска изменений
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,8 +275,8 @@ namespace ng
 			std::string color;
 			int alpha;
 			std::string style;
-			float width;
-			float height;
+			int width;
+			int height;
 		public:
 			struct PosScale
 			{
@@ -374,7 +371,7 @@ namespace ng
 			Text(std::string id, int layer, std::string text, std::string fontId,
 			     bool layermotion, bool visible, float x, float y, float scale,
 				 unsigned int size, std::string color, int alpha, std::string style);
-			bool setText(std::string id, int layer, std::string text, std::string fontId,
+			void setText(std::string id, int layer, std::string text, std::string fontId,
 				 bool layermotion, bool visible, float x, float y, float scale,
 				 unsigned int size, std::string color, int alpha, std::string style);
 			void setColorText(std::string color, int alpha);
@@ -392,13 +389,13 @@ namespace ng
 	{
 		private:
 			ng::Text *text;
-			int interval; // Междустрочный интервал
+			float interval; // Междустрочный интервал
 			std::vector<Text*> textVector;
 		public:
 			SmartText(ResData rd);
 			void setSmartText(ResData &rd);
 			std::vector<sf::String> scanWords(sf::String str);
-			std::vector<sf::String> scanString(float w, std::vector<sf::String> vecWords_, sf::Text* text);
+			std::vector<sf::String> scanString(int width, std::vector<sf::String> vecWords_, sf::Text* text);
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();

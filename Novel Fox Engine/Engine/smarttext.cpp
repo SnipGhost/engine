@@ -21,8 +21,8 @@ SmartText::SmartText(ResData rd)
 	width = rd.width;
 	height = rd.height;
 
-	text = new Text(id, layer, rd.text, fontId, layermotion, visible,
-		positionObj.x, positionObj.y, scaleObj, size, color, alpha, style);
+	text = new Text(id, layer, rd.text, fontId, layermotion, visible, positionObj.x, 
+		positionObj.y, scaleObj, size, color, alpha, style);
 
 	interval = text->getLocalBounds().height + height;
 
@@ -72,7 +72,7 @@ std::vector<sf::String> SmartText::scanWords(sf::String str)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Возвращает вектор готовых строк
-std::vector<sf::String> SmartText::scanString(float w, std::vector<sf::String> vecWords_, sf::Text* text)
+std::vector<sf::String> SmartText::scanString(int width, std::vector<sf::String> vecWords_, sf::Text* text)
 {
 	std::vector<sf::String> vecStr;
 	sf::String buff;
@@ -83,7 +83,7 @@ std::vector<sf::String> SmartText::scanString(float w, std::vector<sf::String> v
 		buff = buff2;
 		(buff2 == "") ? buff2 += vecWords_[i] : buff2 += " " + vecWords_[i];
 		text->setString(buff2);
-		if (text->getLocalBounds().width > w)
+		if (text->getLocalBounds().width > width)
 		{
 			vecStr.push_back(buff);
 			buff = "";
@@ -119,23 +119,35 @@ void SmartText::edit(ResData rd) //Доработать
 	//	origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 	//	setResize();
 	//}
-	if (GETBIT(rd.bitMask, _size)) 
-		for (auto &text : textVector) 
+	if (GETBIT(rd.bitMask, _size))
+	{
+		size = rd.size;
+		for (auto &text : textVector)
 			text->setCharacterSize(rd.size);
-	if (GETBIT(rd.bitMask, _fontId)) 
-		for (auto &text : textVector) 
+	}
+	if (GETBIT(rd.bitMask, _fontId))
+	{
+		fontId = rd.fontId;
+		for (auto &text : textVector)
 			text->setFont(*kernel.fonts[rd.fontId]);
+	}
 	if (GETBIT(rd.bitMask, _text))
 	{
 		textVector.clear();
 		setSmartText(rd);
 	}
-	if (GETBIT(rd.bitMask, _color)) 
-		for (auto &text : textVector) 
+	if (GETBIT(rd.bitMask, _color))
+	{
+		color = rd.color;
+		for (auto &text : textVector)
 			text->setColorText(rd.color, rd.alpha);
-	if (GETBIT(rd.bitMask, _style)) 
-		for (auto &text : textVector) 
+	}
+	if (GETBIT(rd.bitMask, _style))
+	{
+		style = rd.style;
+		for (auto &text : textVector)
 			text->setStyleText(rd.style);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::display(sf::RenderWindow *win)

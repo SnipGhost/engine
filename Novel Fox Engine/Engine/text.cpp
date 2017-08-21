@@ -20,8 +20,8 @@ Text::Text(ResData rd)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Text::Text(std::string id, int layer, std::string text, std::string fontId,
-bool layermotion, bool visible, float x, float y, float scale, 
-unsigned int size, std::string color, int alpha, std::string style)
+bool layermotion, bool visible, float x, float y, float scale, unsigned int size, 
+std::string color, int alpha, std::string style)
 {
 	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, size, color, alpha, style);
 
@@ -29,9 +29,9 @@ unsigned int size, std::string color, int alpha, std::string style)
 	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Text::setText(std::string _id, int _layer, std::string text, std::string fontId,
-bool _layermotion, bool _visible, float x, float y, float scale, 
-unsigned int size, std::string color, int alpha, std::string style)
+void Text::setText(std::string _id, int _layer, std::string text, std::string fontId,
+bool _layermotion, bool _visible, float x, float y, float scale, unsigned int size, 
+std::string color, int alpha, std::string style)
 {
 	setString(sf::String::fromUtf8(text.begin(), text.end()));
 	setFont(*kernel.fonts[fontId]);
@@ -43,51 +43,90 @@ unsigned int size, std::string color, int alpha, std::string style)
 	positionObj = sf::Vector2f(x, y);
 	scaleObj = scale;
 
-	//setOutlineThickness(2);				//Обводка
-	//setOutlineColor(sf::Color::Blue);     //Цвет обводки
-
-	setColorText(color, alpha);
 	setCharacterSize(size);
-	if (style != "NULL") setStyleText(style);
-
-	return 1;
+	setColorText(color, alpha);
+	setStyleText(style);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setColorText(std::string color, int alpha)
 {
-	if (color == "red")
-		setFillColor(sf::Color(255, 0, 0, alpha));
-	if (color == "green")
-		setFillColor(sf::Color(0, 128, 0, alpha));
-	if (color == "blue")
-		setFillColor(sf::Color(0, 0, 255, alpha));
-	if (color == "yellow")
-		setFillColor(sf::Color(255, 255, 0, alpha));
-	if (color == "white")
-		setFillColor(sf::Color(255, 255, 255, alpha));
-	if (color == "black")
-		setFillColor(sf::Color(0, 0, 0, alpha));
 
-	//ДОБАВИТЬ ФУНКЦИЮ RGB!
+	if (color == "black")
+	{
+		setFillColor(sf::Color(0, 0, 0, alpha));
+		return;
+	}
+	if (color == "white")
+	{
+		setFillColor(sf::Color(255, 255, 255, alpha));
+		return;
+	}
+	if (color == "red")
+	{
+		setFillColor(sf::Color(255, 0, 0, alpha));
+		return;
+	}
+	if (color == "green")
+	{
+		setFillColor(sf::Color(0, 128, 0, alpha));
+		return;
+	}
+	if (color == "blue")
+	{
+		setFillColor(sf::Color(0, 0, 255, alpha));
+		return;
+	}
+	if (color == "yellow")
+	{
+		setFillColor(sf::Color(255, 255, 0, alpha));
+		return;
+	}
+
+	// Установка RGB цвета
+	char *now = strtok((char*)color.c_str(), " .,:"); //ПРОДУМАТЬ! [!]
+	int red = std::atoi(now);
+	now = strtok(0, " .,:");
+	int green = std::atoi(now);
+	now = strtok(0, " .,:");
+	int blue = std::atoi(now);
+
+	setFillColor(sf::Color(red, green, blue, alpha));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setStyleText(std::string style)
 {
-	char *Ptr = strtok((char*)style.c_str(), " ");
+	char *ptr = strtok((char*)style.c_str(), " .,:");
 
 	unsigned int styleNum = 0;
 
-	while (Ptr)
+	while (ptr)
 	{
-		if (!strcmp(Ptr, "bold"))
+		if (!strcmp(ptr, "bold"))
 			styleNum += BOLD;
-		if (!strcmp(Ptr, "strikethrough"))
+		if (!strcmp(ptr, "strikethrough"))
 			styleNum += STRIKETHROUGH;
-		if (!strcmp(Ptr, "italic"))
+		if (!strcmp(ptr, "italic"))
 			styleNum += ITALIC;
-		if (!strcmp(Ptr, "underlined"))
+		if (!strcmp(ptr, "underlined"))
 			styleNum += UNDERLINED;
-		Ptr = strtok(0, " ");
+		//if (!strcmp(ptr, "outline")) //В поле Style: outline.0.0.0.255.2
+		//{
+		//	ptr = strtok(0, " .,:");
+		//	int red = std::atoi(ptr);
+		//	ptr = strtok(0, " .,:");
+		//	int green = std::atoi(ptr);
+		//	ptr = strtok(0, " .,:");
+		//	int blue = std::atoi(ptr);
+		//	ptr = strtok(0, " .,:");
+		//	int alpha = std::atoi(ptr);
+		//	ptr = strtok(0, " .,:");
+		//	int thickness = std::atoi(ptr);
+
+		//	setOutlineThickness(thickness);
+		//	setOutlineColor(sf::Color(red, green, blue, alpha));
+
+		//}
+		ptr = strtok(0, " .,:");
 	}
 
 	setStyle(styleNum);
