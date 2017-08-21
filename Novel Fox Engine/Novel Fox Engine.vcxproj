@@ -140,6 +140,7 @@
     <ClCompile Include="Engine\sound.cpp" />
     <ClCompile Include="Engine\sprite.cpp" />
     <ClCompile Include="Engine\text.cpp" />
+    <ClCompile Include="Engine\smarttext.cpp" />
     <ClCompile Include="Engine\video.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modules\tinyxml2.cpp" />

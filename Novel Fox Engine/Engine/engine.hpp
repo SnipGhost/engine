@@ -155,6 +155,7 @@ namespace ng
 			sf::Vector2f screen;				// Размеры монитора
 			sf::Vector2f factor;				// Коэффициент между мониторами
 			ng::Shape *band1, *band2;			// Полосы сокрытия
+			ng::Shape *transition;				// Чёрное полотно перехода
 			XMLNode node;					    // Общая текущая node
 			Scene *scene;						// Общая текущая сцена
 			//-----------------------------------------------------------------
@@ -272,6 +273,13 @@ namespace ng
 			std::string id;
 			sf::Vector2f positionObj;
 			float scaleObj;
+			std::string fontId;
+			unsigned int size;
+			std::string color;
+			int alpha;
+			std::string style;
+			float width;
+			float height;
 		public:
 			struct PosScale
 			{
@@ -302,9 +310,14 @@ namespace ng
 	class Shape: public sf::RectangleShape
 	{
 	protected:
+		int alpha;
 		sf::Vector2f size;
 	public:
-		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize);
+		Shape(sf::Vector2f winSize); // Чёрное полотно перехода во весь экран
+		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
+		int getAlpha();
+		void addAlpha();
+		void pickUpAlpha();
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -356,16 +369,42 @@ namespace ng
 	class Text: public sf::Text, public ng::Displayable
 	{
 		public:
+			Text() {}
 			Text(ResData rd);
-			bool setText(ResData &rd);
-			void setColorText(ResData &rd);
-			void setStyleText(ResData &rd);
+			Text(std::string id, int layer, std::string text, std::string fontId,
+			     bool layermotion, bool visible, float x, float y, float scale,
+				 unsigned int size, std::string color, int alpha, std::string style);
+			bool setText(std::string id, int layer, std::string text, std::string fontId,
+				 bool layermotion, bool visible, float x, float y, float scale,
+				 unsigned int size, std::string color, int alpha, std::string style);
+			void setColorText(std::string color, int alpha);
+			void setStyleText(std::string style);
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void setLayerMotion();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);
+	};
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Класс текста/действий над многострочным текстом
+	class SmartText: public ng::Displayable
+	{
+		private:
+			ng::Text *text;
+			int interval; // Междустрочный интервал
+			std::vector<Text*> textVector;
+		public:
+			SmartText(ResData rd);
+			void setSmartText(ResData &rd);
+			std::vector<sf::String> scanWords(sf::String str);
+			std::vector<sf::String> scanString(float w, std::vector<sf::String> vecWords_, sf::Text* text);
+			void edit(ResData rd);
+			void display(sf::RenderWindow *win = kernel.window);
+			void setResize();
+			void setLayerMotion();
+			std::ostream & print(std::ostream &os);
+			friend std::ostream & operator << (std::ostream &os, SmartText &t);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс видео/действий над видео
@@ -422,6 +461,7 @@ namespace ng
 			Scene() {}
 			Scene(XMLNode node);
 			~Scene();
+			//bool sceneReady;				// Готовность сцены
 			int tEvent;						// Время задержки в EVENT-тэге
 			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария

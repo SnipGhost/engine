@@ -71,6 +71,7 @@ Kernel::Kernel()
 	}
 	int anti_aliasing = std::atoi(conf["anti_aliasing"].c_str());
 	int frame_limit = std::atoi(conf["frame_limit"].c_str());
+	int vert_sync = std::atoi(conf["vert_sync"].c_str());
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Установка коэффициента размера окна разработки и использования
 	factor.x = screen.x / devScreen.x;
@@ -84,6 +85,9 @@ Kernel::Kernel()
 	sf::VideoMode videoMode((int)screen.x, (int)screen.y);
 	const char *winName = conf["window_name"].c_str();
 	window = new sf::RenderWindow(videoMode, winName, screen_mode, setting);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Установка вертикальной синхронизации
+	if (vert_sync) window->setVerticalSyncEnabled(true);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Окно закрузки [Исправление прозрачного окна]
 	sf::Texture texture;
@@ -109,7 +113,7 @@ Kernel::Kernel()
 		log->print(msg, CRIT);
 		exit(EXIT_FAILURE);	
 	}
-	window->setFramerateLimit(frame_limit);
+	window->setFramerateLimit(frame_limit); // Установка ограничения FPS
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Прикрепление иконки к приложению
 	sf::Image icon;
@@ -134,6 +138,11 @@ Kernel::Kernel()
 	band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 	band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
 	log->print("Bands created", NORM);
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Создание чёрного полотна перехода
+	transition = new Shape(winsize); // [!]
+	log->print("Transition screen created", NORM);
+
 	loadSpecData();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,6 +158,8 @@ Kernel::~Kernel()
 	if (band1) delete band1;
 	if (band2) delete band2;
 	log->print("Deleting bands is complete", NORM);
+	if (transition) delete transition; // [!]
+	log->print("Deleting transition screen is complete", NORM);
 	if (doc) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window) delete window;
@@ -229,11 +240,16 @@ void Kernel::eventUpdate()
 				}
 			}
 
+			sf::Vector2f winsize(window->getSize());
+
+			//Пересоздание полос сокрытия
 			delete band1;
 			delete band2;
-			sf::Vector2f winsize(window->getSize());
 			band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 			band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
+
+			delete transition; // [!]
+			transition = new Shape(winsize); // [!]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -243,7 +259,7 @@ void Kernel::sceneUpdate()
 	bool clickEnter = false;
 	if (event.isMouseClickKey(sf::Mouse::Left)) clickMouseLeft = true;
 	if (event.isKeyboardKey(sf::Keyboard::Return)) clickEnter = true; //Return - Enter
-	if (clickMouseLeft || clickEnter || scene->tEvent == 0) //Добавить переключение по другим причинам
+	if ((clickMouseLeft || clickEnter || scene->tEvent == 0)/* && scene->sceneReady*/) // [!]
 	{
 		for (auto &sound : scene->sounds) // Выключение звука, если насильно переключили
 			if (sound.second)
@@ -342,6 +358,7 @@ void ng::Kernel::displayUI()
 {
 	band1->display();
 	band2->display();
+	//transition->display(); // [!]
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Kernel::loadSpecData()
@@ -420,15 +437,8 @@ ResData ng::getData(XMLNode node)
 
 	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO"))
 	{
-		const char *width = node->Attribute("width");
-		if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 256;
-
-		const char *height = node->Attribute("height");
-		if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 256;
-
 		const char *smooth = node->Attribute("smooth");
 		if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
-
 		const char *delay = node->Attribute("delay");
 		if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); } else res.delay = 40;
 	}
@@ -436,62 +446,48 @@ ResData ng::getData(XMLNode node)
 	{
 		const char *text = node->GetText();
 		if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";
-
 		const char *type = node->Attribute("type");
 		if (type) { res.type = type; res.bitMask = res.bitMask | (1 << _type); } else res.type = "NULL";
-
 		const char *style = node->Attribute("style");
 		if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
-
 		const char *fontId = node->Attribute("font");
 		if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); } else res.fontId = "standart";
-
 		const char *colorname = node->Attribute("colorname");
 		if (colorname) { res.colorname = colorname; res.bitMask = res.bitMask | (1 << _colorname); } else res.colorname = "black";
-
 		const char *namePerson = node->Attribute("name");
 		if (namePerson) { res.namePerson = namePerson; res.bitMask = res.bitMask | (1 << _namePerson); } else res.namePerson = "NULL";
-
 		const char *color = node->Attribute("color");
 		if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); } else res.color = "black";
 	}
 
 	const char *id = node->Attribute("id");
 	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
-
 	const char *x = node->Attribute("x");
 	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
-
 	const char *y = node->Attribute("y");
 	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
-
+	const char *width = node->Attribute("width");
+	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 0;
+	const char *height = node->Attribute("height");
+	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 0;
 	const char *size = node->Attribute("size");
 	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;
-
 	const char *loop = node->Attribute("loop");
 	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
-
 	const char *layermotion = node->Attribute("layermotion");
 	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
-
 	const char *scale = node->Attribute("scale");
 	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
-
 	const char *layer = node->Attribute("layer");
 	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
-	
 	const char *command = node->Attribute("command");
 	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
-
 	const char *volume = node->Attribute("volume");
 	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
-	
 	const char *visible = node->Attribute("visible");
 	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
-
 	const char *alpha = node->Attribute("alpha");
 	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
-
 	const char *src = node->Attribute("src");
 	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
 

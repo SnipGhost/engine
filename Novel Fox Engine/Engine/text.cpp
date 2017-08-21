@@ -12,55 +12,68 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Text::Text(ResData rd)
 {
-	setText(rd);
+	setText(rd.id, rd.layer, rd.text, rd.fontId, rd.layermotion, rd.visible, 
+		    rd.x, rd.y, rd.scale, rd.size, rd.color, rd.alpha, rd.style);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Text::setText(ResData &rd)
+Text::Text(std::string id, int layer, std::string text, std::string fontId,
+bool layermotion, bool visible, float x, float y, float scale, 
+unsigned int size, std::string color, int alpha, std::string style)
 {
-	setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
-	setFont(*kernel.fonts[rd.fontId]);
+	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, size, color, alpha, style);
 
-	id = rd.id;
-	layer = rd.layer;
-	layermotion = rd.layermotion;
-	visible = rd.visible;
-	positionObj = sf::Vector2f(rd.x, rd.y);
-	scaleObj = rd.scale;
+	origin = PosScale(x, y, scale, scale);
+	setResize();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool Text::setText(std::string _id, int _layer, std::string text, std::string fontId,
+bool _layermotion, bool _visible, float x, float y, float scale, 
+unsigned int size, std::string color, int alpha, std::string style)
+{
+	setString(sf::String::fromUtf8(text.begin(), text.end()));
+	setFont(*kernel.fonts[fontId]);
+
+	id = _id;
+	layer = _layer;
+	layermotion = _layermotion;
+	visible = _visible;
+	positionObj = sf::Vector2f(x, y);
+	scaleObj = scale;
 
 	//setOutlineThickness(2);				//Обводка
 	//setOutlineColor(sf::Color::Blue);     //Цвет обводки
 
-	setColorText(rd);
-	setCharacterSize(rd.size);
-	if (rd.style != "NULL") setStyleText(rd);
+	setColorText(color, alpha);
+	setCharacterSize(size);
+	if (style != "NULL") setStyleText(style);
 
 	return 1;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::setColorText(ResData &rd)
+void Text::setColorText(std::string color, int alpha)
 {
-	if (rd.color == "red")
-		setFillColor(sf::Color(255, 0, 0, rd.alpha));
-	if (rd.color == "green")
-		setFillColor(sf::Color(0, 128, 0, rd.alpha));
-	if (rd.color == "blue")
-		setFillColor(sf::Color(0, 0, 255, rd.alpha));
-	if (rd.color == "yellow")
-		setFillColor(sf::Color(255, 255, 0, rd.alpha));
-	if (rd.color == "white")
-		setFillColor(sf::Color(255, 255, 255, rd.alpha));
-	if (rd.color == "black")
-		setFillColor(sf::Color(0, 0, 0, rd.alpha));
+	if (color == "red")
+		setFillColor(sf::Color(255, 0, 0, alpha));
+	if (color == "green")
+		setFillColor(sf::Color(0, 128, 0, alpha));
+	if (color == "blue")
+		setFillColor(sf::Color(0, 0, 255, alpha));
+	if (color == "yellow")
+		setFillColor(sf::Color(255, 255, 0, alpha));
+	if (color == "white")
+		setFillColor(sf::Color(255, 255, 255, alpha));
+	if (color == "black")
+		setFillColor(sf::Color(0, 0, 0, alpha));
 
 	//ДОБАВИТЬ ФУНКЦИЮ RGB!
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::setStyleText(ResData &rd)
+void Text::setStyleText(std::string style)
 {
-	char *Ptr = strtok((char*)rd.style.c_str(), " ");
+	char *Ptr = strtok((char*)style.c_str(), " ");
 
 	unsigned int styleNum = 0;
 
@@ -109,8 +122,8 @@ void Text::edit(ResData rd)
 	if (GETBIT(rd.bitMask, _size)) setCharacterSize(rd.size);
 	if (GETBIT(rd.bitMask, _fontId)) setFont(*kernel.fonts[rd.fontId]);
 	if (GETBIT(rd.bitMask, _text)) setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
-	if (GETBIT(rd.bitMask, _color)) setColorText(rd);
-	if (GETBIT(rd.bitMask, _style)) setStyleText(rd);
+	if (GETBIT(rd.bitMask, _color)) setColorText(rd.color, rd.alpha);
+	if (GETBIT(rd.bitMask, _style)) setStyleText(rd.style);
 	kernel.print("Edit mode for text: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

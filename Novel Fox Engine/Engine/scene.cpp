@@ -9,6 +9,7 @@ Scene::Scene(XMLNode scene)
 {
 	firstEvent = true;
 	tEvent = -1;
+	//sceneReady = false; // Сцена ещё не готова [!]
 	loadScene(scene);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -19,6 +20,7 @@ Scene::~Scene()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Scene::loadScene(XMLNode scene)
 {
+	//sceneReady = false;
 	std::string line = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 	kernel.print(line + "[Start loading resources]", INFO);
 	const char *sceneId = scene->Attribute("id");
@@ -97,8 +99,9 @@ void Scene::loadScene(XMLNode scene)
 				}
 				else
 				{
-					//Рассчёт нужного количества конструкторов Text: Имя, 1-я строчка, 2-я строчка и т.д.
-					objects[data.id] = new Text(data);
+					//Если стоит "ограничитель" width, то это многострочный текст
+					if (data.width > 0) objects[data.id] = new SmartText(data); 
+					if (data.width == 0) objects[data.id] = new Text(data);
 					layers[data.layer + MAX_LAYER].push_back(objects[data.id]);
 					kernel.print(objects[data.id], INFO);
 				}
@@ -170,6 +173,7 @@ void Scene::loadScene(XMLNode scene)
 		}
 	}
 	kernel.print(line + "~~~~~~~[Resources loaded]", INFO);
+	//sceneReady = true; // Сцена готова
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Read event
@@ -259,6 +263,7 @@ void Scene::displayAll()
 //Удаление всех отрисованных объектов
 void Scene::clear()
 {
+
 	for (auto &layer : layers)
 	{
 		for (auto &obj : layer)

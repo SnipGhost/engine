@@ -5,6 +5,13 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Shape::Shape(sf::Vector2f winSize)
+{
+	alpha = 0;
+	setSize(sf::Vector2f(winSize.x, winSize.y));
+	setFillColor(sf::Color(0, 0, 0, alpha));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Shape::Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize)
 {
 	const float k = (float)16 / 9;
@@ -23,6 +30,23 @@ Shape::Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize)
 	}
 	setSize(sf::Vector2f(size.x, size.y));
 	setFillColor(clr);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+int Shape::getAlpha()
+{
+	return alpha;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Shape::addAlpha()
+{
+	alpha += 1;
+	setFillColor(sf::Color(0, 0, 0, alpha));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Shape::pickUpAlpha()
+{
+	alpha -= 1;
+	setFillColor(sf::Color(0, 0, 0, alpha));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Shape::display(sf::RenderWindow *win)
