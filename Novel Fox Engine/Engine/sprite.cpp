@@ -94,7 +94,6 @@ std::ostream & Sprite::print(std::ostream &os)
 	os << "\tLayerMotion:   \t" << ((layermotion) ? "true" : "false") << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:  \t(" << kernel.factor.x << "; " << kernel.factor.y << ")" << std::endl;
 	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

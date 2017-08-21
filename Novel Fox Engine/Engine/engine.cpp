@@ -76,6 +76,8 @@ Kernel::Kernel()
 	// Установка коэффициента размера окна разработки и использования
 	factor.x = screen.x / devScreen.x;
 	factor.y = screen.y / devScreen.y;
+	log->print("Resize: (" + std::to_string(factor.x) + "; " + 
+		std::to_string(factor.y) + ")");
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Настройка и создание окна
 	sf::ContextSettings setting;
@@ -228,6 +230,9 @@ void Kernel::eventUpdate()
 			screen.y = (float)window->getSize().y;
 			factor.x = screen.x / devScreen.x;
 			factor.y = screen.y / devScreen.y;
+
+			log->print("Resize: (" + std::to_string(factor.x) + "; " + 
+				std::to_string(factor.y) + ")");
 
 			window->setView(sf::View(sf::FloatRect(0, 0, 
 				         (float)event.size.width, (float)event.size.height)));

@@ -42,7 +42,7 @@
       <ANIMATION id="energy" layer="-1" alpha="80" x="840" y="220" scale="1.0" width="200" height="200" delay="40" src="scenario/textures/demoVersion/energy.png"/>-->
     </EVENT>>
     <EVENT>
-      <TEXT id="text" font="std" layer="5" x="160" y="520" color="red" scale="1.0" size="23" width="1700" height="11">Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
+      <TEXT id="text" font="std" layer="5" x="160" y="520" color="red" scale="1.0" size="23" width="1800" height="11">Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
       <SPRITE id="bread" src="scenario/textures/demoVersion/breadtell.png"/>
       <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_1.ogg"/>
       <SPRITE id="hud" layer="4"  x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
@@ -86,11 +86,11 @@
      <SPRITE id="front" layer="3" x="00" y="00" scale="1.0" src="scenario/textures/demoVersion/object3.png"/>
     <EVENT>
       <SPRITE id="bg" src="scenario/textures/demoVersion/background_3blur.png"/>
-      <TEXT id="text" font="simple" style="italic bold" layer="5" x="160" y="545" color="red" scale="1.0" size="33">День добрый! Меня зовут Дана и я символ этого игрового движка.</TEXT>
+      <TEXT id="text" font="simple" style="italic bold" layer="5" x="160" y="545" color="red" scale="1.0" size="33" width="1800" height="-5">День добрый! Меня зовут Дана и я символ этого игрового движка.</TEXT>
       <SPRITE id="hud" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
     </EVENT>
     <EVENT>
-      <TEXT id="text">Я так же буду помогать в создании твоего проекта.</TEXT>
+      <TEXT id="text">Я так же буду помогать в создании твоего проекта. Было бы неплохо, если бы я научила тебя каким-нибудь эффектным штукам!</TEXT>
     </EVENT>
     <EVENT>
       <TEXT id="text">Можешь обратиться ко мне в любое время. Буду ждать!</TEXT>

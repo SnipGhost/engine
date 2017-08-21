@@ -1,5 +1,5 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// smarttext.cpp                                       Реализация класса текста
+// smarttext.cpp     Реализация класса умного текста с автоматическим переносом
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,8 +24,7 @@ SmartText::SmartText(ResData rd)
 	text = new Text(id, layer, rd.text, fontId, layermotion, visible,
 		positionObj.x, positionObj.y, scaleObj, size, color, alpha, style);
 
-	// Ставим межстрочный интервал
-	interval = text->getLocalBounds().height + rd.height;
+	interval = text->getLocalBounds().height + height;
 
 	setSmartText(rd);
 }
@@ -35,15 +34,14 @@ void SmartText::setSmartText(ResData &rd)
 	std::vector<sf::String> vecWords;
 	std::vector<sf::String> vecStrings;
 
-	// Режем текст на слова
-	vecWords = scanWords(rd.text);
-	// Распределяем слова по строкам (учитывая ограничение)
-	vecStrings = scanString(width, vecWords, text);
+	vecWords = scanWords(rd.text); //Вектор слов
+	vecStrings = scanString(width, vecWords, text); //Вектор строк
 
 	for (int i = 0; i < (int)vecStrings.size(); i++)
 	{
-		text = new Text("line" + i, layer, vecStrings[i], fontId, layermotion, visible,
-			positionObj.x, positionObj.y + interval * i, scaleObj, size, color, alpha, style);
+		text = new Text("line" + i, layer, vecStrings[i], fontId, layermotion, 
+			visible, positionObj.x, positionObj.y + interval * i, scaleObj, size, 
+			color, alpha, style);
 		textVector.push_back(text);
 	}
 }
@@ -57,13 +55,17 @@ std::vector<sf::String> SmartText::scanWords(sf::String str)
 	for (int i = 0; i < (int)str.getSize(); i++)
 	{
 		if (str[i] != ' ')
+		{
 			buff += str[i];
+		}
 		else
+		{
 			if (buff != "")
 			{
 				vecStr.push_back(buff);
 				buff = "";
 			}
+		}
 	}
 	vecStr.push_back(buff);
 	return vecStr;
@@ -151,7 +153,14 @@ std::ostream &ng::operator << (std::ostream& os, SmartText &t)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream & SmartText::print(std::ostream &os)
 {
-	//Вытаскивать инфу из ng::Text
+	//Большинство информации спрашиваем у первой строчки
+	sf::Vector2f pos = textVector[0]->getPosition();
+	sf::Vector2f scl = textVector[0]->getScale();
+	os << id << " [ng::SmartText]" << std::endl;
+	os << "\tColor:   \t" << textVector[0]->getFillColor().toInteger() << std::endl;
+	os << "\tLayer:   \t" << layer << std::endl;
+	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
+	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
 	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

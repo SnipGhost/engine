@@ -95,7 +95,6 @@ void Text::setStyleText(std::string style)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::edit(ResData rd)
 {
-	//Layer - НЕЛЬЗЯ
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
 		if (GETBIT(rd.bitMask, _x))
@@ -127,7 +126,7 @@ void Text::edit(ResData rd)
 	kernel.print("Edit mode for text: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::display(sf::RenderWindow *win) //Переделать
+void Text::display(sf::RenderWindow *win)
 {
 	win->draw(*this);
 }
@@ -146,7 +145,6 @@ std::ostream & Text::print(std::ostream &os)
 	os << "\tLayer:   \t" << layer << std::endl;
 	os << "\tPosition:\t(" << pos.x << "; " << pos.y << ")" << std::endl;
 	os << "\tScale:   \t(" << scl.x << "; " << scl.y << ")" << std::endl;
-	os << "\tReSize:  \t(" << kernel.factor.x << "; " << kernel.factor.y << ")" << std::endl;
 	return os;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
