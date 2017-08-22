@@ -209,13 +209,6 @@ bool Scene::doEvent(XMLNode scene)
 	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Jump check
-bool Scene::jump(XMLNode node)
-{
-	if (node->FirstChildElement("JUMP")) return 1;
-	return 0;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Включение любых проигрывающихся ресурсов
 void Scene::startMedia()
 {
@@ -225,7 +218,7 @@ void Scene::startMedia()
 			video.second->play();
 	for (auto &tempo : kernel.music)
 		if (tempo.second && !kernel.event.isMusicPlay(*tempo.second) && 
-			tempo.second->playable && tempo.second->getLoop() == true) //[?]
+			tempo.second->playable)
 			tempo.second->play();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,8 +265,12 @@ void Scene::clear()
 			obj = NULL;
 		}
 	}
-	for (auto &sound : sounds) 
+	for (auto &sound : sounds)
+	{
 		if (sound.second)
+		{
 			delete sound.second;
+		}
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

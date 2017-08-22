@@ -285,23 +285,33 @@ void Kernel::sceneUpdate()
 			delete scene;
 			scene = nullptr;
 
-			ResData data;
-			if (node && scene->jump(node))
+			if (node && node->FirstChildElement("JUMP")) // Если есть node и написали Jump
 			{
-				data = getData(node->FirstChildElement("JUMP"));
-				node = getNextXMLNode(node, "SCENE", data.id);
+				std::string id = "next";
+				if (node->FirstChildElement("JUMP")->Attribute("id")) // Если в Jump есть атрибут id
+				{
+					id = node->FirstChildElement("JUMP")->Attribute("id");
+					node = getNextXMLNode(node, "SCENE", id);
+				}
+				else // Если "забыли" написать атрибут id, то на следующую сцену
+				{
+					print("~~> GO TO NEXT SCENE", NORM);
+					node = getNextXMLNode(node, "SCENE");
+				}
 			}
-			else
+			else // Если Jump не нашли, то на следующую сцену
 			{
 				print("~~> GO TO NEXT SCENE", NORM);
 				if (node) node = getNextXMLNode(node, "SCENE");
 			}
 
-			if (node)
-				scene = new Scene(node);
-			else
+			if (node) // Если есть node, на которую можно перейти
 			{
-				node = loadFirstScene();
+				scene = new Scene(node);
+			}
+			else // Если нет node, на которую можно перейти, то грузим всё сначала
+			{
+				node = loadFirstScene(); // В будущем самая первая node будет меню
 				if (node) scene = new Scene(node);
 			}
 
@@ -432,78 +442,6 @@ XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
 		}
 	}
 	return saveNode->NextSiblingElement(tag);
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Получение и возврат информации по ресурсам
-ResData ng::getData(XMLNode node)
-{
-	ResData res;
-	res.bitMask = 0;
-
-	//ПРОДУМАТЬ ЛУЧШЕ!! [!]
-	if (!strcmp(node->Name(), "SPRITE") || !strcmp(node->Name(), "ANIMATION") || !strcmp(node->Name(), "VIDEO")) 
-	{
-		const char *smooth = node->Attribute("smooth");
-		if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
-		const char *delay = node->Attribute("delay");
-		if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); } else res.delay = 40;
-	}
-	if (!strcmp(node->Name(), "TEXT"))
-	{
-		const char *text = node->GetText();
-		if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";
-		const char *style = node->Attribute("style");
-		if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
-		const char *fontId = node->Attribute("font");
-		if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); } else res.fontId = "standart";
-		const char *color = node->Attribute("color");
-		if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); } else res.color = "black";
-	}
-
-	const char *id = node->Attribute("id");
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
-	const char *x = node->Attribute("x");
-	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
-	const char *y = node->Attribute("y");
-	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
-	const char *width = node->Attribute("width");
-	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 0;
-	const char *height = node->Attribute("height");
-	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 0;
-	const char *size = node->Attribute("size");
-	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;
-	const char *loop = node->Attribute("loop");
-	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
-	const char *layermotion = node->Attribute("layermotion");
-	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
-	const char *scale = node->Attribute("scale");
-	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
-	const char *layer = node->Attribute("layer");
-	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
-	const char *command = node->Attribute("command");
-	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
-	const char *volume = node->Attribute("volume");
-	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
-	const char *visible = node->Attribute("visible");
-	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
-	const char *alpha = node->Attribute("alpha");
-	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
-	const char *src = node->Attribute("src");
-	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
-
-	return res;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Получение и возврат информации по шрифтам
-FontData ng::getFontData(XMLNode node)
-{
-	const char *src = node->Attribute("src");
-	const char *id = node->Attribute("id");
-
-	FontData res;
-	(id) ? res.id = id : res.id = "NULL";
-	(src) ? res.src = RES_PATH + std::string(src) : res.src = "NULL";
-	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream & ng::operator << (std::ostream & os, Displayable * s)

@@ -78,6 +78,10 @@ void Sprite::edit(ResData rd)
 void Sprite::display(sf::RenderWindow *win) 
 {
 	win->draw(*this);
+	//win->draw(*this, sf::BlendAdd); // Разные свойства наложения
+	//win->draw(*this, sf::BlendAlpha);
+	//win->draw(*this, sf::BlendMultiply);
+	//win->draw(*this, sf::BlendNone);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, Sprite &s)

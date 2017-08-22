@@ -26,7 +26,16 @@ SmartText::SmartText(ResData rd)
 
 	interval = text->getLocalBounds().height + height;
 
-	setSmartText(rd);
+	// Способ Миши -------------------------------------------------------------------
+	//size_t len_sym = rd.text.length(); //длина строки в символах
+	//size_t len_pix = text->getLocalBounds().width; //длина строки в пикселях
+	//float avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
+	//size_t line_end_pos = width / avg_sym_size; // примерное кол-во символов которое влезет в строку, округлим в малую сторону
+	// ...
+	// Способ Миши -------------------------------------------------------------------
+
+	//textVector.push_back(text); // Убрать это
+	setSmartText(rd); // Если не получился Мишин способ, то юзать этот
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setSmartText(ResData &rd)

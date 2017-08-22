@@ -220,8 +220,14 @@ namespace ng
 		unsigned __int32 bitMask;  // Битовая маска изменений
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	FontData getFontData(XMLNode tNode); // Распарсить FONT-ноду
-	ResData getData(XMLNode node);    // Распарсить ЛЮБУЮ-ноду
+	FontData getFontData(XMLNode tNode);		// Распарсить FONT-ноду
+	ResData getData(XMLNode node);				// Распарсить ЛЮБУЮ-ноду
+	ResData getDataSprite(XMLNode node);		// Распарсить SPRITE-ноду
+	ResData getDataAnimation(XMLNode node);     // Распарсить ANIMATION-ноду
+	ResData getDataVideo(XMLNode node);			// Распарсить VIDEO-ноду
+	ResData getDataText(XMLNode node);			// Распарсить TEXT-ноду
+	ResData getDataMusicSound(XMLNode node);    // Распарсить MUSIC/SOUND-ноду
+	ResData getDataClick(XMLNode node);			// Распарсить CLICK-ноду
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс шрифтов
 	class Font : public sf::Font
@@ -288,12 +294,9 @@ namespace ng
 			} posScale, origin;
 			
 			virtual ~Displayable();
-
 			sf::Vector2f getPositionObj(); // Первоначально установенные 
 			float getScaleObj();		   // Первоначально установенные 
-
 			bool visible;				   // Состояние объекта 
-
 			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
@@ -463,7 +466,6 @@ namespace ng
 			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
-			bool jump(XMLNode scene);       // Проверка на JUMP
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов
 			void displayAll();              // Отобразить все объекты сцены
