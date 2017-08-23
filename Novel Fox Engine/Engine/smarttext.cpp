@@ -40,15 +40,15 @@ SmartText::SmartText(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setSmartText(ResData &rd)
 {
-	std::vector<sf::String> vecWords;
-	std::vector<sf::String> vecStrings;
+	std::vector<std::string> vecWords;
+	std::vector<std::string> vecStrings;
 
 	vecWords = scanWords(rd.text); //Вектор слов
 	vecStrings = scanString(width, vecWords, text); //Вектор строк
 
 	for (int i = 0; i < (int)vecStrings.size(); i++)
 	{
-		text = new Text("line" + i, layer, vecStrings[i], fontId, layermotion, 
+		text = new Text("line" + std::to_string(i), layer, vecStrings[i], fontId, layermotion, 
 			visible, positionObj.x, positionObj.y + interval * i, scaleObj, size, 
 			color, alpha, style);
 		textVector.push_back(text);
@@ -56,12 +56,12 @@ void SmartText::setSmartText(ResData &rd)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Возвращает вектор слов
-std::vector<sf::String> SmartText::scanWords(sf::String str)
+std::vector<std::string> SmartText::scanWords(std::string str)
 {
-	std::vector<sf::String> vecStr;
-	sf::String buff;
+	std::vector<std::string> vecStr;
+	std::string buff;
 
-	for (int i = 0; i < (int)str.getSize(); i++)
+	for (size_t i = 0; i < str.size(); i++)
 	{
 		if (str[i] != ' ')
 		{
@@ -81,13 +81,13 @@ std::vector<sf::String> SmartText::scanWords(sf::String str)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Возвращает вектор готовых строк
-std::vector<sf::String> SmartText::scanString(int width, std::vector<sf::String> vecWords_, sf::Text* text)
+std::vector<std::string> SmartText::scanString(int width, std::vector<std::string> vecWords_, sf::Text* text)
 {
-	std::vector<sf::String> vecStr;
-	sf::String buff;
-	sf::String buff2;
+	std::vector<std::string> vecStr;
+	std::string buff;
+	std::string buff2;
 
-	for (int i = 0; i < (int)vecWords_.size(); i++)
+	for (size_t i = 0; i < vecWords_.size(); i++)
 	{
 		buff = buff2;
 		(buff2 == "") ? buff2 += vecWords_[i] : buff2 += " " + vecWords_[i];

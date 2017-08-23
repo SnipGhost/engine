@@ -121,8 +121,8 @@ namespace ng
 		bool isWinClosed();
 		bool isMouseClickKey(sf::Mouse::Button mouse);
 		bool isMouseKey(sf::Mouse::Button mouse);
-		bool isMusicPlay(sf::Music &music);
-		bool isVideoPlay(sfe::Movie &video);
+		bool isMusicPlay(sf::Music *music);
+		bool isVideoPlay(sfe::Movie *video);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Преобъявление классов для Kernel
@@ -217,7 +217,7 @@ namespace ng
 		std::string color;       // Цвет текста				18	
 		std::string fontId;      // Идентификатор шрифта	19
 		std::string command;     // Команда					20
-		unsigned __int32 bitMask;  // Битовая маска изменений
+		uint32_t bitMask;        // Битовая маска изменений
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode);		// Распарсить FONT-ноду
@@ -242,7 +242,7 @@ namespace ng
 	class Music: public sf::Music
 	{
 		private:
-			float volume;
+			//float volume; [?]
 		public:
 			std::string state;
 			bool playable;
@@ -399,8 +399,8 @@ namespace ng
 		public:
 			SmartText(ResData rd);
 			void setSmartText(ResData &rd);
-			std::vector<sf::String> scanWords(sf::String str);
-			std::vector<sf::String> scanString(int width, std::vector<sf::String> vecWords_, sf::Text* text);
+			std::vector<std::string> scanWords(std::string str);
+			std::vector<std::string> scanString(int width, std::vector<std::string> vecWords_, sf::Text* text);
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();

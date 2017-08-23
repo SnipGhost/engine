@@ -24,6 +24,8 @@
 #elif defined(__APPLE__)
 
     #define OS_IS_UNIX_MACOS     1
+    #include <stdint.h>
+    typedef int32_t __int32;
 //-----------------------------------------------
 #else
 

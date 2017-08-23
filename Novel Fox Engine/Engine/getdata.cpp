@@ -21,8 +21,7 @@ ResData ng::getData(XMLNode node)
 	if (!strcmp(node->Name(), "CLICK"))
 		return getDataClick(node);
 
-	ResData res; //[!] //Бессмыслица
-	return res;
+	return ResData();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Получение и возврат информации по SPRITE

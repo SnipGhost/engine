@@ -213,11 +213,11 @@ bool Scene::doEvent(XMLNode scene)
 void Scene::startMedia()
 {
 	for (auto &video : videos)
-		if (video.second && !kernel.event.isVideoPlay(*video.second) && 
+		if (video.second && !kernel.event.isVideoPlay(video.second) && 
 			video.second->visible)
 			video.second->play();
 	for (auto &tempo : kernel.music)
-		if (tempo.second && !kernel.event.isMusicPlay(*tempo.second) && 
+		if (tempo.second && !kernel.event.isMusicPlay(tempo.second) && 
 			tempo.second->playable)
 			tempo.second->play();
 }

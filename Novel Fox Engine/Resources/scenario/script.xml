@@ -43,7 +43,7 @@
     </EVENT>>
     <EVENT>
       <TEXT id="person" font="std" layer="5" x="160" y="520" color="210,105,30" size="23">Батон</TEXT>
-      <TEXT id="text" font="std" layer="5" x="160" y="555" color="red" size="23" width="1800" height="11">Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
+      <TEXT id="text" font="std" layer="5" x="160" y="555" color="red" size="23" width="1800" height="11">Hello, boy! Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
       <SPRITE id="bread" src="scenario/textures/demoVersion/breadtell.png"/>
       <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_1.ogg"/>
       <SPRITE id="hud" layer="4"  x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
