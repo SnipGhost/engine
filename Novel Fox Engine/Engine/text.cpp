@@ -83,7 +83,7 @@ void Text::setColorText(std::string color, int alpha)
 	}
 
 	// Установка RGB цвета
-	char *now = strtok((char*)color.c_str(), " .,:"); //ПРОДУМАТЬ! [!]
+	char *now = strtok((char*)color.c_str(), " .,:");
 	int red = std::atoi(now);
 	now = strtok(0, " .,:");
 	int green = std::atoi(now);

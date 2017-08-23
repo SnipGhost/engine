@@ -21,86 +21,51 @@ SmartText::SmartText(ResData rd)
 	width = rd.width;
 	height = rd.height;
 
-	text = new Text(id, layer, rd.text, fontId, layermotion, visible, positionObj.x, 
-		positionObj.y, scaleObj, size, color, alpha, style);
-
-	interval = text->getLocalBounds().height + height;
-
-	// Способ Миши -------------------------------------------------------------------
-	//size_t len_sym = rd.text.length(); //длина строки в символах
-	//size_t len_pix = text->getLocalBounds().width; //длина строки в пикселях
-	//float avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
-	//size_t line_end_pos = width / avg_sym_size; // примерное кол-во символов которое влезет в строку, округлим в малую сторону
-	// ...
-	// Способ Миши -------------------------------------------------------------------
-
-	//textVector.push_back(text); // Убрать это
-	setSmartText(rd); // Если не получился Мишин способ, то юзать этот
+	setSmartText(rd);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setSmartText(ResData &rd)
 {
-	std::vector<std::string> vecWords;
-	std::vector<std::string> vecStrings;
+	text = new Text(id, layer, rd.text, fontId, layermotion, visible, positionObj.x,
+		positionObj.y, scaleObj, size, color, alpha, style);
 
-	vecWords = scanWords(rd.text); //Вектор слов
-	vecStrings = scanString(width, vecWords, text); //Вектор строк
+	interval = text->getLocalBounds().height + height;
 
-	for (int i = 0; i < (int)vecStrings.size(); i++)
+	int line = 0;
+	bool division = true;
+	std::string textString = rd.text;
+	size_t len_sym = textString.length(); // Длина строки в символах
+	size_t len_pix = text->getLocalBounds().width; //длина строки в пикселях
+	float avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
+	size_t line_end_pos = width / avg_sym_size; // примерное кол-во символов которое влезет в строку, округлим в малую сторону
+	while (division == true)
 	{
-		text = new Text("line" + std::to_string(i), layer, vecStrings[i], fontId, layermotion, 
-			visible, positionObj.x, positionObj.y + interval * i, scaleObj, size, 
-			color, alpha, style);
-		textVector.push_back(text);
-	}
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Возвращает вектор слов
-std::vector<std::string> SmartText::scanWords(std::string str)
-{
-	std::vector<std::string> vecStr;
-	std::string buff;
-
-	for (size_t i = 0; i < str.size(); i++)
-	{
-		if (str[i] != ' ')
+		len_sym = textString.length(); // Обновляем длину строки в символах
+		if (line_end_pos < len_sym) // Строка больше ограничения, значит делим
 		{
-			buff += str[i];
-		}
-		else
-		{
-			if (buff != "")
+			for (int i = line_end_pos; i > 0; i--)
 			{
-				vecStr.push_back(buff);
-				buff = "";
+				if (textString[i] == ' ')
+				{
+					text = new Text("line" + std::to_string(line), layer, textString.substr(0, i), fontId, layermotion,
+						visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
+						color, alpha, style);
+					line++;
+					textVector.push_back(text);
+					textString = textString.substr(i+1, len_sym - i);
+					break;
+				}
 			}
 		}
-	}
-	vecStr.push_back(buff);
-	return vecStr;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Возвращает вектор готовых строк
-std::vector<std::string> SmartText::scanString(int width, std::vector<std::string> vecWords_, sf::Text* text)
-{
-	std::vector<std::string> vecStr;
-	std::string buff;
-	std::string buff2;
-
-	for (size_t i = 0; i < vecWords_.size(); i++)
-	{
-		buff = buff2;
-		(buff2 == "") ? buff2 += vecWords_[i] : buff2 += " " + vecWords_[i];
-		text->setString(buff2);
-		if (text->getLocalBounds().width > width)
+		else // Последняя строка, что меньше ограничения
 		{
-			vecStr.push_back(buff);
-			buff = "";
-			buff2 = vecWords_[i];
+			text = new Text("line" + std::to_string(line), layer, textString, fontId, layermotion,
+				visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
+				color, alpha, style);
+			textVector.push_back(text);
+			division = false;
 		}
 	}
-	vecStr.push_back(buff2);
-	return vecStr;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::edit(ResData rd) //Доработать

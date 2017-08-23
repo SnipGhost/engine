@@ -49,17 +49,6 @@ void Sprite::setAlpha(int alpha)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::setBlendMode(std::string style)
 {
-	//if (style == "blendadd")
-	//	renderStates = sf::BlendAdd; //Photoshop: Линейный осветлитель (добавить)
-	//else if (style == "blendalpha")
-	//	renderStates = sf::BlendAlpha; // Добавить с Alpha каналом (является стандартом)
-	//else if (style == "blendmultiply")
-	//	renderStates = sf::BlendMultiply; //Photoshop: Умножение
-	//else if (style == "blendnone")
-	//	renderStates = sf::BlendNone; // Добавить без Alpha режима ("додумает" текстуру)
-	//else
-	//	renderStates = sf::RenderStates::Default;
-
 	if (style == "blendadd")
 		renderStates = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
 	else if (style == "blendmultiply")

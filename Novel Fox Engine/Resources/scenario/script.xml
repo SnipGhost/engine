@@ -43,7 +43,7 @@
     </EVENT>>
     <EVENT>
       <TEXT id="person" font="std" layer="5" x="160" y="520" color="210,105,30" size="23">Батон</TEXT>
-      <TEXT id="text" font="std" layer="5" x="160" y="555" color="red" size="23" width="1800" height="11">Hello, boy! Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
+      <TEXT id="text" font="std" layer="5" x="160" y="555" color="red" size="23" width="700" height="11">Быть или не быть, вот в чём вопрос. Достойно ль смиряться под ударами судьбы, иль надо оказать сопротивленье и в смертной схватке с целым морем бед покончить с ними? Умереть. Забыться.</TEXT>
       <SPRITE id="bread" src="scenario/textures/demoVersion/breadtell.png"/>
       <SOUND id="botbeep" volume="20" src="scenario/sounds/bot_tell_1.ogg"/>
       <SPRITE id="hud" layer="4"  x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
@@ -90,7 +90,7 @@
     <EVENT>
       <SPRITE id="bg" src="scenario/textures/demoVersion/background_3blur.png"/>
       <TEXT id="person" font="simple" style="italic bold" layer="5" x="160" y="510" color="255,69,0" size="33">Дана</TEXT>
-      <TEXT id="text" font="simple" style="italic bold" layer="5" x="160" y="545" color="black" size="33" width="1800" height="-5">День добрый! Меня зовут Дана и я символ этого игрового движка.</TEXT>
+      <TEXT id="text" font="simple" style="italic bold" layer="5" x="160" y="545" color="black" size="33" width="700" height="-5">День добрый! Меня зовут Дана и я символ этого игрового движка.</TEXT>
       <SPRITE id="hud" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demoVersion/hud.png"/>
     </EVENT>
     <EVENT>
