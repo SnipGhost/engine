@@ -34,9 +34,9 @@ void SmartText::setSmartText(ResData &rd)
 	int line = 0;
 	bool division = true;
 	std::string textString = rd.text;
-	size_t len_sym = textString.length(); // Длина строки в символах
-	size_t len_pix = text->getLocalBounds().width; //длина строки в пикселях
-	float avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
+	size_t len_sym = (size_t)textString.length(); // Длина строки в символах
+	size_t len_pix = (size_t)text->getLocalBounds().width; //длина строки в пикселях
+	size_t avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
 	size_t line_end_pos = width / avg_sym_size; // примерное кол-во символов которое влезет в строку, округлим в малую сторону
 	while (division == true)
 	{
