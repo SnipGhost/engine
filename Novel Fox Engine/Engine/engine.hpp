@@ -327,12 +327,14 @@ namespace ng
 		protected:
 			sf::Color color;
 			sf::Texture texture;
+			sf::RenderStates renderStates;
 		public:
 			Sprite() {}
 			Sprite(std::string id, std::string src, bool smooth = true);
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
 			void setAlpha(int alpha);
+			void setBlendMode(std::string style);
 			void display(sf::RenderWindow *win = kernel.window);
 			void edit(ResData rd);
 			void setResize();
@@ -412,6 +414,7 @@ namespace ng
 	{
 		protected:
 			bool loopVideo;
+			sf::RenderStates renderStates;
 		public:
 			Video(std::string src, int width, int height,
 				float x = 0, float y = 0, float volume = 100, bool loop = false);
@@ -421,6 +424,7 @@ namespace ng
 			void setLoop(bool loop);
 			void setPause();
 			void edit(ResData rd);
+			void setBlendMode(std::string style);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
 			void computeLayerScale();

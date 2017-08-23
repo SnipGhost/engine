@@ -63,6 +63,7 @@
       <SPRITE id="bread" src="scenario/textures/demoVersion/breadnorm.png"/>
     </EVENT>
     <EVENT time="2000">
+      <!--<ANIMATION id="rain" layer="1" layermotion="false" style="blendadd" width="1280" height="720" src="scenario/textures/gifRain.png"/>-->
       <SPRITE id="eventTest" layer="4"  x="50" y="50" scale="0.8" src="scenario/textures/demoVersion/event1.png"/>
     </EVENT>
     <EVENT time="2000">

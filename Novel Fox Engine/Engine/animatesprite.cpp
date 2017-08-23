@@ -5,7 +5,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Sprite(id, src, smooth)
+AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Sprite(id, src, smooth) // Не используется [!]
 {
 	lastTime = 0;
 
@@ -27,8 +27,8 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 
 	setAnimation(rd.height, rd.width, rd.delay);
 	
-	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
-	setResize();
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale); // Нужно ли это делать ещё раз? В Sprite уже делается
+	setResize(); // Нужно ли это делать ещё раз? В Sprite уже делается
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
@@ -36,6 +36,7 @@ void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms)
 	sideHeight = frameHeight;
 	sideWidth = frameWidth;
 	delay = ms;
+	setTextureRect(sf::IntRect(0, 0, sideWidth, sideHeight)); // Без этого происходит странный баг свзяанный с первоначальным resize
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::update() 
@@ -104,12 +105,17 @@ void AnimateSprite::edit(ResData rd)
 		yPozAnim = 0;
 	}
 	if (GETBIT(rd.bitMask, _delay)) delay = _delay;
+	if (GETBIT(rd.bitMask, _style))
+	{
+		style = rd.style;
+		setBlendMode(rd.style);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::display(sf::RenderWindow *win) 
 {
 	update();
-	win->draw(*this);
+	win->draw(*this, renderStates);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, AnimateSprite &s)

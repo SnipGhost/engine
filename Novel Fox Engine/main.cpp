@@ -14,7 +14,7 @@ int main()
 	
 	while (kernel.window->isOpen())
 	{
-		kernel.updateAll();
+		kernel.updateAll(); // Update компонентов
 
 		if (kernel.lostFocus())
 		{
@@ -28,12 +28,18 @@ int main()
 		}
 
 		kernel.startDisplay();
-		if (kernel.scene) kernel.scene->displayAll();
+		if (kernel.scene)
+		{
+			kernel.scene->displayAll(); // Отображение компонентов
+		}
 		kernel.endDisplay();
 	}
 
-	if (kernel.scene) delete kernel.scene;
-	kernel.clear();
+	if (kernel.scene)
+	{
+		delete kernel.scene; // Очистка последней загруженной сцены
+	}
+	kernel.clear(); // Очистка ядра
 
 	return EXIT_SUCCESS;
 }

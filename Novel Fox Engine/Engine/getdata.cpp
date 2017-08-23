@@ -1,11 +1,11 @@
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// getdata.cpp                       Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî ðåñóðñàì
+ï»¿//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// getdata.cpp                       ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ Ñ€ÐµÑÑƒÑ€ÑÐ°Ð¼
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include "engine.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî ðåñóðñàì
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ Ñ€ÐµÑÑƒÑ€ÑÐ°Ð¼
 ResData ng::getData(XMLNode node)
 {
 	if (!strcmp(node->Name(), "SPRITE"))
@@ -21,11 +21,11 @@ ResData ng::getData(XMLNode node)
 	if (!strcmp(node->Name(), "CLICK"))
 		return getDataClick(node);
 
-	ResData res; //[!] //Áåññìûñëèöà
+	ResData res; //[!] //Ð‘ÐµÑÑÐ¼Ñ‹ÑÐ»Ð¸Ñ†Ð°
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî SPRITE
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ SPRITE
 ResData ng::getDataSprite(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -34,6 +34,7 @@ ResData ng::getDataSprite(XMLNode node)
 	const char *layermotion = node->Attribute("layermotion");
 	const char *scale = node->Attribute("scale");
 	const char *layer = node->Attribute("layer");
+	const char *style = node->Attribute("style");
 	const char *visible = node->Attribute("visible");
 	const char *alpha = node->Attribute("alpha");
 	const char *src = node->Attribute("src");
@@ -41,30 +42,21 @@ ResData ng::getDataSprite(XMLNode node)
 
 	ResData res;
 	res.bitMask = 0;
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); }
-	else res.id = "NULL";
-	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); }
-	else res.x = 0;
-	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); }
-	else res.y = 0;
-	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); }
-	else res.layermotion = true;
-	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); }
-	else res.scale = 1;
-	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); }
-	else res.layer = 0;
-	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); }
-	else res.visible = true;
-	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); }
-	else res.alpha = 255;
-	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); }
-	else res.src = "NULL";
-	if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); }
-	else res.smooth = true;
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
+	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
+	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
+	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
+	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
+	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
+	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
+	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
+	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
+	if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî ANIMATION
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ ANIMATION
 ResData ng::getDataAnimation(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -76,6 +68,7 @@ ResData ng::getDataAnimation(XMLNode node)
 	const char *layermotion = node->Attribute("layermotion");
 	const char *scale = node->Attribute("scale");
 	const char *layer = node->Attribute("layer");
+	const char *style = node->Attribute("style");
 	const char *visible = node->Attribute("visible");
 	const char *alpha = node->Attribute("alpha");
 	const char *src = node->Attribute("src");
@@ -84,38 +77,25 @@ ResData ng::getDataAnimation(XMLNode node)
 
 	ResData res;
 	res.bitMask = 0;
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); }
-	else res.id = "NULL";
-	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); }
-	else res.x = 0;
-	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); }
-	else res.y = 0;
-	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); }
-	else res.width = 0;
-	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); }
-	else res.height = 0;
-	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); }
-	else res.loop = false;
-	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); }
-	else res.layermotion = true;
-	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); }
-	else res.scale = 1;
-	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); }
-	else res.layer = 0;
-	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); }
-	else res.visible = true;
-	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); }
-	else res.alpha = 255;
-	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); }
-	else res.src = "NULL";
-	if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); }
-	else res.smooth = true;
-	if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); }
-	else res.delay = 40;
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
+	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
+	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
+	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 0;
+	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 0;
+	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
+	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
+	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
+	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
+	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
+	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
+	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
+	if (smooth) { res.smooth = CONVTRUE(smooth); res.bitMask = res.bitMask | (1 << _smooth); } else res.smooth = true;
+	if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); } else res.delay = 40;
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî VIDEO
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ VIDEO
 ResData ng::getDataVideo(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -127,6 +107,7 @@ ResData ng::getDataVideo(XMLNode node)
 	const char *layermotion = node->Attribute("layermotion");
 	const char *scale = node->Attribute("scale");
 	const char *layer = node->Attribute("layer");
+	const char *style = node->Attribute("style");
 	const char *command = node->Attribute("command");
 	const char *volume = node->Attribute("volume");
 	const char *visible = node->Attribute("visible");
@@ -135,38 +116,25 @@ ResData ng::getDataVideo(XMLNode node)
 
 	ResData res;
 	res.bitMask = 0;
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); }
-	else res.id = "NULL";
-	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); }
-	else res.x = 0;
-	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); }
-	else res.y = 0;
-	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); }
-	else res.width = 0;
-	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); }
-	else res.height = 0;
-	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); }
-	else res.loop = false;
-	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); }
-	else res.layermotion = true;
-	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); }
-	else res.scale = 1;
-	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); }
-	else res.layer = 0;
-	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); }
-	else res.command = "NULL";
-	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); }
-	else res.volume = 0;
-	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); }
-	else res.visible = true;
-	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); }
-	else res.alpha = 255;
-	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); }
-	else res.src = "NULL";
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
+	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
+	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
+	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 0;
+	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 0;
+	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
+	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
+	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
+	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
+	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
+	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
+	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
+	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
+	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî TEXT
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ TEXT
 ResData ng::getDataText(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -187,40 +155,25 @@ ResData ng::getDataText(XMLNode node)
 
 	ResData res;
 	res.bitMask = 0;
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); }
-	else res.id = "NULL";
-	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); }
-	else res.x = 0;
-	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); }
-	else res.y = 0;
-	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); }
-	else res.width = 0;
-	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); }
-	else res.height = 0;
-	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); }
-	else res.size = 1;
-	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); }
-	else res.layermotion = true;
-	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); }
-	else res.scale = 1;
-	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); }
-	else res.layer = 0;
-	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); }
-	else res.style = "NULL";
-	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); }
-	else res.visible = true;
-	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); }
-	else res.alpha = 255;
-	if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); }
-	else res.text = "NO TEXT";
-	if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); }
-	else res.fontId = "standart";
-	if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); }
-	else res.color = "black";
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
+	if (x) { res.x = std::stof(x); res.bitMask = res.bitMask | (1 << _x); } else res.x = 0;
+	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
+	if (width) { res.width = std::atoi(width); res.bitMask = res.bitMask | (1 << _width); } else res.width = 0;
+	if (height) { res.height = std::atoi(height); res.bitMask = res.bitMask | (1 << _height); } else res.height = 0;
+	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;
+	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
+	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
+	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
+	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;
+	if (alpha) { res.alpha = 255 * std::atoi(alpha) / 100; res.bitMask = res.bitMask | (1 << _alpha); } else res.alpha = 255;
+	if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";
+	if (fontId) { res.fontId = fontId; res.bitMask = res.bitMask | (1 << _fontId); } else res.fontId = "standart";
+	if (color) { res.color = color; res.bitMask = res.bitMask | (1 << _color); } else res.color = "black";
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî MUSIC/SOUND
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ MUSIC/SOUND
 ResData ng::getDataMusicSound(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -231,20 +184,15 @@ ResData ng::getDataMusicSound(XMLNode node)
 
 	ResData res;
 	res.bitMask = 0;
-	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); }
-	else res.id = "NULL";
-	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); }
-	else res.loop = false;
-	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); }
-	else res.command = "NULL";
-	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); }
-	else res.volume = 0;
-	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); }
-	else res.src = "NULL";
+	if (id) { res.id = id; res.bitMask = res.bitMask | (1 << _id); } else res.id = "NULL";
+	if (loop) { res.loop = CONVTRUE(loop); res.bitMask = res.bitMask | (1 << _loop); } else res.loop = false;
+	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
+	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
+	if (src) { res.src = RES_PATH + std::string(src); res.bitMask = res.bitMask | (1 << _src); } else res.src = "NULL";
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî CLICK
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ CLICK
 ResData ng::getDataClick(XMLNode node)
 {
 	const char *id = node->Attribute("id");
@@ -262,7 +210,7 @@ ResData ng::getDataClick(XMLNode node)
 	return res;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Ïîëó÷åíèå è âîçâðàò èíôîðìàöèè ïî øðèôòàì
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ ÑˆÑ€Ð¸Ñ„Ñ‚Ð°Ð¼
 FontData ng::getFontData(XMLNode node)
 {
 	const char *src = node->Attribute("src");

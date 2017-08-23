@@ -21,6 +21,11 @@ Video::Video(ResData rd)
 	layer = rd.layer;
 	layermotion = rd.layermotion;
 	visible = rd.visible;
+	positionObj = sf::Vector2f(rd.x, rd.y);
+	scaleObj = rd.scale;
+	style = rd.style;
+
+	setBlendMode(style);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -52,16 +57,42 @@ void Video::setPause()
 void Video::edit(ResData rd)
 {
 	//Сделать Edit для видео
+	if (GETBIT(rd.bitMask, _style))
+	{
+		style = rd.style;
+		setBlendMode(rd.style);
+	}
 	kernel.print("Edit mode for video: " + rd.id, INFO);
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Video::setBlendMode(std::string style)
+{
+	//if (style == "blendadd")
+	//	renderStates = sf::BlendAdd; //Photoshop: Линейный осветлитель (добавить)
+	//else if (style == "blendalpha")
+	//	renderStates = sf::BlendAlpha; // Добавить с Alpha каналом (является стандартом)
+	//else if (style == "blendmultiply")
+	//	renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	//else if (style == "blendnone")
+	//	renderStates = sf::BlendNone; // Добавить без Alpha режима ("додумает" текстуру)
+	//else
+	//	renderStates = sf::RenderStates::Default;
+
+	if (style == "blendadd")
+		renderStates = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	else if (style == "blendmultiply")
+		renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	else
+		renderStates = sf::RenderStates::Default;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::display(sf::RenderWindow *win)
 {
-	setLoop(loopVideo);
-	if (getStatus() == sfe::Playing)
+	setLoop(loopVideo); // Лаги возникают вероятнее всего от множества проверок состояния
+	if (getStatus() == sfe::Playing) // Лаги возникают вероятнее всего от множества проверок состояния
 	{
 		update();
-		win->draw(*this);
+		win->draw(*this, renderStates);
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

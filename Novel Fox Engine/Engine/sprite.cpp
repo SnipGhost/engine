@@ -5,7 +5,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sprite::Sprite(std::string id, std::string src, bool smooth)
+Sprite::Sprite(std::string id, std::string src, bool smooth) //Нигде не юзаем [!]
 {
 	if (!setStrTexture(src, smooth))
 		kernel.print("Failed to create sprite " + id, WARN);
@@ -24,6 +24,9 @@ Sprite::Sprite(ResData rd)
 	visible = rd.visible;
 	positionObj = sf::Vector2f(rd.x, rd.y);
 	scaleObj = rd.scale;
+	style = rd.style;
+
+	setBlendMode(style);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -42,6 +45,27 @@ void Sprite::setAlpha(int alpha)
 {
 	color.a = alpha;
 	setColor(sf::Color(255, 255, 255, color.a));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Sprite::setBlendMode(std::string style)
+{
+	//if (style == "blendadd")
+	//	renderStates = sf::BlendAdd; //Photoshop: Линейный осветлитель (добавить)
+	//else if (style == "blendalpha")
+	//	renderStates = sf::BlendAlpha; // Добавить с Alpha каналом (является стандартом)
+	//else if (style == "blendmultiply")
+	//	renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	//else if (style == "blendnone")
+	//	renderStates = sf::BlendNone; // Добавить без Alpha режима ("додумает" текстуру)
+	//else
+	//	renderStates = sf::RenderStates::Default;
+
+	if (style == "blendadd")
+		renderStates = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	else if (style == "blendmultiply")
+		renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	else 
+		renderStates = sf::RenderStates::Default;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::edit(ResData rd)
@@ -72,16 +96,17 @@ void Sprite::edit(ResData rd)
 		setResize();
 	}
 	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
+	if (GETBIT(rd.bitMask, _style))
+	{
+		style = rd.style;
+		setBlendMode(rd.style);
+	}
 	kernel.print("Edit mode for sprite: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::display(sf::RenderWindow *win) 
 {
-	win->draw(*this);
-	//win->draw(*this, sf::BlendAdd); // Разные свойства наложения
-	//win->draw(*this, sf::BlendAlpha);
-	//win->draw(*this, sf::BlendMultiply);
-	//win->draw(*this, sf::BlendNone);
+	win->draw(*this, renderStates);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, Sprite &s)
