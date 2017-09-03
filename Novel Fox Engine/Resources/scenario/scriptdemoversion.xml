@@ -2,7 +2,7 @@
 <SCRIPT>
 
   <CLICK id="click" volume="5" src="scenario/sounds/click.ogg"/>
-  <FONT id="std" src="scenario/fonts/classic.ttf"/>
+  <FONT id="std" src="scenario/fonts/strict.ttf"/>
   <FONT id="rus" src="scenario/fonts/classicold.ttf"/>
   <FONT id="simple" src="scenario/fonts/simple.ttf"/>
 
@@ -12,7 +12,7 @@
     <SPRITE id="gui" layer="4" scale="0.656" src="scenario/textures/demoVersion/menu/gui.png"/>
    </SCENE>
 
-   <SCENE id="girl1">
+   <!--<SCENE id="girl1">
     <SPRITE id="bg" layer="0" src="scenario/textures/scene_0_test/background.png"/>
     <SPRITE id="back" layer="0" src="scenario/textures/scene_0_test/object1.png"/>
     <SPRITE id="girl" layer="0" alpha="75" src="scenario/textures/scene_0_test/object2.png"/>
@@ -24,7 +24,7 @@
      <SPRITE id="background" layer="1" src="scenario/textures/demoVersion/scene_1/background.png"/>
      <SPRITE id="back" layer="2" src="scenario/textures/demoVersion/scene_1/back.png"/>
      <SPRITE id="center" layer="3" src="scenario/textures/demoVersion/scene_1/center.png"/>
-  </SCENE>
+  </SCENE>-->
     
   <SCENE id="guidebot">
      <SPRITE id="bg" layer="-10" src="scenario/textures/demoVersion/background_1.png"/>

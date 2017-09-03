@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SCRIPT>
+  <FONT id="classic" src="scenario/fonts/classic.ttf"/>
+  <SCENE id="scene3">
+    <SPRITE id="back" layer="0" src="scenario/textures/demo/scene3/back.png"/>
+    <SPRITE id="girl" layer="0" x="0" y="0" src="scenario/textures/demo/scene3/girl.png"/>
+    <EVENT>
+      <TEXT id="person" font="classic" layer="5" x="160" y="520" color="yellow" size="23">Girl</TEXT>
+      <TEXT id="text" font="classic" layer="5" x="160" y="555" color="white" size="23" width="900" height="11">I think it's wonderful!</TEXT>
+      <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel3.png"/>
+    </EVENT>
+  </SCENE>
+  <SCENE id="scene2">
+    <SPRITE id="back" layer="0" src="scenario/textures/demo/scene2/back.png"/>
+    <SPRITE id="girl" layer="0" x="700" y="140" src="scenario/textures/demo/scene2/girl1.png"/>
+    <EVENT>
+      <SPRITE id="girl" src="scenario/textures/demo/scene2/girl2.png"/>
+      <TEXT id="person" font="classic" layer="5" x="160" y="520" color="0,191,255" size="23">Girl</TEXT>
+      <TEXT id="text" font="classic" layer="5" x="160" y="555" color="white" size="23" width="900" height="11">It`s a good weather today</TEXT>
+      <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel2.png"/>
+    </EVENT>
+    <EVENT>
+      <TEXT id="text">To be, or not to be: that is the question: whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing end them? To die: to sleep;</TEXT>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="girl" src="scenario/textures/demo/scene2/girl1.png"/>
+      <TEXT id="person" visible="false"/>
+      <TEXT id="text" visible="false"/>
+      <SPRITE id="panel" visible="false"/>
+    </EVENT>
+  </SCENE>
+  <SCENE id="scene1">
+    <SPRITE id="front" layer="3" src="scenario/textures/demo/scene1/3.png"/>
+    <SPRITE id="middle" layer="2" src="scenario/textures/demo/scene1/2.png"/>
+    <ANIMATION id="snow" layer="1" alpha="30" delay="30" layermotion="false" style="blendadd" width="800" height="450" scale="1.6" src="scenario/textures/demo/scene1/snow.png"/>
+    <SPRITE id="back" layer="1" src="scenario/textures/demo/scene1/1.png"/>
+    <EVENT>
+      <TEXT id="person" font="classic" layer="5" x="160" y="520" color="210,105,30" size="23">Indrys</TEXT>
+      <TEXT id="text" font="classic" layer="5" x="160" y="555" color="black" size="23">It`s a good weather today</TEXT>
+      <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel.png"/>
+    </EVENT>
+    <EVENT>
+      <TEXT id="person">Vygo</TEXT>
+      <TEXT id="text">Maybe...</TEXT>
+    </EVENT>
+    <EVENT>
+      <TEXT id="person" visible="false"/>
+      <TEXT id="text" visible="false"/>
+      <SPRITE id="panel" visible="false"/>
+    </EVENT>
+  </SCENE>
+</SCRIPT>
