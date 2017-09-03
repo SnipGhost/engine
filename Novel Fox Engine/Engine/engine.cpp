@@ -285,33 +285,18 @@ void Kernel::sceneUpdate()
 			delete scene;
 			scene = nullptr;
 
-			if (node && node->FirstChildElement("JUMP")) // Если есть node и написали Jump
+			if (node)
 			{
-				std::string id = "next";
-				if (node->FirstChildElement("JUMP")->Attribute("id")) // Если в Jump есть атрибут id
-				{
-					id = node->FirstChildElement("JUMP")->Attribute("id");
-					node = getNextXMLNode(node, "SCENE", id);
-				}
-				else // Если "забыли" написать атрибут id, то на следующую сцену
-				{
-					print("~~> GO TO NEXT SCENE", NORM);
-					node = getNextXMLNode(node, "SCENE");
-				}
-			}
-			else // Если Jump не нашли, то на следующую сцену
-			{
-				print("~~> GO TO NEXT SCENE", NORM);
-				if (node) node = getNextXMLNode(node, "SCENE");
+				node = getNextXMLNode(node, "SCENE");
 			}
 
-			if (node) // Если есть node, на которую можно перейти
+			if (node)
 			{
 				scene = new Scene(node);
 			}
-			else // Если нет node, на которую можно перейти, то грузим всё сначала
+			else
 			{
-				node = loadFirstScene(); // В будущем самая первая node будет меню
+				node = loadFirstScene();
 				if (node) scene = new Scene(node);
 			}
 
@@ -414,34 +399,9 @@ XMLNode Kernel::parseXML(XMLNode node, const char *tag)
 	return node->FirstChildElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag, std::string id)
+XMLNode Kernel::getNextXMLNode(XMLNode node, const char *tag)
 {
-	XMLNode saveNode = node;
-	if (id != "next")
-	{
-		bool correctTag = false;
-		XMLNode nextScene;
-		while (!correctTag)
-		{
-			const char *idNextScene = nullptr;
-			nextScene = node->NextSiblingElement(tag);
-			if (nextScene)
-			{ 
-				idNextScene = node->NextSiblingElement(tag)->Attribute("id");
-				if (!strcmp(idNextScene, id.c_str()))
-				{
-					kernel.print("~~> JUMP TO SCENE " + (std::string)idNextScene, NORM);
-					return node->NextSiblingElement(tag);
-				}
-				node = node->NextSiblingElement(tag);
-			}
-			else
-			{
-				correctTag = true;
-			}
-		}
-	}
-	return saveNode->NextSiblingElement(tag);
+	return node->NextSiblingElement(tag);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream & ng::operator << (std::ostream & os, Displayable * s)

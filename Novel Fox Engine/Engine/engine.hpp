@@ -178,7 +178,7 @@ namespace ng
 			XMLNode loadFirstScene();    // Загрузить первую сцену
 			//-----------------------------------------------------------------
 			XMLNode parseXML(XMLNode node, const char *tag);
-			XMLNode getNextXMLNode(XMLNode node, const char *tag, std::string id = "next");
+			XMLNode getNextXMLNode(XMLNode node, const char *tag);
 			//-----------------------------------------------------------------
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{
@@ -399,8 +399,6 @@ namespace ng
 		public:
 			SmartText(ResData rd);
 			void setSmartText(ResData &rd);
-			std::vector<std::string> scanWords(std::string str);
-			std::vector<std::string> scanString(int width, std::vector<std::string> vecWords_, sf::Text* text);
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
