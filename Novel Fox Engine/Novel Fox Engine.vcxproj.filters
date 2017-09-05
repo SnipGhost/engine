@@ -93,7 +93,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Resources\scenario\script.xml">
+    <Xml Include="Resources\scenario\scriptforvideo.xml">
       <Filter>Файлы ресурсов</Filter>
     </Xml>
   </ItemGroup>

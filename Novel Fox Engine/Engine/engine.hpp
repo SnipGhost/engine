@@ -468,6 +468,7 @@ namespace ng
 			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
+			void isEvent(XMLNode scene);    // Если нашли Event
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов
 			void displayAll();              // Отобразить все объекты сцены

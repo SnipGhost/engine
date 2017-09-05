@@ -9,6 +9,13 @@
       <TEXT id="text" font="classic" layer="5" x="160" y="555" color="white" size="23" width="900" height="11">I think it's wonderful!</TEXT>
       <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel3.png"/>
     </EVENT>
+    <EVENT>
+      <CHOICE id="choice1">
+        <SELECTION id="myText1" value="1"/>
+        <SELECTION id="myText2" value="2"/>
+        <SELECTION id="myText3" value="3"/>
+      </CHOICE>
+    </EVENT>
   </SCENE>
   <SCENE id="scene2">
     <SPRITE id="back" layer="0" src="scenario/textures/demo/scene2/back.png"/>

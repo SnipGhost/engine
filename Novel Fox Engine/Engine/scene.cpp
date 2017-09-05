@@ -176,6 +176,40 @@ void Scene::loadScene(XMLNode scene)
 	//sceneReady = true; // Сцена готова
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// If exit event...
+void Scene::isEvent(XMLNode eventNode)
+{
+		loadScene(eventNode);
+		const char *ifarg = eventNode->Attribute("if");
+		//if (ifarg); // Распарсиваем if аргумент
+
+		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
+		if (choiceNode)
+		{
+			const char *id = eventNode->Attribute("id");
+			//if (id); // Нашли id choice ТЭГ
+			const char *type = eventNode->Attribute("type");
+			//if (type); // Нашли type choice ТЭГ
+
+			XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
+			while (selectionNode) // Пока тэг есть...
+			{
+				if (selectionNode)
+				{
+					const char *id = eventNode->Attribute("id");
+					//if (id); // Нашли id объекта в selection ТЭГ
+					const char *value = eventNode->Attribute("value");
+					//if (value); // Нашли value объекта в selection ТЭГ
+				}
+				selectionNode = choiceNode->NextSiblingElement("SELECTION");
+			}
+		}
+
+		const char *timeEvent = eventNode->Attribute("time");
+		if (timeEvent) tEvent = std::atoi(timeEvent);
+		saveTTEvent = kernel.globalClock.getMilliSecond();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Read event
 bool Scene::doEvent(XMLNode scene)
 {
@@ -184,13 +218,12 @@ bool Scene::doEvent(XMLNode scene)
 		eventNode = scene->FirstChildElement("EVENT"); 
 		if (eventNode)
 		{
-			loadScene(eventNode);
-			const char *timeEvent = eventNode->Attribute("time");  //Добавить переключение по другим причинам
-			if (timeEvent) tEvent = std::atoi(timeEvent);
-			saveTTEvent = kernel.globalClock.getMilliSecond();
-		}
+			isEvent(eventNode);
+		} 
 		else
+		{
 			return 1;
+		}
 		firstEvent = false;
 	} 
 	else
@@ -198,13 +231,12 @@ bool Scene::doEvent(XMLNode scene)
 		eventNode = eventNode->NextSiblingElement("EVENT");
 		if (eventNode)
 		{
-			loadScene(eventNode);
-			const char *timeEvent = eventNode->Attribute("time");  //Добавить переключение по другим причинам
-			if (timeEvent) tEvent = std::atoi(timeEvent);
-			saveTTEvent = kernel.globalClock.getMilliSecond();
+			isEvent(eventNode);
 		}
 		else
+		{
 			return 1;
+		}
 	}
 	return 0;
 }
