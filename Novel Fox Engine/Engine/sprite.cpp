@@ -57,6 +57,18 @@ void Sprite::setBlendMode(std::string style)
 		renderStates = sf::RenderStates::Default;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool Sprite::isMouseAbove() // Эта функция работает верно
+{
+	if (kernel.getMouse().x >= posScale.pos.x && 
+		kernel.getMouse().x < (posScale.pos.x + getTextureRect().width * posScale.scale.x) && 
+		kernel.getMouse().y >= posScale.pos.y && 
+		kernel.getMouse().y < (posScale.pos.y + getTextureRect().height * posScale.scale.y))
+	{
+		return 1;
+	}
+	return 0;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::edit(ResData rd)
 {
 	//Layer - НЕЛЬЗЯ

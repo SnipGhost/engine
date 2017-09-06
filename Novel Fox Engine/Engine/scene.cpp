@@ -196,25 +196,26 @@ void Scene::isEvent(XMLNode eventNode)
 			{
 				if (selectionNode)
 				{
-					const char *id = eventNode->Attribute("id");
-					//if (id); // Нашли id объекта в selection ТЭГ
+					const char *id = selectionNode->Attribute("id");
 
-					for (auto &layer : layers)
+					if (id) // Если подходящий id введён и существует
 					{
-						for (auto &obj : layer)
+						for (auto &layer : layers)
 						{
-							if(strcmp(obj->getId(), id))
+							for (auto &obj : layer)
 							{
-								std::cout << "I win" << std::endl;
-								/*obj->setLayerMotion();*/
+								std::string strId = id;
+								if (obj->getId() == strId && obj->isMouseAbove())
+								{
+									const char *value = selectionNode->Attribute("value");
+									std::cout << value  << std::endl;
+									//if (value); // Забить инфу в hesh таблицу
+								}
 							}
 						}
 					}
-
-					const char *value = eventNode->Attribute("value");
-					//if (value); // Нашли value объекта в selection ТЭГ
 				}
-				selectionNode = choiceNode->NextSiblingElement("SELECTION");
+				selectionNode = selectionNode->NextSiblingElement("SELECTION");
 			}
 		}
 

@@ -68,6 +68,11 @@ void SmartText::setSmartText(ResData &rd)
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool SmartText::isMouseAbove()
+{
+	return 0;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::edit(ResData rd) //Доработать
 {
 	//if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))

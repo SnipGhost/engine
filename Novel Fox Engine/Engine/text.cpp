@@ -132,6 +132,18 @@ void Text::setStyleText(std::string style)
 	setStyle(styleNum);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool Text::isMouseAbove() // Пофиксить, есть некоторая неточность
+{
+	if (kernel.getMouse().x >= posScale.pos.x &&
+		kernel.getMouse().x < (posScale.pos.x + getLocalBounds().width * posScale.scale.x) &&
+		kernel.getMouse().y >= posScale.pos.y &&
+		kernel.getMouse().y < (posScale.pos.y + getLocalBounds().height * posScale.scale.y))
+	{
+		return 1;
+	}
+	return 0;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::edit(ResData rd)
 {
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))

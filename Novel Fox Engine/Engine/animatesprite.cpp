@@ -65,6 +65,11 @@ void AnimateSprite::update()
 	setTextureRect(sf::IntRect(sideWidth * xPozAnim, sideHeight * yPozAnim, sideWidth, sideHeight));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool AnimateSprite::isMouseAbove()
+{
+	return 0;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::edit(ResData rd)
 {
 	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);

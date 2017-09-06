@@ -298,6 +298,7 @@ namespace ng
 			float getScaleObj();		   // Первоначально установенные 
 			bool visible;				   // Состояние объекта 
 			std::string getId();
+			virtual bool isMouseAbove() = 0; // Проверка на то, что указатель над объектом
 			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
@@ -337,6 +338,7 @@ namespace ng
 			void setAlpha(int alpha);
 			void setBlendMode(std::string style);
 			void display(sf::RenderWindow *win = kernel.window);
+			bool isMouseAbove();
 			void edit(ResData rd);
 			void setResize();
 			void computeLayerScale();
@@ -362,6 +364,7 @@ namespace ng
 			AnimateSprite(ResData rd);
 			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
 			void update();
+			bool isMouseAbove();
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			std::ostream & print(std::ostream &os);
@@ -382,6 +385,7 @@ namespace ng
 				 unsigned int size, std::string color, int alpha, std::string style);
 			void setColorText(std::string color, int alpha);
 			void setStyleText(std::string style);
+			bool isMouseAbove();
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
@@ -400,6 +404,7 @@ namespace ng
 		public:
 			SmartText(ResData rd);
 			void setSmartText(ResData &rd);
+			bool isMouseAbove();
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
@@ -422,6 +427,7 @@ namespace ng
 				float x, float y, float volume, bool loop);
 			void setLoop(bool loop);
 			void setPause();
+			bool isMouseAbove();
 			void edit(ResData rd);
 			void setBlendMode(std::string style);
 			void display(sf::RenderWindow *win = kernel.window);
