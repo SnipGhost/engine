@@ -11,8 +11,8 @@
     </EVENT>
     <EVENT>
       <CHOICE id="choice1">
-        <SELECTION id="myText1" value="1"/>
-        <SELECTION id="myText2" value="2"/>
+        <SELECTION id="person" value="1"/>
+        <SELECTION id="myText1" value="2"/>
         <SELECTION id="myText3" value="3"/>
       </CHOICE>
     </EVENT>

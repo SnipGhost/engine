@@ -198,6 +198,19 @@ void Scene::isEvent(XMLNode eventNode)
 				{
 					const char *id = eventNode->Attribute("id");
 					//if (id); // Нашли id объекта в selection ТЭГ
+
+					for (auto &layer : layers)
+					{
+						for (auto &obj : layer)
+						{
+							if(strcmp(obj->getId(), id))
+							{
+								std::cout << "I win" << std::endl;
+								/*obj->setLayerMotion();*/
+							}
+						}
+					}
+
 					const char *value = eventNode->Attribute("value");
 					//if (value); // Нашли value объекта в selection ТЭГ
 				}

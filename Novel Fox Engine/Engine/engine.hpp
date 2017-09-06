@@ -297,6 +297,7 @@ namespace ng
 			sf::Vector2f getPositionObj(); // Первоначально установенные 
 			float getScaleObj();		   // Первоначально установенные 
 			bool visible;				   // Состояние объекта 
+			std::string getId();
 			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
