@@ -51,8 +51,8 @@
     <SPRITE id="back" layer="1" src="scenario/textures/demo/scene1/1.png"/>
     <EVENT>
       <CHOICE id="choice1">
-        <SELECTION id="yes" value="We going to play great game - LOL"/>
-        <SELECTION id="no" value="We goind to University"/>
+        <SELECTION id="yes" value="yes"/>
+        <SELECTION id="no" value="no"/>
       </CHOICE>
       <SPRITE id="yes" visible="false"/>
       <SPRITE id="no" visible="false"/>
