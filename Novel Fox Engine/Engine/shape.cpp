@@ -32,6 +32,13 @@ Shape::Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize)
 	setFillColor(clr);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Shape::Shape(sf::Vector2f size, sf::Vector2f pos)
+{
+	setPosition(pos.x, pos.y);
+	setSize(sf::Vector2f(size.x, size.y));
+	setFillColor(sf::Color(0, 0, 255, 128));
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int Shape::getAlpha()
 {
 	return alpha;

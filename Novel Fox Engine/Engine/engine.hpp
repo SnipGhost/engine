@@ -317,6 +317,7 @@ namespace ng
 	public:
 		Shape(sf::Vector2f winSize); // Чёрное полотно перехода во весь экран
 		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
+		Shape(sf::Vector2f size, sf::Vector2f pos);
 		int getAlpha();
 		void addAlpha();
 		void pickUpAlpha();
@@ -389,6 +390,7 @@ namespace ng
 			void edit(ResData rd);
 			void display(sf::RenderWindow *win = kernel.window);
 			void setResize();
+			void computeLayerScale();
 			void setLayerMotion();
 			std::ostream & print(std::ostream &os);
 			friend std::ostream & operator << (std::ostream &os, Text &t);

@@ -20,7 +20,7 @@ Text::Text(ResData rd)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Text::Text(std::string id, int layer, std::string text, std::string fontId,
-bool layermotion, bool visible, float x, float y, float scale, unsigned int size, 
+bool layermotion, bool visible, float x, float y, float scale, unsigned int _size, 
 std::string color, int alpha, std::string style)
 {
 	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, size, color, alpha, style);
@@ -30,7 +30,7 @@ std::string color, int alpha, std::string style)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setText(std::string _id, int _layer, std::string text, std::string fontId,
-bool _layermotion, bool _visible, float x, float y, float scale, unsigned int size, 
+bool _layermotion, bool _visible, float x, float y, float scale, unsigned int _size, 
 std::string color, int alpha, std::string style)
 {
 	setString(sf::String::fromUtf8(text.begin(), text.end()));
@@ -42,6 +42,7 @@ std::string color, int alpha, std::string style)
 	visible = _visible;
 	positionObj = sf::Vector2f(x, y);
 	scaleObj = scale;
+	size = _size;
 
 	setCharacterSize(size);
 	setColorText(color, alpha);
@@ -134,9 +135,10 @@ void Text::setStyleText(std::string style)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Text::isMouseAbove() // Пофиксить, есть некоторая неточность
 {
-	if (kernel.getMouse().x >= posScale.pos.x &&
+	float G = 0.04347826086956; // Очень неточная зависимость
+	if (kernel.getMouse().x >= posScale.pos.x + size * G &&
 		kernel.getMouse().x < (posScale.pos.x + getLocalBounds().width * posScale.scale.x) &&
-		kernel.getMouse().y >= posScale.pos.y &&
+		kernel.getMouse().y >= posScale.pos.y + 4 * size * G &&
 		kernel.getMouse().y < (posScale.pos.y + getLocalBounds().height * posScale.scale.y))
 	{
 		return 1;
@@ -180,6 +182,11 @@ void Text::edit(ResData rd)
 void Text::display(sf::RenderWindow *win)
 {
 	win->draw(*this);
+	if (this->isMouseAbove())
+	{
+		ng::Shape sp(sf::Vector2f(getLocalBounds().width * posScale.scale.x, getLocalBounds().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
+		win->draw(sp);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, Text &t)
@@ -202,9 +209,54 @@ std::ostream & Text::print(std::ostream &os)
 void Text::setResize()
 {
 	Displayable::setResize();
+	computeLayerScale();
 	setPosition(posScale.pos);
 	setScale(posScale.scale);
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void Text::computeLayerScale() // Проверить работоспособность [!]
+{
+	int w = getLocalBounds().width;
+	int h = getLocalBounds().height;
+	float sx = 0;
+	float sy = 0;
+
+	static const float k = kernel.devScreen.x / kernel.devScreen.y;
+
+	if (kernel.screen.x * (1 / k) <= kernel.screen.y) //Горизонтальные полосы
+	{
+		if (layer <= 0 || layer > 3)
+		{
+			sx = posScale.scale.x + (float)0.03 * kernel.factor.x;
+			sy = posScale.scale.y + (float)0.03 * kernel.factor.x;
+		}
+		else
+		{
+			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
+		}
+	}
+	else // Вертикальные полосы
+	{
+		if (layer <= 0 || layer > 3)
+		{
+			sx = posScale.scale.x + (float)0.03 * kernel.factor.y;
+			sy = posScale.scale.y + (float)0.03 * kernel.factor.y;
+		}
+		else
+		{
+			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
+			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
+		}
+	}
+
+	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
+	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
+
+	posScale.scale.x = sx;
+	posScale.scale.y = sy;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setLayerMotion()
 {
