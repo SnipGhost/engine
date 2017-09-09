@@ -26,7 +26,7 @@ SmartText::SmartText(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setSmartText(ResData &rd)
 {
-	text = new Text(id, layer, "text", fontId, layermotion, visible, positionObj.x,
+	text = new Text(id, layer, rd.text, fontId, layermotion, visible, positionObj.x,
 		positionObj.y, scaleObj, size, color, alpha, style);
 
 	interval = text->getLocalBounds().height + height;

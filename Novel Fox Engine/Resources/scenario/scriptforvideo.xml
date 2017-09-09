@@ -44,9 +44,8 @@
     <SPRITE id="girl" layer="0" x="700" y="140" src="scenario/textures/demo/scene2/girl1.png"/>
     <EVENT>
       <SPRITE id="girl" src="scenario/textures/demo/scene2/girl2.png"/>
-      <!--
       <TEXT id="person" font="classic" layer="5" x="160" y="520" color="0,191,255" size="23">Girl</TEXT>
-      <TEXT id="text" font="classic" layer="5" x="160" y="555" color="white" size="23" width="900" height="11">It`s a good weather today</TEXT>-->
+      <TEXT id="text" font="classic" layer="5" x="160" y="555" color="white" size="23" width="900" height="11">It`s a good weather today</TEXT>
       <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel2.png"/>
     </EVENT>
     <EVENT>

@@ -23,7 +23,7 @@ Text::Text(std::string id, int layer, std::string text, std::string fontId,
 bool layermotion, bool visible, float x, float y, float scale, unsigned int _size, 
 std::string color, int alpha, std::string style)
 {
-	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, size, color, alpha, style);
+	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, _size, color, alpha, style);
 
 	origin = PosScale(x, y, scale, scale);
 	setResize();
