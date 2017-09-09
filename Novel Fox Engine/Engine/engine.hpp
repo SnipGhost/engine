@@ -222,12 +222,6 @@ namespace ng
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	FontData getFontData(XMLNode tNode);		// Распарсить FONT-ноду
 	ResData getData(XMLNode node);				// Распарсить ЛЮБУЮ-ноду
-	ResData getDataSprite(XMLNode node);		// Распарсить SPRITE-ноду
-	ResData getDataAnimation(XMLNode node);     // Распарсить ANIMATION-ноду
-	ResData getDataVideo(XMLNode node);			// Распарсить VIDEO-ноду
-	ResData getDataText(XMLNode node);			// Распарсить TEXT-ноду
-	ResData getDataMusicSound(XMLNode node);    // Распарсить MUSIC/SOUND-ноду
-	ResData getDataClick(XMLNode node);			// Распарсить CLICK-ноду
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс шрифтов
 	class Font : public sf::Font
@@ -276,8 +270,6 @@ namespace ng
 			std::string id;
 			sf::Vector2f positionObj;
 			float scaleObj;
-			std::string fontId;
-			unsigned int size;
 			std::string color;
 			int alpha;
 			std::string style;
@@ -375,6 +367,9 @@ namespace ng
 	// Класс текста/действий над текстом
 	class Text: public sf::Text, public ng::Displayable
 	{
+		private:
+			std::string fontId;
+			unsigned int size;
 		public:
 			Text() {}
 			Text(ResData rd);
@@ -399,7 +394,11 @@ namespace ng
 	class SmartText: public ng::Displayable
 	{
 		private:
-			ng::Text *text;
+			std::string text;
+			std::string fontId;
+			unsigned int size;
+
+			ng::Text *textExample;
 			float interval; // Междустрочный интервал
 			std::vector<Text*> textVector;
 		public:

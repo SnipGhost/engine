@@ -20,22 +20,23 @@ SmartText::SmartText(ResData rd)
 	style = rd.style;
 	width = rd.width;
 	height = rd.height;
+	text = rd.text;
 
 	setSmartText(rd);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setSmartText(ResData &rd)
 {
-	text = new Text(id, layer, rd.text, fontId, layermotion, visible, positionObj.x,
+	textExample = new Text(id, layer, text, fontId, layermotion, visible, positionObj.x,
 		positionObj.y, scaleObj, size, color, alpha, style);
 
-	interval = text->getLocalBounds().height + height;
+	interval = textExample->getLocalBounds().height + height;
 
 	int line = 0;
 	bool division = true;
-	std::string textString = rd.text;
+	std::string textString = text;
 	size_t len_sym = (size_t)textString.length(); // Длина строки в символах
-	size_t len_pix = (size_t)text->getLocalBounds().width; //длина строки в пикселях
+	size_t len_pix = (size_t)textExample->getLocalBounds().width; //длина строки в пикселях
 	size_t avg_sym_size = len_pix / len_sym; // средняя длина символа в пикселях
 	size_t line_end_pos = width / avg_sym_size; // примерное кол-во символов которое влезет в строку, округлим в малую сторону
 	while (division == true)
@@ -47,11 +48,11 @@ void SmartText::setSmartText(ResData &rd)
 			{
 				if (textString[i] == ' ')
 				{
-					text = new Text("line" + std::to_string(line), layer, textString.substr(0, i), fontId, layermotion,
+					textExample = new Text("line" + std::to_string(line), layer, textString.substr(0, i), fontId, layermotion,
 						visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
 						color, alpha, style);
 					line++;
-					textVector.push_back(text);
+					textVector.push_back(textExample);
 					textString = textString.substr(i+1, len_sym - i);
 					break;
 				}
@@ -59,45 +60,43 @@ void SmartText::setSmartText(ResData &rd)
 		}
 		else // Последняя строка, что меньше ограничения
 		{
-			text = new Text("line" + std::to_string(line), layer, textString, fontId, layermotion,
+			textExample = new Text("line" + std::to_string(line), layer, textString, fontId, layermotion,
 				visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
 				color, alpha, style);
-			textVector.push_back(text);
+			textVector.push_back(textExample);
 			division = false;
 		}
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool SmartText::isMouseAbove()
-{
+{ 
+	for (auto &text : textVector)
+	{
+		if (text->isMouseAbove())
+		{
+			return 1;
+		}
+	}
 	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::edit(ResData rd) //Доработать
 {
-	//if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
-	//{
-	//	if (GETBIT(rd.bitMask, _x))
-	//	{
-	//		positionObj.x = rd.x;
-	//		setPosition(rd.x, positionObj.y);
-	//		origin = PosScale(rd.x, positionObj.y, scaleObj, scaleObj);
-	//	}
-	//	if (GETBIT(rd.bitMask, _y))
-	//	{
-	//		positionObj.y = rd.y;
-	//		setPosition(positionObj.x, rd.y);
-	//		origin = PosScale(positionObj.x, rd.y, scaleObj, scaleObj);
-	//	}
-	//	setResize();
-	//}
-	//if (GETBIT(rd.bitMask, _scale))
-	//{
-	//	scaleObj = rd.scale;
-	//	setScale(rd.scale, rd.scale);
-	//	origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
-	//	setResize();
-	//}
+	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y) || 
+		GETBIT(rd.bitMask, _scale) || GETBIT(rd.bitMask, _text))
+	{
+		if (GETBIT(rd.bitMask, _x))
+			positionObj.x = rd.x;
+		if (GETBIT(rd.bitMask, _y))
+			positionObj.y = rd.y;
+		if (GETBIT(rd.bitMask, _scale))
+			scaleObj = rd.scale;
+		if (GETBIT(rd.bitMask, _text))
+			text = rd.text;
+		textVector.clear();
+		setSmartText(rd);
+	}
 	if (GETBIT(rd.bitMask, _size))
 	{
 		size = rd.size;
@@ -109,11 +108,6 @@ void SmartText::edit(ResData rd) //Доработать
 		fontId = rd.fontId;
 		for (auto &text : textVector)
 			text->setFont(*kernel.fonts[rd.fontId]);
-	}
-	if (GETBIT(rd.bitMask, _text))
-	{
-		textVector.clear();
-		setSmartText(rd);
 	}
 	if (GETBIT(rd.bitMask, _color))
 	{

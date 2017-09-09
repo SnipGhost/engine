@@ -183,41 +183,41 @@ void Scene::isEvent(XMLNode eventNode)
 		const char *ifarg = eventNode->Attribute("if");
 		//if (ifarg); // Распарсиваем if аргумент
 
-		//XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
-		//if (choiceNode)
-		//{
-		//	const char *id = eventNode->Attribute("id");
-		//	//if (id); // Нашли id choice ТЭГ
-		//	const char *type = eventNode->Attribute("type");
-		//	//if (type); // Нашли type choice ТЭГ
+		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
+		if (choiceNode)
+		{
+			const char *id = eventNode->Attribute("id");
+			//if (id); // Нашли id choice ТЭГ
+			const char *type = eventNode->Attribute("type");
+			//if (type); // Нашли type choice ТЭГ
 
-		//	XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
-		//	while (selectionNode) // Пока тэг есть...
-		//	{
-		//		if (selectionNode)
-		//		{
-		//			const char *id = selectionNode->Attribute("id");
+			XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
+			while (selectionNode) // Пока тэг есть...
+			{
+				if (selectionNode)
+				{
+					const char *id = selectionNode->Attribute("id");
 
-		//			if (id) // Если подходящий id введён и существует
-		//			{
-		//				for (auto &layer : layers)
-		//				{
-		//					for (auto &obj : layer)
-		//					{
-		//						std::string strId = id;
-		//						if (obj->getId() == strId && obj->isMouseAbove())
-		//						{
-		//							const char *value = selectionNode->Attribute("value");
-		//							std::cout << value  << std::endl;
-		//							//if (value); // Забить инфу в hesh таблицу
-		//						}
-		//					}
-		//				}
-		//			}
-		//		}
-		//		selectionNode = selectionNode->NextSiblingElement("SELECTION");
-		//	}
-		//}
+					if (id) // Если подходящий id введён и существует
+					{
+						for (auto &layer : layers)
+						{
+							for (auto &obj : layer)
+							{
+								std::string strId = id;
+								if (obj->getId() == strId && obj->isMouseAbove())
+								{
+									const char *value = selectionNode->Attribute("value");
+									std::cout << value  << std::endl;
+									//if (value); // Забить инфу в hesh таблицу
+								}
+							}
+						}
+					}
+				}
+				selectionNode = selectionNode->NextSiblingElement("SELECTION");
+			}
+		}
 
 		const char *timeEvent = eventNode->Attribute("time");
 		if (timeEvent) tEvent = std::atoi(timeEvent);

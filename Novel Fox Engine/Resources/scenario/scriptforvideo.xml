@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SCRIPT>
-  <FONT id="classic" src="scenario/fonts/classicold.ttf"/>
-  <SCENE id="scene1">
+  <FONT id="classic" src="scenario/fonts/classic.ttf"/>
+  <!--<SCENE id="scene1">
     <SPRITE id="front" layer="3" src="scenario/textures/demo/scene1/3.png"/>
     <SPRITE id="middle" layer="2" src="scenario/textures/demo/scene1/2.png"/>
     <SPRITE id="back" layer="1" src="scenario/textures/demo/scene1/1.png"/>
@@ -30,6 +30,7 @@
       
       <TEXT id="person" visible="true">Vygo</TEXT>
       <TEXT id="text" visible="true">Maybe...</TEXT>
+      
     </EVENT>
     
     <EVENT>
@@ -37,7 +38,7 @@
       <TEXT id="text" visible="false"/>
       <SPRITE id="panel" visible="false"/>
     </EVENT>
-  </SCENE>
+  </SCENE>-->
 
   <SCENE id="scene2">
     <SPRITE id="back" layer="0" src="scenario/textures/demo/scene2/back.png"/>
