@@ -133,13 +133,18 @@ void Text::setStyleText(std::string style)
 	setStyle(styleNum);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Text::isMouseAbove() // Пофиксить, есть некоторая неточность
+bool Text::isMouseAbove()
 {
-	float G = 0.04347826086956; // Очень неточная зависимость
-	if (kernel.getMouse().x >= posScale.pos.x + size * G &&
-		kernel.getMouse().x < (posScale.pos.x + getLocalBounds().width * posScale.scale.x) &&
-		kernel.getMouse().y >= posScale.pos.y + 4 * size * G &&
-		kernel.getMouse().y < (posScale.pos.y + getLocalBounds().height * posScale.scale.y))
+	float x_indent = getLocalBounds().left * posScale.scale.x;
+	float y_indent = getLocalBounds().top * posScale.scale.y;
+
+	float x_circuit = getLocalBounds().width * posScale.scale.x;
+	float y_circuit = getLocalBounds().height * posScale.scale.y;
+
+	if (kernel.getMouse().x >= (posScale.pos.x + x_indent) &&
+		kernel.getMouse().x < (posScale.pos.x + x_circuit + x_indent) &&
+		kernel.getMouse().y >= (posScale.pos.y + y_indent) &&
+		kernel.getMouse().y < (posScale.pos.y + y_circuit + y_indent))
 	{
 		return 1;
 	}
@@ -182,9 +187,9 @@ void Text::edit(ResData rd)
 void Text::display(sf::RenderWindow *win)
 {
 	win->draw(*this);
-	if (this->isMouseAbove())
+	if (this->isMouseAbove()) // ТЕСТ [!]
 	{
-		ng::Shape sp(sf::Vector2f(getLocalBounds().width * posScale.scale.x, getLocalBounds().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
+		ng::Shape sp(sf::Vector2f(getLocalBounds().width * posScale.scale.x, getLocalBounds().height * posScale.scale.y), sf::Vector2f(posScale.pos.x + getLocalBounds().left  * posScale.scale.x, posScale.pos.y + getLocalBounds().top * posScale.scale.y));
 		win->draw(sp);
 	}
 }
@@ -209,52 +214,8 @@ std::ostream & Text::print(std::ostream &os)
 void Text::setResize()
 {
 	Displayable::setResize();
-	computeLayerScale();
 	setPosition(posScale.pos);
 	setScale(posScale.scale);
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Text::computeLayerScale() // Проверить работоспособность [!]
-{
-	int w = getLocalBounds().width;
-	int h = getLocalBounds().height;
-	float sx = 0;
-	float sy = 0;
-
-	static const float k = kernel.devScreen.x / kernel.devScreen.y;
-
-	if (kernel.screen.x * (1 / k) <= kernel.screen.y) //Горизонтальные полосы
-	{
-		if (layer <= 0 || layer > 3)
-		{
-			sx = posScale.scale.x + (float)0.03 * kernel.factor.x;
-			sy = posScale.scale.y + (float)0.03 * kernel.factor.x;
-		}
-		else
-		{
-			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
-			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.x;
-		}
-	}
-	else // Вертикальные полосы
-	{
-		if (layer <= 0 || layer > 3)
-		{
-			sx = posScale.scale.x + (float)0.03 * kernel.factor.y;
-			sy = posScale.scale.y + (float)0.03 * kernel.factor.y;
-		}
-		else
-		{
-			sx = posScale.scale.x + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
-			sy = posScale.scale.y + (float)0.03 * (2 << (layer - 1)) * kernel.factor.y;
-		}
-	}
-
-	posScale.pos.x = posScale.pos.x - w * (sx - posScale.scale.x) / 2;
-	posScale.pos.y = posScale.pos.y - h * (sy - posScale.scale.y) / 2;
-
-	posScale.scale.x = sx;
-	posScale.scale.y = sy;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
