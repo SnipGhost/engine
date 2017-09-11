@@ -43,6 +43,7 @@
   <SCENE id="scene2">
     <SPRITE id="back" layer="0" src="scenario/textures/demo/scene2/back.png"/>
     <SPRITE id="girl" layer="0" x="700" y="140" src="scenario/textures/demo/scene2/girl1.png"/>
+    <MUSIC id="music1" volume="3" command="play" src="scenario/music/main.ogg"/>
     <EVENT>
       <SPRITE id="girl" src="scenario/textures/demo/scene2/girl2.png"/>
       <TEXT id="person" font="classic" layer="5" x="160" y="520" color="0,191,255" size="23">Girl</TEXT>

@@ -235,15 +235,16 @@ namespace ng
 	// Класс музыки/действий над музыкой
 	class Music: public sf::Music
 	{
-		private:
-			//float volume; [?]
 		public:
-			std::string state;
+			std::string state; // Текущее состояние музыки
 			bool playable;
+			float volume;
+			float volumeNow;
+			bool loop;
+
 			Music(ResData rd);
-			bool setMusic(std::string src, float volume, bool loop);
-			void setPause();
-			//bool setSlowStop();
+			bool setMusic(std::string src);
+			void update();
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

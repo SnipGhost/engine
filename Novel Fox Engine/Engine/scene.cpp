@@ -118,34 +118,24 @@ void Scene::loadScene(XMLNode scene)
 					}
 					if (data.command == "pause") // Остановка на паузу
 					{
-						kernel.music[data.id]->playable = false;
-						kernel.music[data.id]->pause();
+						kernel.music[data.id]->state = data.command;
 					}
 					if (data.command == "play") // Остановка на паузу
 					{
-						kernel.music[data.id]->playable = true;
-						kernel.music[data.id]->play();
+						kernel.music[data.id]->state = data.command;
 					}
-
-					//if (data.command == "slowstop") // Плавная остатовка и удаление
-					//	kernel.music[data.id]->state = "slowstop";
-					//if (data.command == "slowpause") // Плавная остановка на паузу
-					//	kernel.music[data.id]->state = "slowpause";
-					//if (data.command == "slowplay") // Плавное включение
-					//	kernel.music[data.id]->state = "slowstart";
-
-
-					if (data.command == "edit")
-					{
-						//if (data.volume) kernel.music[data.id]->setVolume(data.volume);
-						//(data.loop) ? kernel.music[data.id]->setLoop(true) : kernel.music[data.id]->setLoop(false);
-						//(data.visible) ? kernel.music[data.id]->playable = true : kernel.music[data.id]->playable = false; //Нужна ли?
-					}
+					//if (data.command == "smoothpause") // Остановка на паузу плавно
+					//{
+					//	kernel.music[data.id]->state = "smoothpause";
+					//}
+					//if (data.command == "smoothplay") // Запустить плавно
+					//{
+					//	kernel.music[data.id]->state = "smoothplay";
+					//}
 				}											
 				else
 				{
 					Music *mus = new Music(data);
-					mus->play();
 					kernel.music[data.id] = mus;
 					kernel.print(mus, INFO);
 				}
@@ -263,9 +253,9 @@ void Scene::startMedia()
 			video.second->visible)
 			video.second->play();
 	for (auto &tempo : kernel.music)
-		if (tempo.second && !kernel.event.isMusicPlay(tempo.second) && 
+		if (tempo.second && !kernel.event.isMusicPlay(tempo.second) &&
 			tempo.second->playable)
-			tempo.second->play();
+			tempo.second->state = "play";
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Остановка любых проигрывающихся ресурсов
@@ -279,7 +269,7 @@ void Scene::stopMedia()
 			video.second->setPause();
 	for (auto &tempo : kernel.music)
 		if (tempo.second)
-			tempo.second->setPause();
+			tempo.second->state = "pause";
 	delay(FOCUS_DELAY);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

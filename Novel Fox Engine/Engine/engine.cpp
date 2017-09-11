@@ -323,6 +323,10 @@ void Kernel::updateAll()
 		sceneUpdate();
 	}
 
+	for (auto &tempo : kernel.music)
+		if (tempo.second)
+			tempo.second->update(); // Малозатратный update music
+
 	// Другие update
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
