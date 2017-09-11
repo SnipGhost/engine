@@ -17,7 +17,5 @@ Font::Font(FontData fd)
 	id = fd.id;
 	if (!loadFromFile(fd.src))
 		kernel.print("Failed load font " + fd.src, WARN);
-	/*std::cout << this->getGlyph(20, 30, true).textureRect.width << std::endl;*/
-	//std::cout << this->getGlyph(20, 30, true).advance << std::endl;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

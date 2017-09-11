@@ -52,7 +52,7 @@ bool Event::isMouseKey(sf::Mouse::Button mouse)
 // Если данная музыка играет
 bool Event::isMusicPlay(sf::Music *music)
 {
-	if (music) // Если музыка существует [ВРОДЕ НЕ РАБОТАЕТ]
+	if (music) // Если музыка существует
 		return (music->getStatus() == sf::Music::Playing);
 	return 0;
 }
@@ -60,7 +60,7 @@ bool Event::isMusicPlay(sf::Music *music)
 // Если данное видео проигрывается
 bool Event::isVideoPlay(sfe::Movie *video)
 {
-	if (video) // Если видео существует [ВРОДЕ НЕ РАБОТАЕТ]
+	if (video) // Если видео существует
 		return (video->getStatus() == sfe::Playing);
 	return 0;
 }

@@ -24,6 +24,8 @@ Video::Video(ResData rd)
 	positionObj = sf::Vector2f(rd.x, rd.y);
 	scaleObj = rd.scale;
 	style = rd.style;
+	height = rd.height;
+	width = rd.width;
 
 	setBlendMode(style);
 
@@ -54,14 +56,62 @@ void Video::setPause()
 		pause();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool Video::isMouseAbove()
-{
+bool Video::isMouseAbove() // Не проверено на работоспособность [!]
+{ 
+	if (kernel.getMouse().x >= posScale.pos.x &&
+		kernel.getMouse().x < (posScale.pos.x + width * posScale.scale.x) &&
+		kernel.getMouse().y >= posScale.pos.y &&
+		kernel.getMouse().y < (posScale.pos.y + height * posScale.scale.y))
+	{
+		return 1;
+	}
 	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::edit(ResData rd)
 {
 	//Сделать Edit для видео
+	//~~~~ Не проверено на работоспособность [!]
+	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
+	{
+		if (GETBIT(rd.bitMask, _x))
+		{
+			positionObj.x = rd.x;
+			setPosition(rd.x, positionObj.y);
+			origin = PosScale(rd.x, positionObj.y, scaleObj, scaleObj);
+		}
+		if (GETBIT(rd.bitMask, _y))
+		{
+			positionObj.y = rd.y;
+			setPosition(positionObj.x, rd.y);
+			origin = PosScale(positionObj.x, rd.y, scaleObj, scaleObj);
+		}
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _width) || GETBIT(rd.bitMask, _height))
+	{
+		if (GETBIT(rd.bitMask, _width))
+		{
+			width = rd.width;
+		}
+		if (GETBIT(rd.bitMask, _height))
+		{
+			height = rd.height;
+		}
+		fit(positionObj.x, positionObj.y, (float)width, (float)height);
+	}
+	if (GETBIT(rd.bitMask, _scale))
+	{
+		scaleObj = rd.scale;
+		setScale(rd.scale, rd.scale);
+		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
+		setResize();
+	}
+	if (GETBIT(rd.bitMask, _volume))
+	{
+		setVolume(rd.volume);
+	}
+	//~~~~ Не проверено на работоспособность [!]
 	if (GETBIT(rd.bitMask, _style))
 	{
 		style = rd.style;
