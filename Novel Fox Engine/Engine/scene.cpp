@@ -116,22 +116,11 @@ void Scene::loadScene(XMLNode scene)
 						delete kernel.music[data.id];
 						kernel.music[data.id] = nullptr;
 					}
-					if (data.command == "pause") // Остановка на паузу
+					if (data.command == "pause" || data.command == "play" ||
+						data.command == "smoothpause" || data.command == "smoothplay")
 					{
 						kernel.music[data.id]->state = data.command;
 					}
-					if (data.command == "play") // Остановка на паузу
-					{
-						kernel.music[data.id]->state = data.command;
-					}
-					//if (data.command == "smoothpause") // Остановка на паузу плавно
-					//{
-					//	kernel.music[data.id]->state = "smoothpause";
-					//}
-					//if (data.command == "smoothplay") // Запустить плавно
-					//{
-					//	kernel.music[data.id]->state = "smoothplay";
-					//}
 				}											
 				else
 				{

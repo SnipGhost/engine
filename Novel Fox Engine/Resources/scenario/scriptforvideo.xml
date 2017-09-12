@@ -43,7 +43,7 @@
   <SCENE id="scene2">
     <SPRITE id="back" layer="0" src="scenario/textures/demo/scene2/back.png"/>
     <SPRITE id="girl" layer="0" x="700" y="140" src="scenario/textures/demo/scene2/girl1.png"/>
-    <MUSIC id="music1" volume="3" command="play" src="scenario/music/main.ogg"/>
+    <MUSIC id="music1" volume="50" command="play" src="scenario/music/main.ogg"/>
     <EVENT>
       <SPRITE id="girl" src="scenario/textures/demo/scene2/girl2.png"/>
       <TEXT id="person" font="classic" layer="5" x="160" y="520" color="0,191,255" size="23">Girl</TEXT>
@@ -51,9 +51,11 @@
       <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel2.png"/>
     </EVENT>
     <EVENT>
+      <MUSIC id="music1" command="smoothpause"/>
       <TEXT id="text">To be, or not to be: that is the question: whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing end them? To die: to sleep;</TEXT>
     </EVENT>
     <EVENT>
+      <MUSIC id="music1" command="smoothplay"/>
       <SPRITE id="girl" src="scenario/textures/demo/scene2/girl1.png"/>
       <SPRITE id="panel" visible="false"/>
       <TEXT id="person" visible="false"/>

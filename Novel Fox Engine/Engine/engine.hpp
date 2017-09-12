@@ -242,6 +242,11 @@ namespace ng
 			float volumeNow;
 			bool loop;
 
+			bool first;
+			float timeDo;
+			float firstTime;
+			float nextTime;
+
 			Music(ResData rd);
 			bool setMusic(std::string src);
 			void update();
@@ -254,6 +259,7 @@ namespace ng
 		protected:
 			sf::SoundBuffer buffer;
 		public:
+			float volume;
 			bool playable;
 			Sound(std::string id, std::string src, float volume = 100);
 			Sound(ResData rd);

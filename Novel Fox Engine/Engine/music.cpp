@@ -7,6 +7,8 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Music::Music(ResData rd)
 {
+	first = true;
+
 	state = rd.command;
 	playable = rd.visible;
 	volume = rd.volume;
@@ -60,56 +62,82 @@ void Music::update()
 	{
 		state = "final";
 	}
-	//if (state == "smoothpause")
-	//{
-	//	static float firstTime = kernel.globalClock.getMilliSecond();
-	//	float nextTime = kernel.globalClock.getMilliSecond();
-	//	float k = (nextTime - firstTime) / 100;
 
-	//	if (getStatus() == sf::Music::Playing && k <= 100)
-	//	{
-	//		volumeNow = getVolume() - getVolume() * k / 100;
+	if (state == "smoothpause") // Кривая версия [!]
+	{
+		if (first)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
+			first = false;
+		}
+		nextTime = kernel.globalClock.getMilliSecond();
+		
+		float k = (nextTime - firstTime);
+		float tact = 90; // 90 миллисекунд [!] Непонятная константа
+		timeDo = 3; // 3 секунды
+		std::cout << getVolume() << std::endl;
+		if (getStatus() == sf::Music::Playing && k >= tact)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
 
-	//		if (volumeNow <= volume && volumeNow > 0.01)
-	//		{
-	//			std::cout << volumeNow << std::endl;
-	//			setVolume(volumeNow);
-	//		} 
-	//		else
-	//		{
-	//			playable = false;
-	//			pause();
-	//			state = "final";
-	//		}
-	//	}
-	//}
-	//if (state == "smoothstop")
-	//{
-	//	// ?
-	//}
-	//if (state == "smoothplay")
-	//{
-	//	playable = true;
-	//	play();
+			volumeNow = getVolume() - (1000 / timeDo / volume);
+			if (volumeNow < 0) volumeNow = 0;
+			setVolume(volumeNow);
 
-	//	static float firstTime = kernel.globalClock.getMilliSecond();
-	//	float nextTime = kernel.globalClock.getMilliSecond();
-	//	float k = (nextTime - firstTime) / 100;
+			if (volumeNow == 0)
+			{
+				state = "final";
+				playable = false;
+				pause();
+				first = true;
+				return;
+			}
+		}
+	}
 
-	//	if (getStatus() == sf::Music::Playing && k <= 100)
-	//	{
-	//		volumeNow = getVolume() + getVolume() * k / 100;
+	if (state == "smoothplay") // Кривая версия [!]
+	{
+		if (getStatus() == sf::Music::Stopped)
+		{
+			volumeNow = 0; // Начинаем с нуля volume
+			setVolume(volumeNow);
+			playable = true;
+			play();
+		}
+			
+		if (getStatus() == sf::Music::Paused)
+		{
+			playable = true;
+			play();
+		}
 
-	//		if (volumeNow <= volume && volumeNow > 0.01)
-	//		{
-	//			setVolume(volumeNow);
-	//		}
-	//		else
-	//		{
-	//			state = "final";
-	//		}
-	//	}
-	//}
+		if (first)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
+			first = false;
+		}
+		nextTime = kernel.globalClock.getMilliSecond();
+
+		float k = (nextTime - firstTime);
+		float tact = 90; // 90 миллисекунд [!] Непонятная константа
+		timeDo = 3; // 3 секунды
+
+		if (getStatus() == sf::Music::Playing && k >= tact)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
+
+			volumeNow = getVolume() + (1000 / timeDo / volume);
+			if (volumeNow > volume) volumeNow = volume;
+			setVolume(volumeNow);
+			std::cout << getVolume() << std::endl;
+
+			if (volumeNow == volume)
+			{
+				state = "final";
+				return;
+			}
+		}
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //void Music::change() 
