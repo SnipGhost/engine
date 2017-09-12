@@ -8,7 +8,7 @@ using namespace ng;
 Music::Music(ResData rd)
 {
 	first = true;			// Логическая переменная для различных действий
-	tact = 100;				// Такт изменения
+	tact = 100;				// Частота изменения [100 - 1 раз в 100 миллисекунд]
 	timeDo = rd.time;		// Время изменения
 	state = rd.command;		// Текущее состояние
 	playable = rd.visible;
@@ -31,7 +31,6 @@ bool Music::setMusic(std::string src)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Music::update()
 {
-	//std::cout << state << std::endl;
 	if (state == "final")
 	{
 		return;
@@ -43,7 +42,6 @@ void Music::update()
 	if (state == "pause" && getStatus() == sf::Music::Playing)
 	{
 		state = "final";
-		playable = false;
 		pause();
 		return;
 	} else if (state == "pause" && getStatus() == sf::Music::Paused)
@@ -53,7 +51,6 @@ void Music::update()
 	if (state == "play" && (getStatus() == sf::Music::Paused || getStatus() == sf::Music::Stopped))
 	{
 		state = "final";
-		playable = true;
 		volumeNow = volume;
 		setVolume(volumeNow);
 		play();
@@ -78,6 +75,9 @@ void Music::update()
 			firstTime = kernel.globalClock.getMilliSecond();
 			volumeNow = getVolume() - (volume / (timeDo / tact));
 			if (volumeNow < 0) volumeNow = 0;
+
+			std::cout << volumeNow << std::endl;
+
 			setVolume(volumeNow);
 			if (volumeNow == 0)
 			{
@@ -111,6 +111,9 @@ void Music::update()
 			firstTime = kernel.globalClock.getMilliSecond();
 			volumeNow = getVolume() + (volume / (timeDo / tact));
 			if (volumeNow > volume) volumeNow = volume;
+
+			std::cout << volumeNow << std::endl;
+
 			setVolume(volumeNow);
 			if (volumeNow == volume)
 			{
@@ -121,10 +124,41 @@ void Music::update()
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//void Music::change() 
-//{
-//
-//}
+void Music::edit(ResData rd)
+{
+	if (GETBIT(rd.bitMask, _command))
+	{
+		if (rd.command == "pause")
+		{
+			playable = false;
+			state = rd.command;
+		}
+		if (rd.command == "play")
+		{
+			playable = true;
+			state = rd.command;
+		}
+
+		if (rd.command == "smoothpause" || rd.command == "smoothplay")
+		{
+			state = rd.command;
+		}
+	}
+
+	if (GETBIT(rd.bitMask, _time)) timeDo = rd.time;
+	if (GETBIT(rd.bitMask, _volume)) // Продумать над плавностью [!]
+	{
+		volume = rd.volume;
+		volumeNow = rd.volume;
+		setVolume(volumeNow);
+	}
+	if (GETBIT(rd.bitMask, _loop))
+	{
+		loop = rd.loop;
+		setLoop(loop);
+	}
+	if (GETBIT(rd.bitMask, _src)) setMusic(rd.src); // Добавил как возможность, но это отвратно
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream &os, const Music *m)
 {

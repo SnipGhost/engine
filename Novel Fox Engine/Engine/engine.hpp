@@ -252,6 +252,7 @@ namespace ng
 			int tact;           // Такт изменения
 
 			Music(ResData rd);
+			void edit(ResData rd);
 			bool setMusic(std::string src);
 			void update();
 			friend std::ostream & operator << (std::ostream &os, const Music *m);
