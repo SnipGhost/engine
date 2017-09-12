@@ -27,8 +27,8 @@ AnimateSprite::AnimateSprite(ResData rd) : Sprite(rd)
 
 	setAnimation(rd.height, rd.width, rd.delay);
 	
-	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale); // Нужно ли это делать ещё раз? В Sprite уже делается
-	setResize(); // Нужно ли это делать ещё раз? В Sprite уже делается
+	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
+	setResize();
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::setAnimation(int frameHeight, int frameWidth, int ms) 
@@ -79,7 +79,15 @@ bool AnimateSprite::isMouseAbove()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void AnimateSprite::edit(ResData rd)
 {
-	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+	if (GETBIT(rd.bitMask, _visible))
+	{
+		visible = rd.visible;
+	}
+	if (GETBIT(rd.bitMask, _alpha))
+	{
+		alpha = rd.alpha;
+		setAlpha(rd.alpha);
+	}
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
 		if (GETBIT(rd.bitMask, _x))
@@ -103,7 +111,10 @@ void AnimateSprite::edit(ResData rd)
 		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
-	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
+	if (GETBIT(rd.bitMask, _src))
+	{
+		setStrTexture(rd.src, rd.smooth);
+	}
 	if (GETBIT(rd.bitMask, _width))
 	{
 		sideWidth = rd.width;
@@ -116,11 +127,19 @@ void AnimateSprite::edit(ResData rd)
 		yEnd = (getTexture()->getSize().y / rd.height) - 1;
 		yPozAnim = 0;
 	}
-	if (GETBIT(rd.bitMask, _delay)) delay = _delay;
+	if (GETBIT(rd.bitMask, _delay))
+	{
+		delay = rd.delay;
+	}
 	if (GETBIT(rd.bitMask, _style))
 	{
 		style = rd.style;
-		setBlendMode(rd.style);
+		setRenderStates(rd.style);
+	}
+	if (GETBIT(rd.bitMask, _angle))
+	{
+		angle = rd.angle;
+		setRotation(rd.angle);
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

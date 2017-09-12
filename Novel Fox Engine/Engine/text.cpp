@@ -13,7 +13,7 @@ using namespace ng;
 Text::Text(ResData rd)
 {
 	setText(rd.id, rd.layer, rd.text, rd.fontId, rd.layermotion, rd.visible, 
-		    rd.x, rd.y, rd.scale, rd.size, rd.color, rd.alpha, rd.style);
+		    rd.x, rd.y, rd.scale, rd.size, rd.color, rd.alpha, rd.style, rd.angle);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -21,9 +21,9 @@ Text::Text(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Text::Text(std::string id, int layer, std::string text, std::string fontId,
 bool layermotion, bool visible, float x, float y, float scale, unsigned int _size, 
-std::string color, int alpha, std::string style)
+std::string color, int alpha, std::string style, float angle)
 {
-	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, _size, color, alpha, style);
+	setText(id, layer, text, fontId, layermotion, visible, x, y, scale, _size, color, alpha, style, angle);
 
 	origin = PosScale(x, y, scale, scale);
 	setResize();
@@ -31,10 +31,12 @@ std::string color, int alpha, std::string style)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setText(std::string _id, int _layer, std::string text, std::string fontId,
 bool _layermotion, bool _visible, float x, float y, float scale, unsigned int _size, 
-std::string color, int alpha, std::string style)
+std::string color, int alpha, std::string style, float angle)
 {
 	setString(sf::String::fromUtf8(text.begin(), text.end()));
 	setFont(*kernel.fonts[fontId]);
+
+	setRotation(angle);
 
 	id = _id;
 	layer = _layer;
@@ -153,6 +155,10 @@ bool Text::isMouseAbove()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::edit(ResData rd)
 {
+	if (GETBIT(rd.bitMask, _visible)) 
+	{
+		visible = rd.visible;
+	}
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
 		if (GETBIT(rd.bitMask, _x))
@@ -176,11 +182,40 @@ void Text::edit(ResData rd)
 		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
-	if (GETBIT(rd.bitMask, _size)) setCharacterSize(rd.size);
-	if (GETBIT(rd.bitMask, _fontId)) setFont(*kernel.fonts[rd.fontId]);
-	if (GETBIT(rd.bitMask, _text)) setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
-	if (GETBIT(rd.bitMask, _color)) setColorText(rd.color, rd.alpha);
-	if (GETBIT(rd.bitMask, _style)) setStyleText(rd.style);
+	if (GETBIT(rd.bitMask, _size))
+	{
+		size = rd.size;
+		setCharacterSize(rd.size);
+	}
+	if (GETBIT(rd.bitMask, _fontId))
+	{
+		fontId = rd.fontId;
+		setFont(*kernel.fonts[rd.fontId]);
+	}
+	if (GETBIT(rd.bitMask, _text))
+	{
+		setString(sf::String::fromUtf8(rd.text.begin(), rd.text.end()));
+	}
+	if (GETBIT(rd.bitMask, _color))
+	{
+		color = rd.color;
+		setColorText(rd.color, alpha);
+	}
+	if (GETBIT(rd.bitMask, _alpha))
+	{
+		alpha = rd.alpha;
+		setColorText(color, rd.alpha);
+	}
+	if (GETBIT(rd.bitMask, _style))
+	{
+		style = rd.style;
+		setStyleText(rd.style);
+	}
+	if (GETBIT(rd.bitMask, _angle))
+	{
+		angle = rd.angle;
+		setRotation(rd.angle);
+	}
 	kernel.print("Edit mode for text: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -217,7 +252,6 @@ void Text::setResize()
 	setPosition(posScale.pos);
 	setScale(posScale.scale);
 }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Text::setLayerMotion()
 {

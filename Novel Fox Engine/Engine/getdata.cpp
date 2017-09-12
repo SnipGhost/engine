@@ -13,6 +13,7 @@ ResData ng::getData(XMLNode node)
 	const char *y = node->Attribute("y");
 	const char *layermotion = node->Attribute("layermotion");
 	const char *scale = node->Attribute("scale");
+	const char *angle = node->Attribute("angle");
 	const char *layer = node->Attribute("layer");
 	const char *style = node->Attribute("style");
 	const char *visible = node->Attribute("visible");
@@ -41,6 +42,7 @@ ResData ng::getData(XMLNode node)
 	if (y) { res.y = std::stof(y); res.bitMask = res.bitMask | (1 << _y); } else res.y = 0;
 	if (layermotion) { res.layermotion = CONVTRUE(layermotion); res.bitMask = res.bitMask | (1 << _layermotion); } else res.layermotion = true;
 	if (scale) { res.scale = std::stof(scale); res.bitMask = res.bitMask | (1 << _scale); } else res.scale = 1;
+	if (angle) { res.angle = std::stof(angle); res.bitMask = res.bitMask | (1 << _angle); } else res.angle = 0;
 	if (layer) { res.layer = std::atoi(layer); res.bitMask = res.bitMask | (1 << _layer); } else res.layer = 0;
 	if (style) { res.style = style; res.bitMask = res.bitMask | (1 << _style); } else res.style = "NULL";
 	if (visible) { res.visible = CONVTRUE(visible); res.bitMask = res.bitMask | (1 << _visible); } else res.visible = true;

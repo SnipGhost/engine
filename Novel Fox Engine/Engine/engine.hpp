@@ -61,9 +61,9 @@ namespace ng
 	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
 	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
-	enum { _delay = 0, _layer, _width, _height, _alpha, _time, _size, _x, _y, _scale, 
-		   _volume, _loop, _smooth, _visible, _layermotion, _id, _src, _text, 
-		   _style, _color, _fontId, _command };
+	enum { _delay = 0, _layer, _width, _height, _alpha, _time, _size, _x, _y, 
+		   _scale, _angle, _volume, _loop, _smooth, _visible, _layermotion, _id, 
+		   _src, _text, _style, _color, _fontId, _command };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
 	{
@@ -206,18 +206,19 @@ namespace ng
 		float x;                 // Позиция по X			7
 		float y;                 // Позиция по Y			8
 		float scale;             // Масштаб (sX = sY)		9
-		float volume;            // Громкость				10
-		bool loop;               // Зацикливание			11
-		bool smooth;             // Размытие				12
-		bool visible;            // Видимость				13
-		bool layermotion;		 // Движение слоёв			14
-		std::string id;          // Идентификатор объекта	15
-		std::string src;         // Путь до ресурса			16
-		std::string text;        // Содержание текста		17		
-		std::string style;       // Стиль текста			18
-		std::string color;       // Цвет текста				19	
-		std::string fontId;      // Идентификатор шрифта	20
-		std::string command;     // Команда					21
+		float angle;             // Угол поворота           10
+		float volume;            // Громкость				11
+		bool loop;               // Зацикливание			12
+		bool smooth;             // Размытие				13
+		bool visible;            // Видимость				14
+		bool layermotion;		 // Движение слоёв			15
+		std::string id;          // Идентификатор объекта	16
+		std::string src;         // Путь до ресурса			17
+		std::string text;        // Содержание текста		18		
+		std::string style;       // Стиль текста			19
+		std::string color;       // Цвет текста				20	
+		std::string fontId;      // Идентификатор шрифта	21
+		std::string command;     // Команда					22
 
 		uint32_t bitMask;        // Битовая маска изменений
 	};
@@ -287,6 +288,7 @@ namespace ng
 			std::string style;
 			int width;
 			int height;
+			float angle;
 		public:
 			struct PosScale
 			{
@@ -341,7 +343,7 @@ namespace ng
 			Sprite(ResData rd);
 			bool setStrTexture(std::string src, bool smooth);
 			void setAlpha(int alpha);
-			void setBlendMode(std::string style);
+			void setRenderStates(std::string style);
 			void display(sf::RenderWindow *win = kernel.window);
 			bool isMouseAbove();
 			void edit(ResData rd);
@@ -387,10 +389,10 @@ namespace ng
 			Text(ResData rd);
 			Text(std::string id, int layer, std::string text, std::string fontId,
 			     bool layermotion, bool visible, float x, float y, float scale,
-				 unsigned int size, std::string color, int alpha, std::string style);
+				 unsigned int size, std::string color, int alpha, std::string style, float angle);
 			void setText(std::string id, int layer, std::string text, std::string fontId,
 				 bool layermotion, bool visible, float x, float y, float scale,
-				 unsigned int size, std::string color, int alpha, std::string style);
+				 unsigned int size, std::string color, int alpha, std::string style, float angle);
 			void setColorText(std::string color, int alpha);
 			void setStyleText(std::string style);
 			bool isMouseAbove();

@@ -13,6 +13,7 @@ SmartText::SmartText(ResData rd)
 	visible = rd.visible;
 	positionObj = sf::Vector2f(rd.x, rd.y);
 	scaleObj = rd.scale;
+	angle = rd.angle;
 	fontId = rd.fontId;
 	size = rd.size;
 	color = rd.color;
@@ -28,7 +29,7 @@ SmartText::SmartText(ResData rd)
 void SmartText::setSmartText(ResData &rd)
 {
 	textExample = new Text(id, layer, text, fontId, layermotion, visible, positionObj.x,
-		positionObj.y, scaleObj, size, color, alpha, style);
+		positionObj.y, scaleObj, size, color, alpha, style, angle);
 
 	interval = textExample->getLocalBounds().height + height;
 
@@ -50,7 +51,7 @@ void SmartText::setSmartText(ResData &rd)
 				{
 					textExample = new Text("line" + std::to_string(line), layer, textString.substr(0, i), fontId, layermotion,
 						visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
-						color, alpha, style);
+						color, alpha, style, angle);
 					line++;
 					textVector.push_back(textExample);
 					textString = textString.substr(i+1, len_sym - i);
@@ -62,7 +63,7 @@ void SmartText::setSmartText(ResData &rd)
 		{
 			textExample = new Text("line" + std::to_string(line), layer, textString, fontId, layermotion,
 				visible, positionObj.x, positionObj.y + interval * line, scaleObj, size,
-				color, alpha, style);
+				color, alpha, style, angle);
 			textVector.push_back(textExample);
 			division = false;
 		}
@@ -83,6 +84,12 @@ bool SmartText::isMouseAbove()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::edit(ResData rd) //Доработать
 {
+	if (GETBIT(rd.bitMask, _visible))
+	{
+		visible = rd.visible;
+		for (auto &text : textVector)
+			text->visible = rd.visible;
+	}
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y) || 
 		GETBIT(rd.bitMask, _scale) || GETBIT(rd.bitMask, _text))
 	{
@@ -121,14 +128,18 @@ void SmartText::edit(ResData rd) //Доработать
 		for (auto &text : textVector)
 			text->setStyleText(rd.style);
 	}
+	if (GETBIT(rd.bitMask, _angle))
+	{
+		angle = rd.angle;
+		for (auto &text : textVector)
+			text->setRotation(rd.angle);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::display(sf::RenderWindow *win)
 {
 	for (auto &text : textVector)
-	{
 		text->display(win);
-	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, SmartText &t)
@@ -152,16 +163,12 @@ std::ostream & SmartText::print(std::ostream &os)
 void SmartText::setResize()
 {
 	for (auto &text : textVector)
-	{
 		text->setResize();
-	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SmartText::setLayerMotion()
 {
 	for (auto &text : textVector)
-	{
 		text->setLayerMotion();
-	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

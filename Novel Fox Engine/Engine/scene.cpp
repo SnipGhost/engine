@@ -46,7 +46,6 @@ void Scene::loadScene(XMLNode scene)
 			{
 				if (objects[data.id])
 				{	
-					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
 					objects[data.id]->edit(data);
 				}
 				else
@@ -61,7 +60,6 @@ void Scene::loadScene(XMLNode scene)
 			{
 				if (objects[data.id])
 				{	
-					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
 					objects[data.id]->edit(data);
 				}
 				else
@@ -76,7 +74,6 @@ void Scene::loadScene(XMLNode scene)
 			{
 				if (objects[data.id])
 				{
-					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
 					objects[data.id]->edit(data);
 				}
 				else
@@ -94,7 +91,6 @@ void Scene::loadScene(XMLNode scene)
 			{
 				if (objects[data.id])
 				{
-					if (GETBIT(data.bitMask, _visible)) objects[data.id]->visible = data.visible;
 					objects[data.id]->edit(data);
 				}
 				else
@@ -132,8 +128,6 @@ void Scene::loadScene(XMLNode scene)
 				if (sounds[data.id])
 				{	
 					sounds[data.id]->edit(data);
-					sounds[data.id]->playable = true;
-					sounds[data.id]->play();
 				}
 				else
 				{
@@ -159,7 +153,7 @@ void Scene::isEvent(XMLNode eventNode)
 		const char *ifarg = eventNode->Attribute("if");
 		//if (ifarg); // Распарсиваем if аргумент
 
-		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
+		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE"); // А если несколько CHOICE? [!]
 		if (choiceNode)
 		{
 			const char *id = eventNode->Attribute("id");

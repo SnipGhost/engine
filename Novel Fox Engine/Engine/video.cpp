@@ -72,6 +72,10 @@ void Video::edit(ResData rd)
 {
 	//Сделать Edit для видео
 	//~~~~ Не проверено на работоспособность [!]
+	if (GETBIT(rd.bitMask, _visible))
+	{
+		visible = rd.visible;
+	}
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
 		if (GETBIT(rd.bitMask, _x))

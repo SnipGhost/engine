@@ -23,8 +23,18 @@ Sound::Sound(ResData rd)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sound::edit(ResData rd)
 {
-	if (GETBIT(rd.bitMask, _src)) setSound(rd.src, volume);
-	if (GETBIT(rd.bitMask, _volume)) setVolume(rd.volume);
+	playable = true;
+	play(); // Проиграет даже при Edit
+
+	if (GETBIT(rd.bitMask, _src))
+	{
+		setSound(rd.src, volume);
+	}
+	if (GETBIT(rd.bitMask, _volume))
+	{
+		volume = rd.volume;
+		setVolume(rd.volume);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sound::setSound(std::string src, float volume)

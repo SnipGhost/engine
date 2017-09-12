@@ -17,6 +17,7 @@ Sprite::Sprite(ResData rd)
 		kernel.print("Failed to create sprite " + rd.id, WARN);
 
 	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+	if (GETBIT(rd.bitMask, _angle)) setRotation(rd.angle);
 
 	id = rd.id;
 	layer = rd.layer;
@@ -24,9 +25,10 @@ Sprite::Sprite(ResData rd)
 	visible = rd.visible;
 	positionObj = sf::Vector2f(rd.x, rd.y);
 	scaleObj = rd.scale;
+	angle = rd.angle;
 	style = rd.style;
 
-	setBlendMode(style);
+	setRenderStates(style);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -47,14 +49,20 @@ void Sprite::setAlpha(int alpha)
 	setColor(sf::Color(255, 255, 255, color.a));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Sprite::setBlendMode(std::string style)
+void Sprite::setRenderStates(std::string style)
 {
 	if (style == "blendadd")
-		renderStates = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	{
+		renderStates.blendMode = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	}
 	else if (style == "blendmultiply")
-		renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	{
+		renderStates.blendMode = sf::BlendMultiply; //Photoshop: Умножение
+	}
 	else 
 		renderStates = sf::RenderStates::Default;
+
+	/*renderStates.shader = &shader;*/
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool Sprite::isMouseAbove() // Эта функция работает верно
@@ -71,8 +79,15 @@ bool Sprite::isMouseAbove() // Эта функция работает верно
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sprite::edit(ResData rd)
 {
-	//Layer - НЕЛЬЗЯ
-	if (GETBIT(rd.bitMask, _alpha)) setAlpha(rd.alpha);
+	if (GETBIT(rd.bitMask, _visible))
+	{
+		visible = rd.visible;
+	}
+	if (GETBIT(rd.bitMask, _alpha))
+	{
+		alpha = rd.alpha;
+		setAlpha(rd.alpha);
+	}
 	if (GETBIT(rd.bitMask, _x) || GETBIT(rd.bitMask, _y))
 	{
 		if (GETBIT(rd.bitMask, _x))
@@ -96,11 +111,19 @@ void Sprite::edit(ResData rd)
 		origin = PosScale(positionObj.x, positionObj.y, rd.scale, rd.scale);
 		setResize();
 	}
-	if (GETBIT(rd.bitMask, _src)) setStrTexture(rd.src, rd.smooth);
+	if (GETBIT(rd.bitMask, _src))
+	{
+		setStrTexture(rd.src, rd.smooth);
+	}
 	if (GETBIT(rd.bitMask, _style))
 	{
 		style = rd.style;
-		setBlendMode(rd.style);
+		setRenderStates(rd.style);
+	}
+	if (GETBIT(rd.bitMask, _angle))
+	{
+		angle = rd.angle;
+		setRotation(rd.angle);
 	}
 	kernel.print("Edit mode for sprite: " + rd.id, INFO);
 }
