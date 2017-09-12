@@ -26,6 +26,7 @@ ResData ng::getData(XMLNode node)
 	const char *delay = node->Attribute("delay");
 
 	const char *command = node->Attribute("command");
+	const char *time = node->Attribute("time");
 	const char *volume = node->Attribute("volume");
 
 	const char *size = node->Attribute("size");
@@ -53,6 +54,7 @@ ResData ng::getData(XMLNode node)
 	if (delay) { res.delay = std::atoi(delay); res.bitMask = res.bitMask | (1 << _delay); } else res.delay = 40;
 
 	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
+	if (time) { res.time = std::atoi(time); res.bitMask = res.bitMask | (1 << _time); } else res.time = 1000;
 	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
 
 	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;

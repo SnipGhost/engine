@@ -61,7 +61,7 @@ namespace ng
 	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
 	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
-	enum { _delay = 0, _layer, _width, _height, _alpha, _size, _x, _y, _scale, 
+	enum { _delay = 0, _layer, _width, _height, _alpha, _time, _size, _x, _y, _scale, 
 		   _volume, _loop, _smooth, _visible, _layermotion, _id, _src, _text, 
 		   _style, _color, _fontId, _command };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,22 +201,24 @@ namespace ng
 		int width;               // Ширина объекта			2
 		int height;              // Высота объекта			3
 		int alpha;               // Прозрачность			4
-		unsigned int size;       // Размер текста			5
-		float x;                 // Позиция по X			6
-		float y;                 // Позиция по Y			7
-		float scale;             // Масштаб (sX = sY)		8
-		float volume;            // Громкость				9
-		bool loop;               // Зацикливание			10
-		bool smooth;             // Размытие				11
-		bool visible;            // Видимость				12
-		bool layermotion;		 // Движение слоёв			13
-		std::string id;          // Идентификатор объекта	14
-		std::string src;         // Путь до ресурса			15
-		std::string text;        // Содержание текста		16		
-		std::string style;       // Стиль текста			17
-		std::string color;       // Цвет текста				18	
-		std::string fontId;      // Идентификатор шрифта	19
-		std::string command;     // Команда					20
+		int time;                // Время                   5
+		unsigned int size;       // Размер текста			6
+		float x;                 // Позиция по X			7
+		float y;                 // Позиция по Y			8
+		float scale;             // Масштаб (sX = sY)		9
+		float volume;            // Громкость				10
+		bool loop;               // Зацикливание			11
+		bool smooth;             // Размытие				12
+		bool visible;            // Видимость				13
+		bool layermotion;		 // Движение слоёв			14
+		std::string id;          // Идентификатор объекта	15
+		std::string src;         // Путь до ресурса			16
+		std::string text;        // Содержание текста		17		
+		std::string style;       // Стиль текста			18
+		std::string color;       // Цвет текста				19	
+		std::string fontId;      // Идентификатор шрифта	20
+		std::string command;     // Команда					21
+
 		uint32_t bitMask;        // Битовая маска изменений
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -236,16 +238,18 @@ namespace ng
 	class Music: public sf::Music
 	{
 		public:
-			std::string state; // Текущее состояние музыки
-			bool playable;
-			float volume;
-			float volumeNow;
-			bool loop;
+			std::string state;	// Текущее состояние музыки
+			bool playable;		// Нужно ли проигрывать музыку [!] // Без надобности
+			float volume;		// Установленное значение громкости
+			float volumeNow;	// Значение громкости сейчас [изменяется]
+			bool loop;			// Повторение
 
-			bool first;
-			float timeDo;
-			float firstTime;
-			float nextTime;
+			bool first;			// Логика для общих действий
+			int timeDo;			// Время действия
+			int firstTime;
+			int nextTime;
+			int difference;     // Разница между двума предыдущими параметрами
+			int tact;           // Такт изменения
 
 			Music(ResData rd);
 			bool setMusic(std::string src);
