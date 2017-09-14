@@ -62,7 +62,7 @@ namespace ng
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
 	enum TAGS { NONE, CRIT, WARN, NORM, INFO }; // Метки для сообщений лога
 	enum { _delay = 0, _layer, _width, _height, _alpha, _time, _size, _x, _y, 
-		   _scale, _angle, _volume, _loop, _smooth, _visible, _layermotion, _id, 
+		   _scale, _angle, _volume, _speed, _loop, _smooth, _visible, _layermotion, _id,
 		   _src, _text, _style, _color, _fontId, _command };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	class LogStream
@@ -208,17 +208,18 @@ namespace ng
 		float scale;             // Масштаб (sX = sY)		9
 		float angle;             // Угол поворота           10
 		float volume;            // Громкость				11
-		bool loop;               // Зацикливание			12
-		bool smooth;             // Размытие				13
-		bool visible;            // Видимость				14
-		bool layermotion;		 // Движение слоёв			15
-		std::string id;          // Идентификатор объекта	16
-		std::string src;         // Путь до ресурса			17
-		std::string text;        // Содержание текста		18		
-		std::string style;       // Стиль текста			19
-		std::string color;       // Цвет текста				20	
-		std::string fontId;      // Идентификатор шрифта	21
-		std::string command;     // Команда					22
+		float speed;             // Быстрота музыки         12
+		bool loop;               // Зацикливание			13
+		bool smooth;             // Размытие				14
+		bool visible;            // Видимость				15
+		bool layermotion;		 // Движение слоёв			16
+		std::string id;          // Идентификатор объекта	17
+		std::string src;         // Путь до ресурса			18
+		std::string text;        // Содержание текста		19		
+		std::string style;       // Стиль текста			20
+		std::string color;       // Цвет текста				21	
+		std::string fontId;      // Идентификатор шрифта	22
+		std::string command;     // Команда					23
 
 		uint32_t bitMask;        // Битовая маска изменений
 	};
@@ -244,6 +245,7 @@ namespace ng
 			float volume;		// Установленное значение громкости
 			float volumeNow;	// Значение громкости сейчас [изменяется]
 			bool loop;			// Повторение
+			float speed;        // Скорость проигрывания
 
 			bool first;			// Логика для общих действий
 			int timeDo;			// Время действия
@@ -265,8 +267,10 @@ namespace ng
 		protected:
 			sf::SoundBuffer buffer;
 		public:
-			float volume;
-			bool playable;
+			float volume;       // Установленное значение громкости
+			bool playable;      // Нужно ли проигрывать музыку [!] // Без надобности
+			float speed;        // Скорость проигрывания
+
 			Sound(std::string id, std::string src, float volume = 100);
 			Sound(ResData rd);
 			void edit(ResData rd);

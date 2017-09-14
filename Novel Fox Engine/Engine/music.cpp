@@ -11,10 +11,12 @@ Music::Music(ResData rd)
 	tact = 100;				// Частота изменения [100 - 1 раз в 100 миллисекунд]
 	timeDo = rd.time;		// Время изменения
 	state = rd.command;		// Текущее состояние
-	playable = rd.visible;
+	playable = rd.visible;  // Нужно ли проигрывать музыку [!] // Без надобности
 	volume = rd.volume;		// Установленная громкость музыки
+	speed = rd.speed;       // Скорость проигрывания
 	volumeNow = rd.volume;	// Громкость музыки в текущий момент времени
 	loop = rd.loop;			// Повторение музыки
+
 	if (!setMusic(rd.src))
 		kernel.print("Failed load music " + rd.id, WARN);
 }
@@ -24,7 +26,7 @@ bool Music::setMusic(std::string src)
 	if (!openFromFile(src)) 
 		return 0;
 	setVolume(volumeNow);
-	//setPitch(2); // Установка скорости
+	setPitch(speed);
 	setLoop(loop);
 	return 1;
 }
@@ -145,7 +147,10 @@ void Music::edit(ResData rd)
 		}
 	}
 
-	if (GETBIT(rd.bitMask, _time)) timeDo = rd.time;
+	if (GETBIT(rd.bitMask, _time))
+	{
+		timeDo = rd.time;
+	}
 	if (GETBIT(rd.bitMask, _volume)) // Продумать над плавностью [!]
 	{
 		volume = rd.volume;
@@ -157,7 +162,15 @@ void Music::edit(ResData rd)
 		loop = rd.loop;
 		setLoop(loop);
 	}
-	if (GETBIT(rd.bitMask, _src)) setMusic(rd.src); // Добавил как возможность, но это отвратно
+	if (GETBIT(rd.bitMask, _src))
+	{
+		setMusic(rd.src); // Добавил как возможность, но это отвратно
+	}
+	if (GETBIT(rd.bitMask, _speed))
+	{
+		speed = rd.speed;
+		setPitch(speed);
+	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream &os, const Music *m)

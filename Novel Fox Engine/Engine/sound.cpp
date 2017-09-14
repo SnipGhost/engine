@@ -9,6 +9,7 @@ Sound::Sound(std::string id, std::string src, float _volume)
 {
 	volume = _volume;
 	playable = true;
+
 	if (!setSound(src, volume))
 		kernel.print("Failed load sound " + id, WARN);
 }
@@ -17,8 +18,12 @@ Sound::Sound(ResData rd)
 {
 	volume = rd.volume;
 	playable = rd.visible;
+	speed = rd.speed;
+
 	if (!setSound(rd.src, rd.volume))
 		kernel.print("Failed load sound " + rd.id, WARN);
+
+	setPitch(speed);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Sound::edit(ResData rd)
@@ -34,6 +39,11 @@ void Sound::edit(ResData rd)
 	{
 		volume = rd.volume;
 		setVolume(rd.volume);
+	}
+	if (GETBIT(rd.bitMask, _speed))
+	{
+		speed = rd.speed;
+		setPitch(speed);
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

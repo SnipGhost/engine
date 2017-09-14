@@ -96,5 +96,8 @@
     <Xml Include="Resources\scenario\scriptforvideo.xml">
       <Filter>Файлы ресурсов</Filter>
     </Xml>
+    <Xml Include="Resources\scenario\script1920x1080.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

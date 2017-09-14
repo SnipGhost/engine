@@ -29,6 +29,7 @@ ResData ng::getData(XMLNode node)
 	const char *command = node->Attribute("command");
 	const char *time = node->Attribute("time");
 	const char *volume = node->Attribute("volume");
+	const char *speed = node->Attribute("speed");
 
 	const char *size = node->Attribute("size");
 	const char *text = node->GetText();
@@ -57,7 +58,8 @@ ResData ng::getData(XMLNode node)
 
 	if (command) { res.command = command; res.bitMask = res.bitMask | (1 << _command); } else res.command = "NULL";
 	if (time) { res.time = std::atoi(time); res.bitMask = res.bitMask | (1 << _time); } else res.time = 1000;
-	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 0;
+	if (volume) { res.volume = std::stof(volume); res.bitMask = res.bitMask | (1 << _volume); } else res.volume = 100;
+	if (speed) { res.speed = std::stof(speed); res.bitMask = res.bitMask | (1 << _speed); } else res.speed = 1;
 
 	if (size) { res.size = std::atoi(size); res.bitMask = res.bitMask | (1 << _size); } else res.size = 1;
 	if (text) { res.text = text; res.bitMask = res.bitMask | (1 << _text); } else res.text = "NO TEXT";

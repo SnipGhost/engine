@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SCRIPT>
   <FONT id="classic" src="scenario/fonts/classic.ttf"/>
+  <SCENE id="scene0">
+    <SPRITE id="back" layer="1" src="scenario/textures/demo/logo/back.png"/>
+    <SPRITE id="middle" x="250" y="50" layer="4" src="scenario/textures/demo/logo/logo.png"/>
+    <SPRITE id="front" layer="4" x="290" y="390" src="scenario/textures/demo/logo/name.png"/>
+  </SCENE>
   <SCENE id="scene1">
     <MUSIC id="wind" volume="50" command="smoothplay" time="3000" loop="true" src="scenario/music/wind.ogg"/>
     <SPRITE id="front" layer="3" src="scenario/textures/demo/scene1/3.png"/>

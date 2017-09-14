@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SCRIPT>
+  <SCENE id="scene0">
+    <SPRITE id="back" layer="0" src="scenario/textures/1920x1080/back1.png"/>
+  </SCENE>
+</SCRIPT>

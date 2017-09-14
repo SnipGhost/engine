@@ -155,6 +155,7 @@
     <None Include="Resources\config.ini" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Resources\scenario\script1920x1080.xml" />
     <Xml Include="Resources\scenario\scriptforvideo.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
