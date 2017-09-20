@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SCRIPT>
   <SCENE id="scene0">
-    <SPRITE id="back" layer="0" src="scenario/textures/1920x1080/back1.png"/>
+    <SPRITE id="back" layer="0" src="scenario/textures/1920x1080/back.png"/>
+    <EVENT>
+      <SPRITE id="back" src="scenario/textures/1920x1080/h1.png"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="back" src="scenario/textures/1920x1080/h2.png"/>
+    </EVENT>
+    <EVENT>
+      <SPRITE id="back" src="scenario/textures/1920x1080/h3.png"/>
+    </EVENT>
   </SCENE>
 </SCRIPT>

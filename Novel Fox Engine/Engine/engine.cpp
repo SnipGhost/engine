@@ -324,8 +324,17 @@ void Kernel::updateAll()
 	}
 
 	for (auto &tempo : kernel.music)
+	{
 		if (tempo.second)
+		{
 			tempo.second->update(); // Малозатратный update music
+			if (tempo.second->state == "stop")
+			{
+				delete kernel.music[tempo.first];
+				kernel.music[tempo.first] = nullptr;
+			}
+		}
+	}
 
 	// Другие update
 }

@@ -33,6 +33,8 @@ bool Music::setMusic(std::string src)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Music::update()
 {
+	//std::cout << state << std::endl;
+
 	if (state == "final")
 	{
 		return;
@@ -78,7 +80,7 @@ void Music::update()
 			volumeNow = getVolume() - (volume / (timeDo / tact));
 			if (volumeNow < 0) volumeNow = 0;
 
-			std::cout << volumeNow << std::endl;
+			//std::cout << volumeNow << std::endl;
 
 			setVolume(volumeNow);
 			if (volumeNow == 0)
@@ -86,6 +88,35 @@ void Music::update()
 				state = "final";
 				playable = false;
 				pause();
+				first = true;
+				return;
+			}
+		}
+	}
+
+	if (state == "smoothstop")
+	{
+		if (first)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
+			first = false;
+		}
+		nextTime = kernel.globalClock.getMilliSecond();
+		difference = nextTime - firstTime;
+		if (getStatus() == sf::Music::Playing && difference >= tact)
+		{
+			firstTime = kernel.globalClock.getMilliSecond();
+			volumeNow = getVolume() - (volume / (timeDo / tact));
+			if (volumeNow < 0) volumeNow = 0;
+
+			std::cout << volumeNow << std::endl;
+
+			setVolume(volumeNow);
+			if (volumeNow == 0)
+			{
+				state = "stop";
+				playable = false;
+				stop();
 				first = true;
 				return;
 			}
@@ -114,7 +145,7 @@ void Music::update()
 			volumeNow = getVolume() + (volume / (timeDo / tact));
 			if (volumeNow > volume) volumeNow = volume;
 
-			std::cout << volumeNow << std::endl;
+			//std::cout << volumeNow << std::endl;
 
 			setVolume(volumeNow);
 			if (volumeNow == volume)
@@ -141,7 +172,7 @@ void Music::edit(ResData rd)
 			state = rd.command;
 		}
 
-		if (rd.command == "smoothpause" || rd.command == "smoothplay")
+		if (rd.command == "smoothpause" || rd.command == "smoothplay" || rd.command == "smoothstop")
 		{
 			state = rd.command;
 		}
