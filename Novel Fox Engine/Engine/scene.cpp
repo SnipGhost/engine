@@ -8,6 +8,7 @@ using namespace ng;
 Scene::Scene(XMLNode scene)
 {
 	firstEvent = true;
+	next = true;
 	tEvent = -1;
 	//sceneReady = false; // Сцена ещё не готова [!]
 	loadScene(scene);
@@ -147,50 +148,65 @@ void Scene::loadScene(XMLNode scene)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // If exit event...
-void Scene::isEvent(XMLNode eventNode)
+bool Scene::isEvent()
 {
-		loadScene(eventNode);
-		const char *ifarg = eventNode->Attribute("if");
-		//if (ifarg); // Распарсиваем if аргумент
+	XMLNode choiceNode = eventNode->FirstChildElement("CHOICE"); // Только один Choice в Event
+	if (choiceNode)
+	{
+		bool isClickOnObject = false;
+		const char *id_chouce = choiceNode->Attribute("id"); // Id переменной, куда записываем значение
+		/*const char *type = choiceNode->Attribute("type");*/
+		//if (type); // Нашли type choice ТЭГ
 
-		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE"); // А если несколько CHOICE? [!]
-		if (choiceNode)
+		XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
+		while (selectionNode) // Пока тэг есть...
 		{
-			const char *id_chouce = choiceNode->Attribute("id");
-			//if (id_chouce); // Нашли id choice ТЭГ
-			const char *type = choiceNode->Attribute("type");
-			//if (type); // Нашли type choice ТЭГ
-
-			XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
-			while (selectionNode) // Пока тэг есть...
+			if (selectionNode)
 			{
-				if (selectionNode)
-				{
-					const char *id = selectionNode->Attribute("id");
+				const char *id = selectionNode->Attribute("id");
 
-					if (id) // Если подходящий id введён и существует
+				if (id) // Если подходящий id введён и существует
+				{
+					std::string strId = id;
+					for (auto &layer : layers)
 					{
-						for (auto &layer : layers)
+						for (auto &obj : layer)
 						{
-							for (auto &obj : layer)
+							if (obj->getId() == strId && obj->isMouseAbove())
 							{
-								std::string strId = id;
-								if (obj->getId() == strId && obj->isMouseAbove())
-								{
-									const char *value = selectionNode->Attribute("value");
-									if (value) kernel.saveHash.insert(SaveHash::value_type(id_chouce, value));
-								}
+
+								const char *value = selectionNode->Attribute("value");
+								if (value) kernel.saveHash.insert(SaveHash::value_type(id_chouce, value));
+								isClickOnObject = true;
 							}
 						}
 					}
 				}
-				selectionNode = selectionNode->NextSiblingElement("SELECTION");
 			}
+			selectionNode = selectionNode->NextSiblingElement("SELECTION");
 		}
+		if (!isClickOnObject) return 0; //Fail, нет курсора на на нужном объекте при клике
+	}
 
-		const char *timeEvent = eventNode->Attribute("time");
-		if (timeEvent) tEvent = std::atoi(timeEvent);
-		saveTTEvent = kernel.globalClock.getMilliSecond();
+	loadScene(eventNode);
+	/*const char *ifarg = eventNode->Attribute("if");*/
+	//if (ifarg); // Распарсиваем if аргумент
+
+	const char *timeEvent = eventNode->Attribute("time");
+	if (timeEvent) tEvent = std::atoi(timeEvent);
+	saveTTEvent = kernel.globalClock.getMilliSecond();
+
+	return 1;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bool Scene::isEventWithChoice(XMLNode eventNode)
+{
+	XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
+	if (choiceNode)
+	{
+		return 1;
+	}
+	return 0;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Read event
@@ -198,23 +214,55 @@ bool Scene::doEvent(XMLNode scene)
 {
 	if (firstEvent)
 	{
-		eventNode = scene->FirstChildElement("EVENT"); 
+		bool firstAgain = true; //Заменить на next [!]
+		eventNode = scene->FirstChildElement("EVENT");
 		if (eventNode)
 		{
-			isEvent(eventNode);
-		} 
+			if (isEventWithChoice(eventNode))
+			{
+				if (!isEvent())
+				{
+					return 0;
+				}
+				else
+				{
+					firstAgain = false;
+				}
+			}
+			else
+			{
+				isEvent();
+				firstAgain = false;
+			}
+		}
 		else
 		{
 			return 1;
 		}
-		firstEvent = false;
+		if (firstAgain == false) firstEvent = false;
 	} 
 	else
 	{
-		eventNode = eventNode->NextSiblingElement("EVENT");
+		if (next) eventNode = eventNode->NextSiblingElement("EVENT");
 		if (eventNode)
 		{
-			isEvent(eventNode);
+			if (isEventWithChoice(eventNode))
+			{
+				if (!isEvent())
+				{
+					next = false;
+					return 0;
+				}
+				else
+				{
+					next = true;
+				}
+			}
+			else
+			{
+				isEvent();
+				next = true;
+			}
 		}
 		else
 		{
@@ -271,8 +319,6 @@ void Scene::displayAll()
 //Удаление всех отрисованных объектов
 void Scene::clear()
 {
-	kernel.saveGameHash(); // Внепланово сохраняем всё и вся[!] 
-
 	for (auto &layer : layers)
 	{
 		for (auto &obj : layer)

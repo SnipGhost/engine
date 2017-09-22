@@ -309,11 +309,11 @@ namespace ng
 			} posScale, origin;
 			
 			virtual ~Displayable();
-			sf::Vector2f getPositionObj(); // Первоначально установенные 
-			float getScaleObj();		   // Первоначально установенные 
-			bool visible;				   // Состояние объекта 
-			std::string getId();
-			virtual bool isMouseAbove() = 0; // Проверка на то, что указатель над объектом
+			sf::Vector2f getPositionObj() { return positionObj; } 
+			float getScaleObj() { return scaleObj; }		      
+			bool visible;
+			std::string getId() { return id; }
+			virtual bool isMouseAbove() = 0;
 			virtual void edit(ResData rd) = 0;
 			void doLayerMotion(sf::Transformable *obj);
 			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
@@ -327,15 +327,17 @@ namespace ng
 	class Shape: public sf::RectangleShape
 	{
 	protected:
+		bool isColorAdd;
 		int alpha;
 		sf::Vector2f size;
 	public:
+		Shape() { isColorAdd = true; }
 		Shape(sf::Vector2f winSize); // Чёрное полотно перехода во весь экран
 		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
-		Shape(sf::Vector2f size, sf::Vector2f pos);
-		int getAlpha();
-		void addAlpha();
-		void pickUpAlpha();
+		void setOutlineShape(sf::Vector2f size, sf::Vector2f pos);
+		//int getAlpha();
+		//void addAlpha();
+		//void pickUpAlpha();
 		void display(sf::RenderWindow *win = kernel.window);
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -343,6 +345,7 @@ namespace ng
 	class Sprite: public sf::Sprite, public ng::Displayable
 	{
 		protected:
+			ng::Shape outlineShape;
 			sf::Color color;
 			sf::Texture texture;
 			sf::RenderStates renderStates;
@@ -367,6 +370,7 @@ namespace ng
 	class AnimateSprite: public ng::Sprite
 	{
 		protected:
+			ng::Shape outlineShape;
 			int lastTime;            // Предыдущее время смены кадра
 			unsigned int xPozAnim;   // Текущее положение анимации по X
 			unsigned int yPozAnim;   // Текущее положение анимации по Y
@@ -391,6 +395,7 @@ namespace ng
 	class Text: public sf::Text, public ng::Displayable
 	{
 		private:
+			ng::Shape outlineShape;
 			std::string fontId;
 			unsigned int size;
 		public:
@@ -440,6 +445,7 @@ namespace ng
 	class Video: public sfe::Movie, public ng::Displayable
 	{
 		protected:
+			ng::Shape outlineShape;
 			bool loopVideo;
 			sf::RenderStates renderStates;
 		public:
@@ -478,6 +484,7 @@ namespace ng
 
 		protected:
 			bool firstEvent;
+			bool next;
 			std::string idNextScene;
 			std::vector<Displayable*> layers[C_LAYERS];
 			typedef std::map<std::string, ng::Video*>::iterator VidIt;
@@ -498,7 +505,8 @@ namespace ng
 			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
-			void isEvent(XMLNode scene);    // Если нашли Event
+			bool isEvent();					// Если нашли Event
+			bool isEventWithChoice(XMLNode scene);    
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов
 			void displayAll();              // Отобразить все объекты сцены

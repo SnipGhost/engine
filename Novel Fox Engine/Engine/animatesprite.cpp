@@ -12,6 +12,14 @@ AnimateSprite::AnimateSprite(std::string id, std::string src, bool smooth): Spri
 	xPozAnim = 0;
 	yPozAnim = 0;
 
+	xEnd = (getTexture()->getSize().x / 256) - 1;
+	yEnd = (getTexture()->getSize().y / 256) - 1;
+
+	setAnimation(256, 256, 40);
+
+	origin = PosScale(0, 0, 1, 1);
+	setResize();
+
 	//Нужно ли делать? [!]
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

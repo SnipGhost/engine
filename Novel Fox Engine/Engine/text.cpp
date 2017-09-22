@@ -224,8 +224,8 @@ void Text::display(sf::RenderWindow *win)
 	win->draw(*this);
 	if (this->isMouseAbove()) // ТЕСТ [!]
 	{
-		ng::Shape sp(sf::Vector2f(getLocalBounds().width * posScale.scale.x, getLocalBounds().height * posScale.scale.y), sf::Vector2f(posScale.pos.x + getLocalBounds().left  * posScale.scale.x, posScale.pos.y + getLocalBounds().top * posScale.scale.y));
-		win->draw(sp);
+		outlineShape.setOutlineShape(sf::Vector2f(getLocalBounds().width * posScale.scale.x, getLocalBounds().height * posScale.scale.y), sf::Vector2f(posScale.pos.x + getLocalBounds().left  * posScale.scale.x, posScale.pos.y + getLocalBounds().top * posScale.scale.y));
+		win->draw(outlineShape);
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

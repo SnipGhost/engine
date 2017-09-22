@@ -38,20 +38,6 @@ void Displayable::doLayerMotion(sf::Transformable *obj) // TODO: FIX! [?]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sf::Vector2f Displayable::getPositionObj()
-{
-	return positionObj;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-float Displayable::getScaleObj()
-{
-	return scaleObj;
-}
-std::string Displayable::getId()
-{
-	return id;
-}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Вычисление новых значений размера
 void Displayable::setResize()
 {

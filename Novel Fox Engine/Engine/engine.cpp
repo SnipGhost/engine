@@ -280,30 +280,15 @@ void Kernel::eventUpdate()
 void Kernel::sceneUpdate()
 {
 	bool clickMouseLeft = false;
-	bool clickEnter = false;
+	/*bool clickEnter = false;*/
 	if (event.isMouseClickKey(sf::Mouse::Left)) clickMouseLeft = true;
-	if (event.isKeyboardKey(sf::Keyboard::Return)) clickEnter = true; //Return - Enter
-	if ((clickMouseLeft || clickEnter || scene->tEvent == 0)/* && scene->sceneReady*/) // [!]
+	//if (event.isKeyboardKey(sf::Keyboard::Return)) clickEnter = true; //Return - Enter
+	if ((clickMouseLeft /*|| clickEnter*/ || scene->tEvent == 0)/* && scene->sceneReady*/) // [!]
 	{
-		for (auto &sound : scene->sounds) // Выключение звука, если насильно переключили
-			if (sound.second)
-			{
-				sound.second->playable = false;
-				sound.second->stop();
-			}
-
 		if (scene->tEvent != 0 && click) click->play();
-
-		if (clickMouseLeft) print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "
-			+ std::to_string(event.mouseButton.y) + ")", INFO);
-		if (clickEnter) print("Keyboard click: Enter", INFO);
-		if (scene->tEvent == 0) print("Event timeout ", INFO);
-
 		if (scene->doEvent(node)) {
-
 			delete scene;
 			scene = nullptr;
-
 			if (node)
 			{
 				node = getNextXMLNode(node, "SCENE");
@@ -318,7 +303,20 @@ void Kernel::sceneUpdate()
 				node = loadFirstScene();
 				if (node) scene = new Scene(node);
 			}
+		}
 
+		if (clickMouseLeft) print("Mouse click: (" + std::to_string(event.mouseButton.x) + "; "
+			+ std::to_string(event.mouseButton.y) + ")", INFO);
+		/*if (clickEnter) print("Keyboard click: Enter", INFO);*/
+		if (scene->tEvent == 0) print("Event timeout ", INFO);
+
+		for (auto &sound : scene->sounds) // Выключение звука, если насильно переключили
+		{
+			if (sound.second)
+			{
+				sound.second->playable = false;
+				sound.second->stop();
+			}
 		}
 	}
 }
@@ -419,6 +417,8 @@ void Kernel::clear()
 	log->print("Deleting fonts is complete", NORM);
 	if (kernel.click) delete kernel.click;
 	log->print("Deleting click sound is complete", NORM);
+
+	saveGameHash(); // Внепланово сохраняем всё и вся [!] 
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode ng::Kernel::loadFirstScene()

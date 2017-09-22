@@ -21,14 +21,14 @@
     <EVENT>
       <TEXT id="person" visible="false"/>
       <TEXT id="text" y="520">Какая сегодня погода?</TEXT>
-      <TEXT id="chouce1" font="classic" layer="5" x="160" y="555" color="green" size="23">Идёт снег и дует ветер</TEXT>
-      <TEXT id="chouce2" font="classic" layer="5" x="160" y="590" color="red" size="23">Солнечно, без осадков</TEXT>
+      <TEXT id="chouce1" font="classic" layer="5" x="180" y="555" color="green" size="23">Идёт снег и дует ветер</TEXT>
+      <TEXT id="chouce2" font="classic" layer="5" x="180" y="590" color="red" size="23">Солнечно, без осадков</TEXT>
     </EVENT>
     
     <EVENT>
       <CHOICE id="chouce1_xx">
-        <SELECTION id="chouce1" value="Идёт снег"/>
-        <SELECTION id="chouce2" value="Без осадков"/>
+        <SELECTION id="chouce1" value="Yes"/>
+        <SELECTION id="chouce2" value="No"/>
       </CHOICE>
       <TEXT id="text">Какое у тебя настроение?</TEXT>
       <TEXT id="chouce1">Замечательное</TEXT>
@@ -37,8 +37,8 @@
     
     <EVENT>
       <CHOICE id="chouce2_xxx">
-        <SELECTION id="chouce1" value="Замечательное"/>
-        <SELECTION id="chouce2" value="Плохое"/>
+        <SELECTION id="chouce1" value="Yes"/>
+        <SELECTION id="chouce2" value="No"/>
       </CHOICE>
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>

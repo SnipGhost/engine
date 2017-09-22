@@ -131,10 +131,10 @@ void Sprite::edit(ResData rd)
 void Sprite::display(sf::RenderWindow *win) 
 {
 	win->draw(*this, renderStates);
-	if (this->isMouseAbove() && (id == "yes" || id == "no")) // ТЕСТ [!]
+	if (this->isMouseAbove()) // ТЕСТ [!]
 	{
-		ng::Shape sp(sf::Vector2f(getTextureRect().width * posScale.scale.x, getTextureRect().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
-		win->draw(sp);
+		outlineShape.setOutlineShape(sf::Vector2f(getTextureRect().width * posScale.scale.x, getTextureRect().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
+		win->draw(outlineShape);
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
