@@ -213,6 +213,25 @@ sf::Vector2f Kernel::getMouse()
 	return window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void ng::Kernel::loadGameHash()
+{
+	// Сделать загрузку
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void ng::Kernel::saveGameHash()
+{
+	std::ofstream out(RES_PATH + "save/save_hash");
+
+	for (auto sh : saveHash)
+	{
+		out << sh.first << " " << sh.second << std::endl;
+	}
+
+	out << kernel.node->Attribute("id") << std::endl;
+
+	out.close();
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::string Kernel::operator [] (std::string key)
 {
 	return conf[key];

@@ -15,6 +15,7 @@
 #include <string>
 #include <map>
 #include <type_traits>
+#include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <sfeMovie/Movie.hpp>
@@ -57,6 +58,7 @@ namespace ng
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	typedef tinyxml2::XMLElement* XMLNode;
+	typedef std::unordered_map<std::string, std::string> SaveHash;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	extern const char *DEFAULT[PARAMS_COUNT*2]; // Настройки по-умолчанию
 	extern const bool RES_PARAMS[PARAMS_COUNT]; // Добавлять к настрокам пути
@@ -158,6 +160,7 @@ namespace ng
 			ng::Shape *transition;				// Чёрное полотно перехода
 			XMLNode node;					    // Общая текущая node
 			Scene *scene;						// Общая текущая сцена
+			SaveHash saveHash;              // Хеш-сохранения
 			//-----------------------------------------------------------------
 			static Kernel & init();                   // Instance-метод
 			~Kernel();                                // Обязательный деструктор
@@ -165,6 +168,8 @@ namespace ng
 			std::string operator[] (std::string key); // Выдает конфигурацию
 			sf::Vector2f getMouse();				  // Запрос координат мыши
 			//-----------------------------------------------------------------
+			void loadGameHash();         // Загрузка сохранения в saveHash
+			void saveGameHash();		 // Сохранение игры в файл сохранения
 			void updateAll();            // Обновить всё, что есть в списке
 			void eventUpdate();			 // Отследить обычные события
 			void sceneUpdate();			 // Отследить событие переключения

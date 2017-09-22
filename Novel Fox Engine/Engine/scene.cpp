@@ -156,9 +156,9 @@ void Scene::isEvent(XMLNode eventNode)
 		XMLNode choiceNode = eventNode->FirstChildElement("CHOICE"); // А если несколько CHOICE? [!]
 		if (choiceNode)
 		{
-			const char *id = eventNode->Attribute("id");
-			//if (id); // Нашли id choice ТЭГ
-			const char *type = eventNode->Attribute("type");
+			const char *id_chouce = choiceNode->Attribute("id");
+			//if (id_chouce); // Нашли id choice ТЭГ
+			const char *type = choiceNode->Attribute("type");
 			//if (type); // Нашли type choice ТЭГ
 
 			XMLNode selectionNode = choiceNode->FirstChildElement("SELECTION");
@@ -178,8 +178,7 @@ void Scene::isEvent(XMLNode eventNode)
 								if (obj->getId() == strId && obj->isMouseAbove())
 								{
 									const char *value = selectionNode->Attribute("value");
-									std::cout << value  << std::endl;
-									//if (value); // Забить инфу в hesh таблицу
+									if (value) kernel.saveHash.insert(SaveHash::value_type(id_chouce, value));
 								}
 							}
 						}
@@ -272,6 +271,7 @@ void Scene::displayAll()
 //Удаление всех отрисованных объектов
 void Scene::clear()
 {
+	kernel.saveGameHash(); // Внепланово сохраняем всё и вся[!] 
 
 	for (auto &layer : layers)
 	{
