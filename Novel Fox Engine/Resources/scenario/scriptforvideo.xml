@@ -46,19 +46,19 @@
       <TEXT id="text" y="520" visible="true">Интересно, а теперь следующий вопрос. Какое у тебя настроение?</TEXT>
       <TEXT id="chouce1" visible="true">Хорошее настроение</TEXT>
       <TEXT id="chouce2" visible="true">Плохое настроение</TEXT>
-      <CHOICE id="var2">
+      <CHOICE id="var3">
         <SELECTION id="chouce1" value="Yes"/>
         <SELECTION id="chouce2" value="No"/>
       </CHOICE>
     </EVENT>
 
-    <EVENT var="var2" value="Yes">
+    <EVENT var="var3" value="Yes">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
       <TEXT id="text" y="555">Прекрасное настроение, сегодня случилось много чего хорошего</TEXT>
     </EVENT>
 
-    <EVENT var="var2" value="No">
+    <EVENT var="var3" value="No">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
       <TEXT id="text" y="555">Квёлое настроение, болит голова</TEXT>
@@ -66,6 +66,7 @@
     
     <EVENT>
       <MUSIC id="wind" command="stop"/>
+      <MUSIC id="music1" command="stop"/>
       <TEXT id="person" visible="false"/>
       <TEXT id="text" visible="false"/>
       <SPRITE id="panel" visible="false"/>

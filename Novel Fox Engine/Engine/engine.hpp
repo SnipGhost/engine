@@ -157,7 +157,7 @@ namespace ng
 			sf::Vector2f screen;				// Размеры монитора
 			sf::Vector2f factor;				// Коэффициент между мониторами
 			ng::Shape *band1, *band2;			// Полосы сокрытия
-			ng::Shape *transition;				// Чёрное полотно перехода
+			//ng::Shape *transition;				// Чёрное полотно перехода
 			XMLNode node;					    // Общая текущая node
 			Scene *scene;						// Общая текущая сцена
 			SaveHash saveHash;              // Хеш-сохранения
@@ -506,7 +506,8 @@ namespace ng
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
 			bool isEvent();					// Если нашли Event
-			bool isEventWithChoice(XMLNode scene);    
+			//bool isEventWithChoice();    
+			bool isIfValid();
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов
 			void displayAll();              // Отобразить все объекты сцены

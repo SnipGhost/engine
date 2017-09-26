@@ -142,8 +142,8 @@ Kernel::Kernel()
 	log->print("Bands created", NORM);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Создание чёрного полотна перехода
-	transition = new Shape(winsize); // [!]
-	log->print("Transition screen created", NORM);
+	//transition = new Shape(winsize); // [!]
+	//log->print("Transition screen created", NORM);
 
 	loadSpecData();
 }
@@ -160,8 +160,8 @@ Kernel::~Kernel()
 	if (band1) delete band1;
 	if (band2) delete band2;
 	log->print("Deleting bands is complete", NORM);
-	if (transition) delete transition; // [!]
-	log->print("Deleting transition screen is complete", NORM);
+	//if (transition) delete transition; // [!]
+	//log->print("Deleting transition screen is complete", NORM);
 	if (doc) delete doc;
 	log->print("Closing the script is complete", NORM);
 	if (window) delete window;
@@ -272,8 +272,8 @@ void Kernel::eventUpdate()
 			band1 = new Shape(sf::Color::Black, 1, winsize, devScreen);
 			band2 = new Shape(sf::Color::Black, 2, winsize, devScreen);
 
-			delete transition; // [!]
-			transition = new Shape(winsize); // [!]
+			//delete transition; // [!]
+			//transition = new Shape(winsize); // [!]
 		}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -418,8 +418,7 @@ void Kernel::clear()
 	if (kernel.click) delete kernel.click;
 	log->print("Deleting click sound is complete", NORM);
 
-	saveGameHash(); // Внепланово сохраняем всё и вся [!] 
-	//kernel.saveHash.clear(); //Попытка очистить сохранения
+	//saveGameHash(); // Внепланово сохраняем всё и вся [!] 
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode ng::Kernel::loadFirstScene()
