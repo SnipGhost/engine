@@ -419,6 +419,7 @@ void Kernel::clear()
 	log->print("Deleting click sound is complete", NORM);
 
 	saveGameHash(); // Внепланово сохраняем всё и вся [!] 
+	//kernel.saveHash.clear(); //Попытка очистить сохранения
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode ng::Kernel::loadFirstScene()

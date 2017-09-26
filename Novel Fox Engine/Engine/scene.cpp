@@ -150,6 +150,26 @@ void Scene::loadScene(XMLNode scene)
 // If exit event...
 bool Scene::isEvent()
 {
+	const char *var = eventNode->Attribute("var");
+	const char *value = eventNode->Attribute("value");
+	//const char *ifarg = eventNode->Attribute("if");
+	if (var && value)
+	{
+		if (kernel.saveHash.at(var) != value)
+		{
+			eventNode = eventNode->NextSiblingElement("EVENT");
+			isEvent();
+
+			return 1; // Выход из рекурсии
+		}
+	}
+
+	loadScene(eventNode);
+
+	const char *timeEvent = eventNode->Attribute("time");
+	if (timeEvent) tEvent = std::atoi(timeEvent);
+	saveTTEvent = kernel.globalClock.getMilliSecond();
+
 	XMLNode choiceNode = eventNode->FirstChildElement("CHOICE"); // Только один Choice в Event
 	if (choiceNode)
 	{
@@ -187,14 +207,6 @@ bool Scene::isEvent()
 		}
 		if (!isClickOnObject) return 0; //Fail, нет курсора на на нужном объекте при клике
 	}
-
-	loadScene(eventNode);
-	/*const char *ifarg = eventNode->Attribute("if");*/
-	//if (ifarg); // Распарсиваем if аргумент
-
-	const char *timeEvent = eventNode->Attribute("time");
-	if (timeEvent) tEvent = std::atoi(timeEvent);
-	saveTTEvent = kernel.globalClock.getMilliSecond();
 
 	return 1;
 }

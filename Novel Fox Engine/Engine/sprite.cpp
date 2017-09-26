@@ -131,11 +131,11 @@ void Sprite::edit(ResData rd)
 void Sprite::display(sf::RenderWindow *win) 
 {
 	win->draw(*this, renderStates);
-	if (this->isMouseAbove()) // ТЕСТ [!]
-	{
-		outlineShape.setOutlineShape(sf::Vector2f(getTextureRect().width * posScale.scale.x, getTextureRect().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
-		win->draw(outlineShape);
-	}
+	//if (this->isMouseAbove()) // ТЕСТ [!]
+	//{
+	//	outlineShape.setOutlineShape(sf::Vector2f(getTextureRect().width * posScale.scale.x, getTextureRect().height * posScale.scale.y), sf::Vector2f(posScale.pos.x, posScale.pos.y));
+	//	win->draw(outlineShape);
+	//}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream &ng::operator << (std::ostream& os, Sprite &s)
