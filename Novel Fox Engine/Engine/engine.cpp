@@ -418,7 +418,7 @@ void Kernel::clear()
 	if (kernel.click) delete kernel.click;
 	log->print("Deleting click sound is complete", NORM);
 
-	//saveGameHash(); // Внепланово сохраняем всё и вся [!] 
+	saveGameHash(); // Внепланово сохраняем всё и вся [!] 
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 XMLNode ng::Kernel::loadFirstScene()

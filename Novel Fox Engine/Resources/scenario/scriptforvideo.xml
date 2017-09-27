@@ -21,47 +21,47 @@
     
     <EVENT>
       <TEXT id="person" visible="false"/>
-      <TEXT id="text" y="520">Какая сегодня погода?</TEXT>
-      <TEXT id="chouce1" font="classic" layer="5" x="180" y="555" color="green" size="23">Идёт снег и дует ветер</TEXT>
-      <TEXT id="chouce2" font="classic" layer="5" x="180" y="590" color="red" size="23">Солнечно, без осадков</TEXT>
+      <TEXT id="text" y="520">Первый вопрос?</TEXT>
+      <TEXT id="chouce1" font="classic" layer="5" x="180" y="555" color="green" size="23">Зелёный ответ</TEXT>
+      <TEXT id="chouce2" font="classic" layer="5" x="180" y="590" color="red" size="23">Красный ответ</TEXT>
       <CHOICE id="var1">
-        <SELECTION id="chouce1" value="Yes"/>
-        <SELECTION id="chouce2" value="No"/>
+        <SELECTION id="chouce1" value="green"/>
+        <SELECTION id="chouce2" value="red"/>
       </CHOICE>
     </EVENT>
     
-    <EVENT var="var1" value="Yes">
+    <EVENT var="var1" value="green">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
-      <TEXT id="text" y="555">Не самая лучшая: идёт снег, а мне он не нравится...</TEXT>
+      <TEXT id="text" y="555">Зелёный ответ 1</TEXT>
     </EVENT>
 
-    <EVENT var="var1" value="No">
+    <EVENT var="var1" value="red">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
-      <TEXT id="text" y="555">Сегодня солнечно и нет каких-либо осадков, вполне хорошая погода</TEXT>
+      <TEXT id="text" y="555">Красный ответ 1</TEXT>
     </EVENT>
     
     <EVENT>
-      <TEXT id="text" y="520" visible="true">Интересно, а теперь следующий вопрос. Какое у тебя настроение?</TEXT>
-      <TEXT id="chouce1" visible="true">Хорошее настроение</TEXT>
-      <TEXT id="chouce2" visible="true">Плохое настроение</TEXT>
+      <TEXT id="text" y="520" visible="true">Второй вопрос?</TEXT>
+      <TEXT id="chouce1" visible="true">Зелёный ответ</TEXT>
+      <TEXT id="chouce2" visible="true">Красный ответ</TEXT>
       <CHOICE id="var3">
-        <SELECTION id="chouce1" value="Yes"/>
-        <SELECTION id="chouce2" value="No"/>
+        <SELECTION id="chouce1" value="green"/>
+        <SELECTION id="chouce2" value="red"/>
       </CHOICE>
     </EVENT>
 
-    <EVENT var="var3" value="Yes">
+    <EVENT var="var3" value="green">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
-      <TEXT id="text" y="555">Прекрасное настроение, сегодня случилось много чего хорошего</TEXT>
+      <TEXT id="text" y="555">Зелёный ответ 2</TEXT>
     </EVENT>
 
-    <EVENT var="var3" value="No">
+    <EVENT var="var3" value="red">
       <TEXT id="chouce1" visible="false"/>
       <TEXT id="chouce2" visible="false"/>
-      <TEXT id="text" y="555">Квёлое настроение, болит голова</TEXT>
+      <TEXT id="text" y="555">Красный ответ 2</TEXT>
     </EVENT>
     
     <EVENT>

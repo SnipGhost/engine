@@ -181,6 +181,7 @@ bool Scene::isEvent()
 							{
 								const char *value = selectionNode->Attribute("value");
 								if (value) kernel.saveHash.insert_or_assign(id_chouce, value);
+								std::cout << id_chouce << " " << kernel.saveHash.at(id_chouce) << std::endl;
 
 								isClickOnObject = true;
 							}
@@ -200,10 +201,11 @@ bool Scene::isIfValid()
 {
 	const char *var = eventNode->Attribute("var");
 	const char *value = eventNode->Attribute("value");
-	if (var && value)
+	if (var)
 	{
 		if (kernel.saveHash.at(var) == value)
 		{
+			std::cout << kernel.saveHash.at(var) << " " << value << " This answer" << std::endl;
 			return 1;
 		}
 	}
@@ -229,10 +231,11 @@ bool Scene::doEvent(XMLNode scene)
 		}
 	}
 
-	if (eventNode)
+	if (eventNode /*&& isIfValid()*/)
 	{
-		//if (isIfValid()) // Если If есть и он валиден
-		//{
+		if (isIfValid()) // Если If есть и он валиден
+		{
+			//isIfValid();
 			XMLNode choiceNode = eventNode->FirstChildElement("CHOICE");
 			if (choiceNode)
 			{
@@ -251,15 +254,11 @@ bool Scene::doEvent(XMLNode scene)
 				isEvent();
 				next = true;
 			}
-		//}
-		/*else
+		}
+		else
 		{
-			while (!isIfValid())
-			{
-				eventNode = eventNode->NextSiblingElement("EVENT");
-				if (eventNode) isEvent();
-			}
-		}*/
+			// Производим поиск нужного EVENT
+		}
 	}
 	else
 	{
