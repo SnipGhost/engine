@@ -109,22 +109,22 @@ namespace ng
 	// Глобальные часы
 	class Clock : public sf::Clock
 	{
-	public:
-		int getMilliSecond(); // Выдаём время с момента запуска в миллисекундах
+		public:
+			int getMilliSecond(); // Выдаём время с момента запуска в миллисекундах
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс событий/проверок на события
 	class Event : public sf::Event
 	{
-	public:
-		sf::Keyboard keyboard;
-		sf::Mouse mouse;
-		bool isKeyboardKey(sf::Keyboard::Key keyboard); // Данная клавиша нажата?
-		bool isWinClosed(); // Окно закрыто?
-		bool isMouseClickKey(sf::Mouse::Button mouse); // Данная кнопка кликнута?
-		bool isMouseKey(sf::Mouse::Button mouse); // Данная кнопка нажата?
-		bool isMusicPlay(sf::Music *music); // Данная музыка играет?
-		bool isVideoPlay(sfe::Movie *video); // Данное видео воспроизводится?
+		public:
+			sf::Keyboard keyboard;
+			sf::Mouse mouse;
+			bool isKeyboardKey(sf::Keyboard::Key keyboard); // Данная клавиша нажата?
+			bool isWinClosed(); // Окно закрыто?
+			bool isMouseClickKey(sf::Mouse::Button mouse); // Данная кнопка кликнута?
+			bool isMouseKey(sf::Mouse::Button mouse); // Данная кнопка нажата?
+			bool isMusicPlay(sf::Music *music); // Данная музыка играет?
+			bool isVideoPlay(sfe::Movie *video); // Данное видео воспроизводится?
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Преобъявление классов для Kernel
@@ -235,10 +235,10 @@ namespace ng
 	// Класс шрифтов
 	class Font : public sf::Font
 	{
-	public:
-		std::string id;					// Id шрифта
-		Font(std::string src);			// Загрузить шрифт самостоятельно
-		Font(FontData fd);				// Загрузить шрифт из главной FontData
+		public:
+			std::string id;					// Id шрифта
+			Font(std::string src);			// Загрузить шрифт самостоятельно
+			Font(FontData fd);				// Загрузить шрифт из главной FontData
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс музыки/действий над музыкой
@@ -326,16 +326,16 @@ namespace ng
 	// Класс простых отображаемых фигур
 	class Shape: public sf::RectangleShape
 	{
-	protected:
-		bool isColorAdd;
-		int alpha;
-		sf::Vector2f size;
-	public:
-		Shape() { isColorAdd = true; }
-		Shape(sf::Vector2f winSize);	// Чёрное полотно перехода во весь экран
-		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
-		void setOutlineShape(sf::Vector2f size, sf::Vector2f pos);
-		void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+		protected:
+			bool isColorAdd;
+			int alpha;
+			sf::Vector2f size;
+		public:
+			Shape() { isColorAdd = true; }
+			Shape(sf::Vector2f winSize);	// Чёрное полотно перехода во весь экран
+			Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
+			void setOutlineShape(sf::Vector2f size, sf::Vector2f pos);
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс текстур(спрайтов) и действий над ними
@@ -467,10 +467,10 @@ namespace ng
 	// Класс шейдеров(визуальных эффектов над спрайтами)
 	class Shader : public sf::Shader
 	{
-	public:
-		Shader();
-		//Shader(ResData rd);
-		friend std::ostream & operator << (std::ostream &os, const Shader *s); // Составление правильного вывода
+		public:
+			Shader();
+			//Shader(ResData rd);
+			friend std::ostream & operator << (std::ostream &os, const Shader *s); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс сцены(объект, включающий в себя все остальные классы)

@@ -6,6 +6,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// "Переходи на главную видеокарту" для обладателей NVIDIA и встроенной
 #if defined(OS_IS_WIN) && defined(NVIDIA_DRIVER)
 	extern "C" { _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001; }
 #endif
@@ -35,22 +36,22 @@ Kernel::Kernel()
 		ShowWindow(hWnd, SW_HIDE);
 	#endif
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	log = new LogStream(RES_PATH + LOG_FILE);
+	log = new LogStream(RES_PATH + LOG_FILE); // Создаём log компоненты
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	std::string line = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 	log->print(line + "~~~~~~~~~~~~~~~~~~~~[Engine log]", INFO);
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	version = VERSION;
-	log->print("NOVEL FOX ENGINE v" + version, NORM);
+	log->print("NOVEL FOX ENGINE v" + version, NORM);  // Выводим текущую версию движка
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Установка начальных значений из файла конфигурации
-	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE);
-	devScreen.x = std::stof(conf["devScreen_x"].c_str());
-	devScreen.y = std::stof(conf["devScreen_y"].c_str());
-	int screen_mode = std::atoi(conf["screen_mode"].c_str());
-	switch (screen_mode)
+	if (!parseConfig(RES_PATH + CONFIG_FILE)) exit(EXIT_FAILURE); // Если нет файла конфигурации, то вылет ошибки
+	devScreen.x = std::stof(conf["devScreen_x"].c_str()); // Получаем размеры экрана в режиме разработки
+	devScreen.y = std::stof(conf["devScreen_y"].c_str()); // Получаем размеры экрана в режиме разработки
+	int screen_mode = std::atoi(conf["screen_mode"].c_str()); // Получаем состояние окна
+	switch (screen_mode) // Производим настройки в зависимости от состояния окна
 	{
-	case 8:
+	case 8: // Если FullScreen
 	{
 		sf::VideoMode videoMode;
 		screen.x = (float)videoMode.getDesktopMode().width;
@@ -66,6 +67,8 @@ Kernel::Kernel()
 	default:
 	{
 		log->print("INVALID SCREEN MODE!", WARN);
+		screen.x = std::stof(conf["screen_x"].c_str());
+		screen.y = std::stof(conf["screen_y"].c_str());
 		break;
 	}
 	}
