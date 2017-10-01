@@ -21,7 +21,7 @@
 #include <sfeMovie/Movie.hpp>
 #include "../Modules/tinyxml2.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#ifdef OS_IS_WIN
+#ifdef OS_IS_WIN // Разные настройки в зависимости от платформы
 	#include <windows.h>
 	#define delay(ms) Sleep(ms)
 	#define RES_PATH std::string("Resources/")
@@ -110,7 +110,7 @@ namespace ng
 	class Clock : public sf::Clock
 	{
 	public:
-		int getMilliSecond();
+		int getMilliSecond(); // Выдаём время с момента запуска в миллисекундах
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс событий/проверок на события
@@ -119,12 +119,12 @@ namespace ng
 	public:
 		sf::Keyboard keyboard;
 		sf::Mouse mouse;
-		bool isKeyboardKey(sf::Keyboard::Key keyboard);
-		bool isWinClosed();
-		bool isMouseClickKey(sf::Mouse::Button mouse);
-		bool isMouseKey(sf::Mouse::Button mouse);
-		bool isMusicPlay(sf::Music *music);
-		bool isVideoPlay(sfe::Movie *video);
+		bool isKeyboardKey(sf::Keyboard::Key keyboard); // Данная клавиша нажата?
+		bool isWinClosed(); // Окно закрыто?
+		bool isMouseClickKey(sf::Mouse::Button mouse); // Данная кнопка кликнута?
+		bool isMouseKey(sf::Mouse::Button mouse); // Данная кнопка нажата?
+		bool isMusicPlay(sf::Music *music); // Данная музыка играет?
+		bool isVideoPlay(sfe::Movie *video); // Данное видео воспроизводится?
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Преобъявление классов для Kernel
@@ -183,7 +183,7 @@ namespace ng
 			XMLNode loadFirstScene();    // Загрузить первую сцену
 			//-----------------------------------------------------------------
 			XMLNode parseXML(XMLNode node, const char *tag);
-			XMLNode getNextXMLNode(XMLNode node, const char *tag);
+			XMLNode getNextXMLNode(XMLNode node, const char *tag); // Выдаём следующую ноду с нужным тегом
 			//-----------------------------------------------------------------
 			template<typename T> void print(T msg, size_t tag = NONE)
 			{
@@ -236,34 +236,34 @@ namespace ng
 	class Font : public sf::Font
 	{
 	public:
-		std::string id;
-		Font(std::string src);
-		Font(FontData fd);
+		std::string id;					// Id шрифта
+		Font(std::string src);			// Загрузить шрифт самостоятельно
+		Font(FontData fd);				// Загрузить шрифт из главной FontData
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс музыки/действий над музыкой
 	class Music: public sf::Music
 	{
 		public:
-			std::string state;	// Текущее состояние музыки
-			bool playable;		// Нужно ли проигрывать музыку [!] // Без надобности
-			float volume;		// Установленное значение громкости
-			float volumeNow;	// Значение громкости сейчас [изменяется]
-			bool loop;			// Повторение
-			float speed;        // Скорость проигрывания
+			std::string state;			// Текущее состояние музыки
+			bool playable;				// Нужно ли проигрывать музыку [!] // Без надобности
+			float volume;				// Установленное значение громкости
+			float volumeNow;			// Значение громкости сейчас [изменяется]
+			bool loop;					// Повторение
+			float speed;				// Скорость проигрывания
 
-			bool first;			// Логика для общих действий
-			int timeDo;			// Время действия
+			bool first;					// Логика для общих действий
+			int timeDo;					// Время действия
 			int firstTime;
 			int nextTime;
-			int difference;     // Разница между двума предыдущими параметрами
-			int tact;           // Такт изменения
+			int difference;				// Разница между двума предыдущими параметрами
+			int tact;					// Такт изменения
 
-			Music(ResData rd);
-			void edit(ResData rd);
-			bool setMusic(std::string src);
-			void update();
-			friend std::ostream & operator << (std::ostream &os, const Music *m);
+			Music(ResData rd);			// Загрузить музыку из главной ResData
+			void edit(ResData rd);		// Изменить текущие настройки
+			bool setMusic(std::string src); // Установить музыку
+			void update();				// Обновить состояние музыки
+			friend std::ostream & operator << (std::ostream &os, const Music *m); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс звуков/действий над звуками
@@ -272,15 +272,15 @@ namespace ng
 		protected:
 			sf::SoundBuffer buffer;
 		public:
-			float volume;       // Установленное значение громкости
-			bool playable;      // Нужно ли проигрывать музыку [!] // Без надобности
-			float speed;        // Скорость проигрывания
+			float volume;				// Установленное значение громкости
+			bool playable;				// Нужно ли проигрывать музыку [!] // Без надобности
+			float speed;				// Скорость проигрывания
 
 			Sound(std::string id, std::string src, float volume = 100);
-			Sound(ResData rd);
-			void edit(ResData rd);
-			bool setSound(std::string src, float volume);
-			friend std::ostream & operator << (std::ostream &os, const Sound *s);
+			Sound(ResData rd);			// Загрузить звук из главной ResData
+			void edit(ResData rd);		// Изменить текущие настройки
+			bool setSound(std::string src, float volume); // Установить звук
+			friend std::ostream & operator << (std::ostream &os, const Sound *s); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс "видимого" объекта и действий над ним
@@ -309,18 +309,18 @@ namespace ng
 			} posScale, origin;
 			
 			virtual ~Displayable();
-			sf::Vector2f getPositionObj() { return positionObj; } 
-			float getScaleObj() { return scaleObj; }		      
-			bool visible;
-			std::string getId() { return id; }
-			virtual bool isMouseAbove() = 0;
-			virtual void edit(ResData rd) = 0;
-			void doLayerMotion(sf::Transformable *obj);
-			virtual void display(sf::RenderWindow *win = kernel.window) = 0;
-			virtual void setLayerMotion() {}
-			virtual std::ostream & print(std::ostream &os) = 0;
-			friend std::ostream & operator << (std::ostream &os, Displayable *s);
-			virtual void setResize();
+			sf::Vector2f getPositionObj() { return positionObj; } // Выдать текущую позицию объекта
+			float getScaleObj() { return scaleObj; } // Выдать текущий размер объекта	      
+			bool visible;				// Текущая видимость объекта
+			std::string getId() { return id; } // Выдать id текущего объекта
+			virtual bool isMouseAbove() = 0; // Если мышка над данным объектом
+			virtual void edit(ResData rd) = 0; // Изменить текущие настройки
+			void doLayerMotion(sf::Transformable *obj); // Произвести в каждом объекте setLayerMotion
+			virtual void display(sf::RenderWindow *win = kernel.window) = 0; // Кинуть в очередь отображаемых объектов
+			virtual void setLayerMotion() {} // Произвести перемещение layer в зависимости от мышки
+			virtual std::ostream & print(std::ostream &os) = 0; // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, Displayable *s); // Составление правильного вывода
+			virtual void setResize();	// Установить размеры в зависимости от нового окна
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс простых отображаемых фигур
@@ -332,13 +332,10 @@ namespace ng
 		sf::Vector2f size;
 	public:
 		Shape() { isColorAdd = true; }
-		Shape(sf::Vector2f winSize); // Чёрное полотно перехода во весь экран
+		Shape(sf::Vector2f winSize);	// Чёрное полотно перехода во весь экран
 		Shape(sf::Color clr, int pos, sf::Vector2f winSize, sf::Vector2f devSize); //Ограничивающие полосы
 		void setOutlineShape(sf::Vector2f size, sf::Vector2f pos);
-		//int getAlpha();
-		//void addAlpha();
-		//void pickUpAlpha();
-		void display(sf::RenderWindow *win = kernel.window);
+		void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс текстур(спрайтов) и действий над ними
@@ -351,19 +348,19 @@ namespace ng
 			sf::RenderStates renderStates;
 		public:
 			Sprite() {}
-			Sprite(std::string id, std::string src, bool smooth = true);
-			Sprite(ResData rd);
-			bool setStrTexture(std::string src, bool smooth);
-			void setAlpha(int alpha);
-			void setRenderStates(std::string style);
-			void display(sf::RenderWindow *win = kernel.window);
-			bool isMouseAbove();
-			void edit(ResData rd);
-			void setResize();
-			void computeLayerScale();
-			void setLayerMotion();
-			std::ostream & print(std::ostream &os);
-			friend std::ostream & operator << (std::ostream &os, Sprite &s);
+			Sprite(std::string id, std::string src, bool smooth = true); // Загрузить sprite самостоятельно
+			Sprite(ResData rd);			// Загрузить sprite из главной ResData
+			bool setStrTexture(std::string src, bool smooth); // Установить текстуру
+			void setAlpha(int alpha);	// Установить прозрачность данного объекта
+			void setRenderStates(std::string style); // Установить параметры отображения
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+			bool isMouseAbove();		// Если мышка над данным объектом
+			void edit(ResData rd);		// Изменить текущие настройки
+			void setResize();			// Установить размеры в зависимости от нового окна
+			void computeLayerScale();	// Просчитать размеры в зависимости от нового окна
+			void setLayerMotion();		// Произвести перемещение layer в зависимости от мышки
+			std::ostream & print(std::ostream &os); // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, Sprite &s); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс анимации(GIF) и действий над ней
@@ -371,24 +368,24 @@ namespace ng
 	{
 		protected:
 			ng::Shape outlineShape;
-			int lastTime;            // Предыдущее время смены кадра
-			unsigned int xPozAnim;   // Текущее положение анимации по X
-			unsigned int yPozAnim;   // Текущее положение анимации по Y
-			unsigned int xEnd;       // Номер конечного положения по X
-			unsigned int yEnd;       // Номер конечного положения по Y
-			unsigned int sideWidth;  // Ширина кадра
-			unsigned int sideHeight; // Высота кадра
-			int delay;               // Время между кадрами в миллисекундах
+			int lastTime;				// Предыдущее время смены кадра
+			unsigned int xPozAnim;		// Текущее положение анимации по X
+			unsigned int yPozAnim;		// Текущее положение анимации по Y
+			unsigned int xEnd;			// Номер конечного положения по X
+			unsigned int yEnd;			// Номер конечного положения по Y
+			unsigned int sideWidth;		// Ширина кадра
+			unsigned int sideHeight;	// Высота кадра
+			int delay;					// Время между кадрами в миллисекундах
 		public:
-			AnimateSprite(std::string id, std::string src, bool smooth = true);
-			AnimateSprite(ResData rd);
-			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40);
-			void update();
-			bool isMouseAbove();
-			void edit(ResData rd);
-			void display(sf::RenderWindow *win = kernel.window);
-			std::ostream & print(std::ostream &os);
-			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s);
+			AnimateSprite(std::string id, std::string src, bool smooth = true); // Загрузить animatesprite самостоятельно
+			AnimateSprite(ResData rd);	// Загрузить animatesprite из главной ResData
+			void setAnimation(int frameHeight, int frameWidth = 0, int delay = 40); // Установить анимацию
+			void update();				// Обновить состояние анимации
+			bool isMouseAbove();		// Если мышка над данным объектом
+			void edit(ResData rd);		// Изменить текущие настройки
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+			std::ostream & print(std::ostream &os); // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, AnimateSprite &s); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс текста/действий над текстом
@@ -400,22 +397,22 @@ namespace ng
 			unsigned int size;
 		public:
 			Text() {}
-			Text(ResData rd);
+			Text(ResData rd);			// Загрузить text из главной ResData
 			Text(std::string id, int layer, std::string text, std::string fontId,
 			     bool layermotion, bool visible, float x, float y, float scale,
-				 unsigned int size, std::string color, int alpha, std::string style, float angle);
+				 unsigned int size, std::string color, int alpha, std::string style, float angle); // Загрузить text самостоятельно
 			void setText(std::string id, int layer, std::string text, std::string fontId,
 				 bool layermotion, bool visible, float x, float y, float scale,
-				 unsigned int size, std::string color, int alpha, std::string style, float angle);
-			void setColorText(std::string color, int alpha);
-			void setStyleText(std::string style);
-			bool isMouseAbove();
-			void edit(ResData rd);
-			void display(sf::RenderWindow *win = kernel.window);
-			void setResize();
-			void setLayerMotion();
-			std::ostream & print(std::ostream &os);
-			friend std::ostream & operator << (std::ostream &os, Text &t);
+				 unsigned int size, std::string color, int alpha, std::string style, float angle); // Установить текст
+			void setColorText(std::string color, int alpha); // Установить цвет текста
+			void setStyleText(std::string style); // Установить стиль текста
+			bool isMouseAbove();		// Если мышка над данным объектом
+			void edit(ResData rd);		// Изменить текущие настройки
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+			void setResize();			// Установить размеры в зависимости от нового окна
+			void setLayerMotion();		// Произвести перемещение layer в зависимости от мышки
+			std::ostream & print(std::ostream &os); // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, Text &t); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс текста/действий над многострочным текстом
@@ -426,19 +423,19 @@ namespace ng
 			std::string fontId;
 			unsigned int size;
 
-			ng::Text *textExample;
-			float interval; // Междустрочный интервал
-			std::vector<Text*> textVector;
+			ng::Text *textExample;			// Текст для настроек
+			float interval;					// Междустрочный интервал
+			std::vector<Text*> textVector;	// Вектор из готовых строк
 		public:
-			SmartText(ResData rd);
-			void setSmartText(ResData &rd);
-			bool isMouseAbove();
-			void edit(ResData rd);
-			void display(sf::RenderWindow *win = kernel.window);
-			void setResize();
-			void setLayerMotion();
-			std::ostream & print(std::ostream &os);
-			friend std::ostream & operator << (std::ostream &os, SmartText &t);
+			SmartText(ResData rd);			// Загрузить smarttext из главной ResData
+			void setSmartText(ResData &rd); // Установить переносящийся текст
+			bool isMouseAbove();			// Если мышка над данным объектом
+			void edit(ResData rd);			// Изменить текущие настройки
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+			void setResize();				// Установить размеры в зависимости от нового окна
+			void setLayerMotion();			// Произвести перемещение layer в зависимости от мышки
+			std::ostream & print(std::ostream &os); // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, SmartText &t); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс видео/действий над видео
@@ -450,21 +447,21 @@ namespace ng
 			sf::RenderStates renderStates;
 		public:
 			Video(std::string src, int width, int height,
-				float x = 0, float y = 0, float volume = 100, bool loop = false);
+				float x = 0, float y = 0, float volume = 100, bool loop = false); // Загрузить video из главной ResData
 			Video(ResData rd);
 			bool setVideo(std::string src, int width, int height,
-				float x, float y, float volume, bool loop);
-			void setLoop(bool loop);
-			void setPause();
-			bool isMouseAbove();
-			void edit(ResData rd);
-			void setBlendMode(std::string style);
-			void display(sf::RenderWindow *win = kernel.window);
-			void setResize();
-			void computeLayerScale();
-			void setLayerMotion();
-			std::ostream & print(std::ostream &os);
-			friend std::ostream & operator << (std::ostream &os, Video &v);
+				float x, float y, float volume, bool loop); // Загрузить video самостоятельно
+			void setLoop(bool loop);	// Установить зацикливание видео
+			void setPause();			// Поставить видео на паузу
+			bool isMouseAbove();		// Если мышка над данным объектом
+			void edit(ResData rd);		// Изменить текущие настройки
+			void setRenderStates(std::string style); // Установить параметры отображения
+			void display(sf::RenderWindow *win = kernel.window); // Кинуть в очередь отображаемых объектов
+			void setResize();			// Установить размеры в зависимости от нового окна
+			void computeLayerScale();	// Просчитать размеры в зависимости от нового окна
+			void setLayerMotion();		// Произвести перемещение layer в зависимости от мышки
+			std::ostream & print(std::ostream &os); // Вывод информации в log
+			friend std::ostream & operator << (std::ostream &os, Video &v); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс шейдеров(визуальных эффектов над спрайтами)
@@ -473,7 +470,7 @@ namespace ng
 	public:
 		Shader();
 		//Shader(ResData rd);
-		friend std::ostream & operator << (std::ostream &os, const Shader *s);
+		friend std::ostream & operator << (std::ostream &os, const Shader *s); // Составление правильного вывода
 	};
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Класс сцены(объект, включающий в себя все остальные классы)
@@ -485,17 +482,17 @@ namespace ng
 		protected:
 			bool firstEvent;
 			bool next;
-			std::string idNextScene;
-			std::vector<Displayable*> layers[C_LAYERS];
-			typedef std::map<std::string, ng::Video*>::iterator VidIt;
-			typedef std::map<std::string, ng::Music*>::iterator MusIt;
-			typedef std::map<std::string, ng::Sound*>::iterator SouIt;
+			std::string idNextScene;		// Выдаем id следующей scene
+			std::vector<Displayable*> layers[C_LAYERS]; // Вектор с объектами, кроме видео
+			typedef std::map<std::string, ng::Video*>::iterator VidIt; // Map с видео
+			typedef std::map<std::string, ng::Music*>::iterator MusIt; // Map с музыкой
+			typedef std::map<std::string, ng::Sound*>::iterator SouIt; // Map со звуками
 
 		public:
 			XMLNode eventNode;
-			std::map<std::string, ng::Displayable*> objects;
-			std::map<std::string, ng::Video*> videos;
-			std::map<std::string, ng::Sound*> sounds;
+			std::map<std::string, ng::Displayable*> objects;	// Map с объектами
+			std::map<std::string, ng::Video*> videos;			// Map с видео
+			std::map<std::string, ng::Sound*> sounds;			// Map со звуками
 
 			Scene() {}
 			Scene(XMLNode node);
@@ -505,8 +502,7 @@ namespace ng
 			int saveTTEvent;				// Сохранение времени для вычислений
 			void loadScene(XMLNode scene);  // Загрузка ресурсов сценария
 			bool doEvent(XMLNode scene);	// Проход по event для исполнения
-			bool isEvent();					// Если нашли Event
-			//bool isEventWithChoice();    
+			bool isEvent();					// Если нашли Event 
 			bool isIfValid();
 			void startMedia();				// Запуск остановленных объектов
 			void stopMedia();				// Остановка объектов

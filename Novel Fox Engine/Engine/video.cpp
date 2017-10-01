@@ -27,7 +27,7 @@ Video::Video(ResData rd)
 	height = rd.height;
 	width = rd.width;
 
-	setBlendMode(style);
+	setRenderStates(style);
 
 	origin = PosScale(rd.x, rd.y, rd.scale, rd.scale);
 	setResize();
@@ -119,19 +119,25 @@ void Video::edit(ResData rd)
 	if (GETBIT(rd.bitMask, _style))
 	{
 		style = rd.style;
-		setBlendMode(rd.style);
+		setRenderStates(rd.style);
 	}
 	kernel.print("Edit mode for video: " + rd.id, INFO);
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void Video::setBlendMode(std::string style)
+void Video::setRenderStates(std::string style)
 {
 	if (style == "blendadd")
-		renderStates = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	{
+		renderStates.blendMode = sf::BlendAdd;	  //Photoshop: Линейный осветлитель (добавить)
+	}
 	else if (style == "blendmultiply")
-		renderStates = sf::BlendMultiply; //Photoshop: Умножение
+	{
+		renderStates.blendMode = sf::BlendMultiply; //Photoshop: Умножение
+	}
 	else
 		renderStates = sf::RenderStates::Default;
+
+	/*renderStates.shader = &shader;*/
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Video::display(sf::RenderWindow *win)

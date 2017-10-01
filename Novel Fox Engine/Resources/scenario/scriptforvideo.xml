@@ -12,13 +12,14 @@
     <SPRITE id="middle" layer="2" src="scenario/textures/demo/scene1/2.png"/>
     <SPRITE id="back" layer="1" src="scenario/textures/demo/scene1/1.png"/>
     <ANIMATION id="snow" layer="1" angle="-10" x="-100" alpha="30" delay="30" layermotion="false" style="blendadd" width="800" height="450" scale="1.8" src="scenario/textures/demo/scene1/snow.png"/>
+    
     <EVENT>
       <MUSIC id="music1" volume="5" command="play" time="9000" loop="true" src="scenario/music/music1.ogg"/>
       <TEXT id="person" font="classic" layer="5" x="160" y="520" color="210,105,30" size="23">Интрис</TEXT>
       <TEXT id="text" font="classic" layer="5" x="160" y="555" color="black" size="23">Сейчас я задам у тебя несколько вопросов</TEXT>
       <SPRITE id="panel" layer="4" x="130" y="480" scale="0.6" src="scenario/textures/demo/panel.png"/>
     </EVENT>
-    
+
     <EVENT>
       <TEXT id="person" visible="false"/>
       <TEXT id="text" y="520">Первый вопрос?</TEXT>

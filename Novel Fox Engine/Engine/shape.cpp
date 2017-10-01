@@ -43,23 +43,6 @@ void Shape::setOutlineShape(sf::Vector2f size, sf::Vector2f pos)
 	}
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//int Shape::getAlpha()
-//{
-//	return alpha;
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//void Shape::addAlpha()
-//{
-//	alpha += 1;
-//	setFillColor(sf::Color(0, 0, 0, alpha));
-//}
-////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//void Shape::pickUpAlpha()
-//{
-//	alpha -= 1;
-//	setFillColor(sf::Color(0, 0, 0, alpha));
-//}
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void Shape::display(sf::RenderWindow *win)
 {
 	win->draw(*this);

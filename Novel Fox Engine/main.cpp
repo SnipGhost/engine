@@ -9,33 +9,33 @@ using namespace ng;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int main()
 {
-	kernel.node = kernel.loadFirstScene();
-	kernel.scene = new Scene(kernel.node);
+	kernel.node = kernel.loadFirstScene(); // Указатель на первую "SCENE"
+	kernel.scene = new Scene(kernel.node); // Первоначальная загрузка сцены
 	
-	while (kernel.window->isOpen())
+	while (kernel.window->isOpen()) // "Пока окно открыто"
 	{
 		kernel.updateAll(); // Update компонентов
 
-		if (kernel.lostFocus())
+		if (kernel.lostFocus()) // Если окно потеряло фокус
 		{
-			if (kernel.scene) kernel.scene->stopMedia();
-			continue;
+			if (kernel.scene) kernel.scene->stopMedia(); // Останавливаем всё
+			continue; // Пропускаем все дальнейшие визуализации
 		}
 
-		if (kernel.hasFocus())
+		if (kernel.hasFocus()) // Если окно получило фокус
 		{
-			if (kernel.scene) kernel.scene->startMedia();
+			if (kernel.scene) kernel.scene->startMedia(); // Включаем всё
 		}
 
-		kernel.startDisplay();
-		if (kernel.scene)
+		kernel.startDisplay(); // Обязательная функция с GL настройками
+		if (kernel.scene) // Если в памяти есть сцена
 		{
 			kernel.scene->displayAll(); // Отображение компонентов
 		}
-		kernel.endDisplay();
+		kernel.endDisplay(); // Обязательная функция с GL настройками
 	}
 
-	if (kernel.scene)
+	if (kernel.scene) // Если в памяти есть сцена
 	{
 		delete kernel.scene; // Очистка последней загруженной сцены
 	}
